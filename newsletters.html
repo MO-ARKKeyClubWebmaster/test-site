@@ -28,7 +28,7 @@
   .nav-link:hover,.nav-link.active{color:var(--white);background:rgba(255,255,255,0.1);}
   .nav-link svg{width:12px;height:12px;transition:transform var(--transition);}
   .nav-item:hover .nav-link svg{transform:rotate(180deg);}
-  .nav-dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-hover);min-width:200px;padding:0.5rem;opacity:0;pointer-events:none;transform:translateX(-50%) translateY(-6px);transition:opacity var(--transition),transform var(--transition);}
+  .nav-dropdown{position:absolute;top:100%;left:50%;padding-top:8px;transform:translateX(-50%);background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-hover);min-width:200px;padding:0.5rem;opacity:0;pointer-events:none;transform:translateX(-50%) translateY(-6px);transition:opacity var(--transition),transform var(--transition);}
   .nav-item:hover .nav-dropdown{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0);}
   .nav-dropdown a{display:block;padding:0.625rem 0.875rem;font-size:0.875rem;color:var(--text);border-radius:var(--radius-sm);font-weight:400;transition:background var(--transition),color var(--transition);}
   .nav-dropdown a:hover{background:var(--cream);color:var(--blue);}
