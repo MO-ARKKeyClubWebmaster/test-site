@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MO-ARK District | Key Club International</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     ============================================================ */
+  :root {
+    --navy:   #0A1628;
+    --blue:   #1A3A6B;
+    --gold:   #C8962A;
+    --gold-lt:#F0C14B;
+    --cream:  #F7F4EE;
+    --white:  #FFFFFF;
+    --text:   #1C1C1C;
+    --muted:  #5A5A6A;
+    --border: rgba(10,22,40,0.12);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --ff-display: 'DM Serif Display', Georgia, serif;
+    --ff-body:    'DM Sans', system-ui, sans-serif;
+    --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    --shadow-card: 0 2px 12px rgba(10,22,40,0.08), 0 1px 3px rgba(10,22,40,0.06);
+    --shadow-hover: 0 8px 32px rgba(10,22,40,0.14), 0 2px 8px rgba(10,22,40,0.08);
+  }
+
+  /* ============================================================
+     RESET & BASE
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: var(--ff-body);
+    color: var(--text);
+    background: var(--white);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  /* ============================================================
+     NAVIGATION
+     ============================================================ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(10, 22, 40, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    transition: box-shadow var(--transition);
+  }
+  .nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .nav-logo-mark {
+    width: 40px; height: 40px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-display);
+    font-size: 1.2rem;
+    color: var(--navy);
+    font-weight: 400;
+    flex-shrink: 0;
+  }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-name {
+    font-family: var(--ff-display);
+    font-size: 1.1rem;
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+  .nav-logo-sub {
+    font-size: 0.65rem;
+    color: var(--gold-lt);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav-item { position: relative; }
+
+  .nav-link {
+    display: flex; align-items: center; gap: 4px;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.82);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition), background var(--transition);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--white);
+    background: rgba(255,255,255,0.1);
+  }
+  .nav-link svg { width: 12px; height: 12px; flex-shrink: 0; transition: transform var(--transition); }
+  .nav-item:hover .nav-link svg { transform: rotate(180deg); }
+
+  /* Dropdown */
+  .nav-dropdown {
+    position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hover);
+    min-width: 200px;
+    padding: 0.5rem;
+    opacity: 0; pointer-events: none;
+    transform: translateX(-50%) translateY(-6px);
+    transition: opacity var(--transition), transform var(--transition);
+  }
+  .nav-item:hover .nav-dropdown {
+    opacity: 1; pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+  }
+  .nav-dropdown a {
+    display: block;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    font-weight: 400;
+    transition: background var(--transition), color var(--transition);
+  }
+  .nav-dropdown a:hover { background: var(--cream); color: var(--blue); }
+  .nav-dropdown-divider {
+    height: 1px; background: var(--border);
+    margin: 0.375rem 0.875rem;
+  }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy) !important;
+    font-weight: 600 !important;
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1.125rem;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition) !important;
+  }
+  .nav-cta:hover {
+    background: var(--gold-lt) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(200,150,42,0.4);
+  }
+
+  /* Mobile hamburger */
+  .nav-toggle {
+    display: none;
+    flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px;
+    background: none; border: none;
+  }
+  .nav-toggle span {
+    display: block; width: 24px; height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: all var(--transition);
+  }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile menu */
+  .nav-mobile {
+    display: none;
+    position: fixed; inset: 68px 0 0 0;
+    background: var(--navy);
+    padding: 1.5rem;
+    overflow-y: auto;
+    z-index: 999;
+    flex-direction: column; gap: 0.25rem;
+  }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a {
+    display: block;
+    padding: 0.875rem 1rem;
+    color: rgba(255,255,255,0.85);
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background var(--transition), color var(--transition);
+  }
+  .nav-mobile a:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+  .nav-mobile-section {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--gold-lt); font-weight: 600;
+    padding: 1rem 1rem 0.375rem;
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex; align-items: center;
+    background: var(--navy);
+    overflow: hidden;
+    padding-top: 68px;
+  }
+
+  /* Geometric background patterns */
+  .hero-bg {
+    position: absolute; inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    top: -20%; right: -10%;
+    width: 65vw; height: 65vw;
+    background: radial-gradient(ellipse at 60% 40%, rgba(200,150,42,0.18) 0%, rgba(26,58,107,0.25) 50%, transparent 75%);
+    border-radius: 50%;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    bottom: -10%; left: -5%;
+    width: 50vw; height: 50vw;
+    background: radial-gradient(ellipse, rgba(26,58,107,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-inner {
+    position: relative; z-index: 1;
+    max-width: 1200px; margin: 0 auto;
+    padding: 4rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(200,150,42,0.15);
+    border: 1px solid rgba(200,150,42,0.3);
+    border-radius: 100px;
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gold-lt);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-lt);
+  }
+
+  .hero-desc {
+    font-size: 1.0625rem;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    max-width: 44ch;
+  }
+
+  .hero-actions {
+    display: flex; flex-wrap: wrap; gap: 0.875rem;
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.8125rem 1.625rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--ff-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--transition);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+  .btn-primary:hover {
+    background: var(--gold-lt);
+    border-color: var(--gold-lt);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(200,150,42,0.4);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .btn-outline:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.6);
+    transform: translateY(-2px);
+  }
+
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .hero-stat-value {
+    font-family: var(--ff-display);
+    font-size: 2rem;
+    color: var(--gold-lt);
+    line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    margin-top: 0.25rem;
+  }
+
+  /* Hero right — visual card stack */
+  .hero-visual {
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .hero-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    backdrop-filter: blur(8px);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .hero-card:hover {
+    transform: translateX(4px);
+    box-shadow: -4px 0 20px rgba(200,150,42,0.15);
+    border-color: rgba(200,150,42,0.3);
+  }
+  .hero-card-label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--gold-lt); font-weight: 600; margin-bottom: 0.5rem;
+  }
+  .hero-card-title {
+    font-family: var(--ff-display);
+    font-size: 1.1rem; color: var(--white); margin-bottom: 0.25rem;
+  }
+  .hero-card-sub { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+  .hero-card-badge {
+    display: inline-block;
+    margin-top: 0.75rem;
+    background: rgba(200,150,42,0.2);
+    color: var(--gold-lt);
+    font-size: 0.7rem; font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* ============================================================
+     SECTION LAYOUT UTILITY
+     ============================================================ */
+  .section {
+    padding: 6rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-full { padding: 6rem 0; }
+  .section-full .section-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
+  }
+
+  .section-label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em;
+    font-weight: 600; color: var(--gold); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    line-height: 1.1;
+    color: var(--navy);
+    margin-bottom: 1rem;
+  }
+  .section-title em { font-style: italic; color: var(--blue); }
+  .section-desc {
+    font-size: 1.0625rem;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 52ch;
+  }
+
+  .section-header { margin-bottom: 3.5rem; }
+  .section-header.center { text-align: center; }
+  .section-header.center .section-desc { margin: 0 auto; }
+
+  /* ============================================================
+     QUICK LINKS (Start Here)
+     ============================================================ */
+  .quicklinks-bg {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .quicklinks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .quicklink-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column;
+    gap: 0.75rem;
+    transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+    cursor: pointer;
+  }
+  .quicklink-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+    border-color: var(--gold);
+  }
+  .quicklink-icon {
+    width: 44px; height: 44px;
+    background: var(--navy);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .quicklink-icon svg { width: 22px; height: 22px; stroke: var(--gold-lt); }
+  .quicklink-card h3 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem; color: var(--navy);
+  }
+  .quicklink-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.5; flex: 1; }
+  .quicklink-arrow {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 0.8125rem; font-weight: 600; color: var(--gold);
+    transition: gap var(--transition);
+  }
+  .quicklink-card:hover .quicklink-arrow { gap: 8px; }
+
+  /* ============================================================
+     MISSION STRIP
+     ============================================================ */
+  .mission-strip {
+    background: var(--navy);
+    padding: 5rem 1.5rem;
+  }
+  .mission-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 5rem;
+    align-items: center;
+  }
+  .mission-label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--gold); font-weight: 600; margin-bottom: 1rem;
+  }
+  .mission-heading {
+    font-family: var(--ff-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    color: var(--white); line-height: 1.15;
+  }
+  .mission-heading em { font-style: italic; color: var(--gold-lt); }
+  .mission-pillars { display: flex; flex-direction: column; gap: 1.25rem; }
+  .mission-pillar {
+    display: flex; align-items: flex-start; gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    transition: background var(--transition), border-color var(--transition);
+  }
+  .mission-pillar:hover {
+    background: rgba(200,150,42,0.08);
+    border-color: rgba(200,150,42,0.25);
+  }
+  .mission-pillar-num {
+    font-family: var(--ff-display);
+    font-size: 1.5rem; color: var(--gold); line-height: 1; flex-shrink: 0;
+    width: 2rem; text-align: right;
+  }
+  .mission-pillar-content h4 {
+    font-family: var(--ff-display);
+    font-size: 1.125rem; color: var(--white); margin-bottom: 0.375rem;
+  }
+  .mission-pillar-content p { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* ============================================================
+     NEWS & EVENTS
+     ============================================================ */
+  .news-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+  }
+  .news-featured {
+    background: var(--navy);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    min-height: 380px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem;
+    transition: transform var(--transition);
+    cursor: pointer;
+  }
+  .news-featured:hover { transform: scale(1.01); }
+  .news-featured::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,22,40,0.95) 30%, rgba(10,22,40,0.3) 100%);
+    z-index: 1;
+  }
+  .news-featured-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #1A3A6B 0%, #0A1628 60%, #2A1A40 100%);
+  }
+  /* Space-themed art for DLC */
+  .news-featured-art {
+    position: absolute; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+  .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100%{opacity:0.6} 50%{opacity:0.15} }
+  .news-featured-content { position: relative; z-index: 2; }
+  .news-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.7rem; font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+  .news-featured h3 {
+    font-family: var(--ff-display);
+    font-size: 1.625rem; color: var(--white); line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .news-featured p { font-size: 0.9rem; color: rgba(255,255,255,0.65); margin-bottom: 1.25rem; }
+  .news-featured-meta { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+  .news-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+  .news-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.375rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+    transition: box-shadow var(--transition), transform var(--transition);
+    cursor: pointer;
+  }
+  .news-item:hover { box-shadow: var(--shadow-hover); transform: translateX(3px); }
+  .news-item-date {
+    flex-shrink: 0;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    width: 48px; padding: 0.5rem 0.25rem;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .news-item-date-month { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); font-weight: 700; }
+  .news-item-date-day { font-family: var(--ff-display); font-size: 1.375rem; color: var(--navy); line-height: 1; }
+  .news-item-body h4 { font-size: 0.9375rem; font-weight: 600; color: var(--navy); margin-bottom: 0.25rem; line-height: 1.3; }
+  .news-item-body p { font-size: 0.8125rem; color: var(--muted); line-height: 1.5; }
+
+  /* ============================================================
+     DISTRICT SNAPSHOT
+     ============================================================ */
+  .snapshot-bg { background: var(--cream); }
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .snapshot-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 1.75rem;
+    transition: box-shadow var(--transition), transform var(--transition);
+  }
+  .snapshot-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+  .snapshot-card-num {
+    font-family: var(--ff-display);
+    font-size: 3rem; color: var(--navy); line-height: 1;
+    margin-bottom: 0.375rem;
+  }
+  .snapshot-card-unit { font-size: 1rem; color: var(--gold); }
+  .snapshot-card h4 { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 0.375rem; }
+  .snapshot-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
+  .snapshot-card-bar {
+    height: 3px; background: var(--cream);
+    border-radius: 2px; margin-top: 1.25rem; overflow: hidden;
+  }
+  .snapshot-card-fill {
+    height: 100%; background: var(--gold); border-radius: 2px;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ============================================================
+     CORE VALUES
+     ============================================================ */
+  .values-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .value-card {
+    border-radius: var(--radius);
+    padding: 2rem;
+    border: 1px solid var(--border);
+    transition: box-shadow var(--transition), transform var(--transition);
+  }
+  .value-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+  .value-card:nth-child(1) { background: var(--navy); }
+  .value-card:nth-child(2) { background: var(--blue); }
+  .value-card:nth-child(3) { background: var(--cream); }
+  .value-card:nth-child(1) .value-title,
+  .value-card:nth-child(2) .value-title { color: var(--white); }
+  .value-card:nth-child(3) .value-title { color: var(--navy); }
+  .value-card:nth-child(1) .value-desc,
+  .value-card:nth-child(2) .value-desc { color: rgba(255,255,255,0.6); }
+  .value-card:nth-child(3) .value-desc { color: var(--muted); }
+  .value-num {
+    font-family: var(--ff-display);
+    font-size: 3.5rem; line-height: 1;
+    color: var(--gold); opacity: 0.4;
+    margin-bottom: 0.5rem;
+  }
+  .value-title {
+    font-family: var(--ff-display);
+    font-size: 1.5rem; margin-bottom: 0.75rem;
+  }
+  .value-desc { font-size: 0.9rem; line-height: 1.7; }
+
+  /* ============================================================
+     RESOURCES STRIP
+     ============================================================ */
+  .resources-strip {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    padding: 5rem 1.5rem;
+  }
+  .resources-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+  }
+  .resources-content .section-label { color: var(--gold-lt); }
+  .resources-content .section-title { color: var(--white); }
+  .resources-content .section-title em { color: var(--gold-lt); }
+  .resources-content .section-desc { color: rgba(255,255,255,0.6); }
+  .resources-links { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem; }
+  .resource-link {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    cursor: pointer;
+  }
+  .resource-link:hover {
+    background: rgba(200,150,42,0.15);
+    border-color: rgba(200,150,42,0.35);
+    transform: translateX(4px);
+  }
+  .resource-link-icon {
+    width: 36px; height: 36px;
+    background: rgba(200,150,42,0.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .resource-link-icon svg { width: 18px; height: 18px; stroke: var(--gold-lt); }
+  .resource-link-text { flex: 1; }
+  .resource-link-text strong { font-size: 0.9375rem; font-weight: 600; display: block; }
+  .resource-link-text span { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  .resource-link-arrow { color: rgba(255,255,255,0.3); font-size: 1.25rem; }
+
+  .resources-cta-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .resources-cta-box h3 {
+    font-family: var(--ff-display);
+    font-size: 1.375rem; color: var(--white);
+  }
+  .resources-cta-box p { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer {
+    background: var(--navy);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 4rem 1.5rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+    padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 2.5rem;
+  }
+  .footer-brand p {
+    font-size: 0.875rem; color: rgba(255,255,255,0.45);
+    line-height: 1.7; margin-top: 1rem; max-width: 32ch;
+  }
+  .footer-col h4 {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--gold-lt); font-weight: 600; margin-bottom: 1.25rem;
+  }
+  .footer-col ul { display: flex; flex-direction: column; gap: 0.625rem; }
+  .footer-col ul li a {
+    font-size: 0.875rem; color: rgba(255,255,255,0.5);
+    transition: color var(--transition);
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-copy { font-size: 0.8125rem; color: rgba(255,255,255,0.3); }
+  .footer-socials { display: flex; gap: 0.75rem; }
+  .footer-social {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.875rem;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+    cursor: pointer;
+  }
+  .footer-social:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+  .footer-social svg { width: 16px; height: 16px; }
+
+  /* ============================================================
+     ANIMATIONS
+     ============================================================ */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 1024px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-visual { display: none; }
+    .hero-desc { max-width: none; }
+    .mission-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .news-grid { grid-template-columns: 1fr; }
+    .news-featured { min-height: 300px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .resources-inner { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .values-grid { grid-template-columns: 1fr; }
+    .snapshot-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .hero-stat-value { font-size: 1.5rem; }
+    .section { padding: 4rem 1.25rem; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .quicklinks-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .snapshot-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+    .btn { width: 100%; justify-content: center; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="MO-ARK Key Club Home">
+      <div class="nav-logo-mark">K</div>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">MO-ARK District</span>
+        <span class="nav-logo-sub">Key Club International</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li class="nav-item">
+        <a href="about.html" class="nav-link">
+          About
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="nav-dropdown">
+          <a href="about.html">About MO-ARK</a>
+          <a href="about.html#history">Our History</a>
+          <a href="about.html#mission">Mission &amp; Values</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="our-district.html" class="nav-link">
+          Our District
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="nav-dropdown">
+          <a href="our-district.html#board">District Board</a>
+          <a href="our-district.html#clubs">Club Directory</a>
+          <a href="our-district.html#bylaws">District Bylaws</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="newsletters.html" class="nav-link">Newsletters</a>
+      </li>
+      <li class="nav-item">
+        <a href="resources.html" class="nav-link">
+          Resources
+        </a>
+      </li>
+            <li class="nav-item">
+        <a href="dlc.html" class="nav-link">
+          Events
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="nav-dropdown">
+          <a href="dlc.html#calendar">Event Calendar</a>
+          <a href="dlc.html">District Leadership Conference</a>
+        </div>
+      </li>
+      <li>
+        <a href="contact.html" class="nav-link nav-cta">Contact</a>
+      </li>
+    </ul>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="navMobile" role="dialog" aria-label="Mobile navigation">
+  <span class="nav-mobile-section">Navigate</span>
+  <a href="index.html">Home</a>
+  <span class="nav-mobile-section">About</span>
+  <a href="about.html">About MO-ARK</a>
+  <a href="about.html#history">Our History</a>
+  <a href="about.html#mission">Mission &amp; Values</a>
+  <span class="nav-mobile-section">Our District</span>
+  <a href="our-district.html#board">District Board</a>
+  <a href="our-district.html#clubs">Club Directory</a>
+  <a href="our-district.html#bylaws">District Bylaws</a>
+  <span class="nav-mobile-section">Events</span>
+  <a href="dlc.html#calendar">Event Calendar</a>
+  <a href="dlc.html">District Leadership Conference</a>
+  <span class="nav-mobile-section">More</span>
+  <a href="newsletters.html">Newsletters</a>
+  <a href="resources.html">Resources</a>
+  <a href="contact.html">Contact Us</a>
+</div>
+
+<section class="hero" aria-label="Hero">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+  </div>
+
+  <div class="hero-bg">
+    <div class="hero-featured-art" id="starsContainer" style="position:absolute;inset:0;"></div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        Missouri-Arkansas District
+      </div>
+      <h1 class="hero-title">
+        Caring —<br><em>Our Way</em><br>of Life.
+      </h1>
+      <p class="hero-desc">
+        MO-ARK is one of 33 districts of Key Club International — the world's oldest and largest student-led service organization. 126 clubs. 10 divisions. One mission.
+      </p>
+      <div class="hero-actions">
+        <a href="about.html" class="btn btn-primary">
+          Learn About MO-ARK
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a href="dlc.html" class="btn btn-outline">
+          2026 DLC Info
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value">126</div>
+          <div class="hero-stat-label">Schools</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">10</div>
+          <div class="hero-stat-label">Divisions</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">2</div>
+          <div class="hero-stat-label">States</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-card">
+        <div class="hero-card-label">Upcoming Event</div>
+        <div class="hero-card-title">District Leadership Conference</div>
+        <div class="hero-card-sub">University Plaza Hotel · Springfield, MO</div>
+        <div class="hero-card-badge">March 12–14, 2026</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">DLC 2026 Theme</div>
+        <div class="hero-card-title">One Small Step for Service</div>
+        <div class="hero-card-sub">One Giant Leap for Leadership</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Resources</div>
+        <div class="hero-card-title">Club Officer Guidebooks</div>
+        <div class="hero-card-sub">Download PDF guides for every officer role</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="quicklinks-bg">
+  <div class="section">
+    <div class="section-header">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">Find what you need</h2>
+    </div>
+    <div class="quicklinks-grid">
+      <a href="about.html" class="quicklink-card fade-in">
+        <div class="quicklink-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </div>
+        <h3>About MO-ARK</h3>
+        <p>Learn about the Missouri-Arkansas district, our history, and our mission.</p>
+        <span class="quicklink-arrow">Learn more →</span>
+      </a>
+      <a href="dlc.html" class="quicklink-card fade-in">
+        <div class="quicklink-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+          </svg>
+        </div>
+        <h3>DLC 2026</h3>
+        <p>Everything about the District Leadership Conference — registration, forms, and awards.</p>
+        <span class="quicklink-arrow">View DLC info →</span>
+      </a>
+      <a href="our-district.html#board" class="quicklink-card fade-in">
+        <div class="quicklink-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>District Board</h3>
+        <p>Meet your '25–'26 executive and lieutenant governors across all 10 divisions.</p>
+        <span class="quicklink-arrow">Meet the board →</span>
+      </a>
+      <a href="resources.html" class="quicklink-card fade-in">
+        <div class="quicklink-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+        </div>
+        <h3>Resources</h3>
+        <p>Forms, officer guidebooks, monthly reports, style guides, and more.</p>
+        <span class="quicklink-arrow">Browse resources →</span>
+      </a>
+      <a href="newsletters.html" class="quicklink-card fade-in">
+        <div class="quicklink-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h3>Newsletters</h3>
+        <p>Read division newsletters, the Key Way, and Kiwanigram publications.</p>
+        <span class="quicklink-arrow">Read newsletters →</span>
+      </a>
+      <a href="contact.html" class="quicklink-card fade-in">
+        <div class="quicklink-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <h3>Contact Us</h3>
+        <p>Reach out to the board, find individual member contact info, or ask a question.</p>
+        <span class="quicklink-arrow">Get in touch →</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="mission-strip">
+  <div class="mission-inner">
+    <div class="fade-in">
+      <div class="mission-label">Who We Are</div>
+      <h2 class="mission-heading">Built on <em>service,</em> driven by leadership.</h2>
+    </div>
+    <div class="mission-pillars fade-in">
+      <div class="mission-pillar">
+        <div class="mission-pillar-num">01</div>
+        <div class="mission-pillar-content">
+          <h4>Our Mission</h4>
+          <p>To grow members, clubs, and communities through representation and service leadership.</p>
+        </div>
+      </div>
+      <div class="mission-pillar">
+        <div class="mission-pillar-num">02</div>
+        <div class="mission-pillar-content">
+          <h4>Our Purpose</h4>
+          <p>To provide opportunities through character building and community outreach across Missouri and Arkansas.</p>
+        </div>
+      </div>
+      <div class="mission-pillar">
+        <div class="mission-pillar-num">03</div>
+        <div class="mission-pillar-content">
+          <h4>Our Scale</h4>
+          <p>One of 33 districts of Key Club International — the world's oldest and largest youth service organization.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-label">What's Happening</div>
+    <h2 class="section-title">News &amp; <em>Events</em></h2>
+  </div>
+  <div class="news-grid">
+    <a href="dlc.html" class="news-featured fade-in" aria-label="DLC 2026">
+      <div class="news-featured-bg"></div>
+      <div class="news-featured-art" id="heroStars"></div>
+      <div class="news-featured-content">
+        <span class="news-tag">Featured Event</span>
+        <h3>Missouri-Arkansas District Leadership Conference 2026</h3>
+        <p>Join us March 12–14 at University Plaza Hotel in Springfield, Missouri for forums, contests, elections, and a year of celebration.</p>
+        <div class="news-featured-meta">March 12–14, 2026 · Springfield, MO · Theme: SPACE</div>
+      </div>
+    </a>
+    <div class="news-sidebar">
+      <a href="newsletters.html" class="news-item fade-in">
+        <div class="news-item-date">
+          <div class="news-item-date-month">Apr</div>
+          <div class="news-item-date-day">26</div>
+        </div>
+        <div class="news-item-body">
+          <h4>April Newsletters Available</h4>
+          <p>Division newsletters from lieutenant governors now posted.</p>
+        </div>
+      </a>
+      <a href="resources.html#forms" class="news-item fade-in">
+        <div class="news-item-date">
+          <div class="news-item-date-month">Feb</div>
+          <div class="news-item-date-day">1</div>
+        </div>
+        <div class="news-item-body">
+          <h4>DLC Forms Deadline</h4>
+          <p>All paper forms due February 1st. Clubs on t-shirt back must submit by this date.</p>
+        </div>
+      </a>
+      <a href="dlc.html#calendar" class="news-item fade-in">
+        <div class="news-item-date">
+          <div class="news-item-date-month">Apr</div>
+          <div class="news-item-date-day">7</div>
+        </div>
+        <div class="news-item-body">
+          <h4>View Full Event Calendar</h4>
+          <p>Stay up to date with all district events, deadlines, and meetings.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="snapshot-bg section-full">
+  <div class="section-inner">
+    <div class="section-header center fade-in">
+      <div class="section-label">The District</div>
+      <h2 class="section-title">MO-ARK by the <em>numbers</em></h2>
+      <p class="section-desc">Spanning two states with a proud history dating back to 1947, MO-ARK is a powerhouse of student service.</p>
+    </div>
+    <div class="snapshot-grid">
+      <div class="snapshot-card fade-in">
+        <div class="snapshot-card-num">126<span class="snapshot-card-unit">+</span></div>
+        <h4>Member Schools</h4>
+        <p>Active Key Club chapters across Missouri and Arkansas</p>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:84%"></div></div>
+      </div>
+      <div class="snapshot-card fade-in">
+        <div class="snapshot-card-num">10</div>
+        <h4>Divisions</h4>
+        <p>Each led by an elected lieutenant governor serving their region</p>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:100%"></div></div>
+      </div>
+      <div class="snapshot-card fade-in">
+        <div class="snapshot-card-num">1947</div>
+        <h4>Est. Founding Year</h4>
+        <p>First organizational conference held in Hollister, Missouri</p>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:60%"></div></div>
+      </div>
+      <div class="snapshot-card fade-in">
+        <div class="snapshot-card-num">33<span class="snapshot-card-unit">rd</span></div>
+        <h4>of 33 Districts</h4>
+        <p>One district in Key Club International's global network</p>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:50%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header fade-in">
+    <div class="section-label">What We Stand For</div>
+    <h2 class="section-title">Our Core <em>Values</em></h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card fade-in">
+      <div class="value-num">01</div>
+      <h3 class="value-title">Trust</h3>
+      <p class="value-desc">We act with integrity and transparency in every interaction — between members, clubs, and our community partners.</p>
+    </div>
+    <div class="value-card fade-in">
+      <div class="value-num">02</div>
+      <h3 class="value-title">Commitment</h3>
+      <p class="value-desc">We show up for our schools, our communities, and each other with dedication and follow-through in every service opportunity.</p>
+    </div>
+    <div class="value-card fade-in">
+      <div class="value-num">03</div>
+      <h3 class="value-title">Respect</h3>
+      <p class="value-desc">We honor every voice, uphold the dignity of all people, and lead with empathy in everything we do.</p>
+    </div>
+  </div>
+</div>
+
+<div class="resources-strip">
+  <div class="resources-inner">
+    <div class="resources-content fade-in">
+      <div class="section-label">Resources Hub</div>
+      <h2 class="section-title">Everything your<br><em>club needs</em></h2>
+      <p class="section-desc">From monthly report forms to officer guidebooks and DLC registration, it's all in one place.</p>
+      <div class="resources-links">
+        <a href="resources.html#forms" class="resource-link">
+          <div class="resource-link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+            </svg>
+          </div>
+          <div class="resource-link-text">
+            <strong>Monthly Report Forms</strong>
+            <span>Submit your club's monthly activity reports</span>
+          </div>
+          <span class="resource-link-arrow">→</span>
+        </a>
+        <a href="resources.html#club" class="resource-link">
+          <div class="resource-link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <div class="resource-link-text">
+            <strong>Club Officer Guidebooks</strong>
+            <span>PDF guides for every officer position</span>
+          </div>
+          <span class="resource-link-arrow">→</span>
+        </a>
+        <a href="resources.html#style-guide" class="resource-link">
+          <div class="resource-link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5" r="3.5"/><circle cx="17.5" cy="13.5" r="3.5"/>
+              <circle cx="8.5" cy="14.5" r="3.5"/>
+            </svg>
+          </div>
+          <div class="resource-link-text">
+            <strong>Style Guide &amp; Graphics</strong>
+            <span>Official Key Club wordmarks, seals, and branding</span>
+          </div>
+          <span class="resource-link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="resources-cta-box fade-in">
+      <h3>District Leadership Conference</h3>
+      <p>The 2026 DLC will be held March 12–14 at the University Plaza Hotel in Springfield, Missouri. Theme: <strong style="color:var(--gold-lt)">SPACE — "One Small Step for Service, One Giant Leap for Leadership."</strong></p>
+      <p style="margin-top:0.5rem">Access registration forms, award applications, candidate packets, and contest entries.</p>
+      <a href="dlc.html" class="btn btn-primary" style="margin-top:0.5rem">
+        View DLC Info &amp; Forms
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:0.5rem;">
+          <div class="nav-logo-mark">K</div>
+          <div class="nav-logo-text">
+            <span class="nav-logo-name">MO-ARK District</span>
+            <span class="nav-logo-sub">Key Club International</span>
+          </div>
+        </div>
+        <p>Serving the home, school, and community across Missouri and Arkansas since 1947. One of 33 districts of Key Club International.</p>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <ul>
+          <li><a href="about.html">About MO-ARK</a></li>
+          <li><a href="about.html#history">Our History</a></li>
+          <li><a href="about.html#mission">Mission &amp; Values</a></li>
+          <li><a href="our-district.html#board">District Board</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Events</h4>
+        <ul>
+          <li><a href="dlc.html#calendar">Event Calendar</a></li>
+          <li><a href="dlc.html">DLC 2026</a></li>
+          <li><a href="resources.html#forms">DLC Forms</a></li>
+          <li><a href="newsletters.html">Newsletters</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="resources.html#club">Club Resources</a></li>
+          <li><a href="our-district.html#clubs">Club Directory</a></li>
+          <li><a href="our-district.html#bylaws">District Bylaws</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Key Club International | Missouri-Arkansas District. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" class="footer-social" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="#" class="footer-social" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+        <a href="#" class="footer-social" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15.3 6.34 6.34 0 0 0 9.49 21.6a6.34 6.34 0 0 0 6.34-6.34V8.69a8.18 8.18 0 0 0 4.81 1.55V6.79a4.85 4.85 0 0 1-1.05-.1z"/>
+          </svg>
+        </a>
+        <a href="#" class="footer-social" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* Nav scroll effect */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  /* Mobile menu toggle */
+  const toggle = document.getElementById('navToggle');
+  const mobile = document.getElementById('navMobile');
+  toggle.addEventListener('click', () => {
+    const open = mobile.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  /* Close mobile menu on link click */
+  mobile.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobile.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', false);
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* Generate twinkling stars in hero */
+  function makeStars(containerId, count) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      const size = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `
+        position:absolute;
+        left:${Math.random()*100}%;
+        top:${Math.random()*100}%;
+        width:${size}px; height:${size}px;
+        background:white; border-radius:50%;
+        opacity:${Math.random()*0.6+0.1};
+        animation: twinkle ${Math.random()*4+2}s ease-in-out infinite;
+        animation-delay:${Math.random()*4}s;
+      `;
+      c.appendChild(s);
+    }
+  }
+  makeStars('starsContainer', 60);
+  makeStars('heroStars', 40);
+
+  /* Scroll-triggered fade-in */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
