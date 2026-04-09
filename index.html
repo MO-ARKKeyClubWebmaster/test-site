@@ -254,7 +254,7 @@
     position: absolute;
     top: -20%; right: -10%;
     width: 65vw; height: 65vw;
-    background: radial-gradient(ellipse at 60% 40%, rgba(200,150,42,0.18) 0%, rgba(26,58,107,0.25) 50%, transparent 75%);
+    background: radial-gradient(ellipse at 60% 40%, rgba(200,150,42,0.12) 0%, rgba(26,58,107,0.2) 50%, transparent 75%);
     border-radius: 50%;
   }
   .hero-bg::after {
@@ -268,10 +268,89 @@
   .hero-grid {
     position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  /* ── 2D PARALLAX KEY ── */
+  .parallax-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .parallax-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+      pointer-events: none;
+    }
+  /* Allow clicks to reach the key specifically */
+  #pl-key {
+    pointer-events: none;
+  }
+  #pl-key .key-wrap {
+    pointer-events: all;
+  }
+  /* keyWrap stays absolutely positioned within the parallax layer */
+
+  /* Key sizing strategy:
+     - Height is the real constraint: key SVG is 480h × 200w (2.4:1 tall ratio)
+     - We want the full key visible, so cap its height to hero available height minus padding
+     - Width follows from the aspect ratio
+     - On wide screens: allow up to 38vw but cap by height
+     - On medium screens: shrink more aggressively
+     - On narrow: hide and show a small centered version instead */
+  /* Fix: key layers must not clip and key-wrap anchors to viewport right */
+  #pl-shadow,
+  #pl-key {
+    overflow: visible;
+  }
+  .key-wrap {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(38vw, 42vh, 420px);
+    max-height: calc(100svh - 68px - 3rem);
+    z-index: 2;
+  }
+  .key-wrap svg {
+    width: 100%;
+    height: auto;
+    max-height: inherit;
+  }
+
+  /* Large desktops: give more room */
+  @media (min-width: 1400px) {
+    .key-wrap { width: min(420px, 34vw, 50vh); right: 6%; }
+  }
+
+  /* Standard laptops (1024–1280px): key tends to be half-visible — shrink it */
+  @media (max-width: 1280px) and (min-width: 1025px) {
+    .key-wrap { width: min(30vw, 38vh, 340px); right: 2%; }
+  }
+
+  /* Tablets landscape & small laptops (768–1024px): show a smaller centered-right key */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .key-wrap {
+      width: min(22vw, 32vh, 220px);
+      right: 1.5%;
+      opacity: 0.6;
+    }
+  }
+
+  /* Mobile & portrait tablets: hide the side key entirely */
+  @media (max-width: 768px) {
+    .key-wrap { display: none; }
   }
 
   .hero-inner {
@@ -851,6 +930,378 @@
     .btn { width: 100%; justify-content: center; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
   }
+
+  /* ============================================================
+     KEY CLICK HINT
+     ============================================================ */
+  #keyWrap {
+    cursor: pointer;
+    transition: filter var(--transition);
+  }
+  #keyWrap:hover svg {
+    filter: drop-shadow(0 8px 40px rgba(200,150,42,0.55)) drop-shadow(0 2px 8px rgba(200,150,42,0.35));
+  }
+  .key-click-hint {
+    position: absolute;
+    bottom: -3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    color: var(--gold-lt);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+    background: rgba(10,22,40,0.75);
+    border: 1.5px solid rgba(200,150,42,0.55);
+    border-radius: 100px;
+    padding: 0.45rem 1.1rem 0.45rem 0.9rem;
+    box-shadow: 0 0 18px rgba(200,150,42,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    animation: hintpulse 2.8s ease-in-out infinite;
+  }
+  @keyframes hintpulse {
+    0%,100% { opacity:0.6; box-shadow:0 0 14px rgba(200,150,42,0.15), inset 0 1px 0 rgba(255,255,255,0.06); }
+    50%      { opacity:1;   box-shadow:0 0 30px rgba(200,150,42,0.45), inset 0 1px 0 rgba(255,255,255,0.06); }
+  }
+
+  /* ============================================================
+     UNLOCK MODAL OVERLAY
+     ============================================================ */
+  #unlockOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: rgba(8, 16, 32, 0.97);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  #unlockOverlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* close button */
+  #unlockClose {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.5rem;
+    z-index: 9100;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    font-size: 1.25rem;
+    transition: background var(--transition), color var(--transition);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, background 0.2s ease;
+  }
+  #unlockClose.visible { opacity: 1; pointer-events: all; }
+  #unlockClose:hover { background: rgba(200,150,42,0.25); color: var(--gold-lt); }
+
+  /* ── ANIMATION STAGE (lock + key) ── */
+  #animStage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Flying key (3D CSS perspective) */
+  #flyKey {
+    position: absolute;
+    width: 140px;
+    transform-origin: center center;
+    transform: perspective(900px) translateZ(0) translateY(0) scale(1);
+    filter: drop-shadow(0 12px 48px rgba(200,150,42,0.5));
+    z-index: 10;
+  }
+
+  /* Lock SVG container */
+  #lockWrap {
+    position: absolute;
+    width: 180px;
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #lockWrap.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  /* shackle rotate on unlock */
+  #lockShackle {
+    transform-origin: 90px 50px;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  #lockShackle.open { transform: rotate(-70deg) translateY(-8px); }
+
+  /* success burst */
+  #unlockBurst {
+    position: absolute;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,150,42,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.3);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+  #unlockBurst.pop { opacity: 1; transform: scale(1); }
+
+  /* ── CONTENT PANEL (countdown + gallery) ── */
+  #unlockContent {
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 1.5rem 5rem;
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+  }
+  #unlockContent.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* DIVIDER */
+  .unlock-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,150,42,0.4), transparent);
+    margin: 0 0 4rem;
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown-wrap {
+    text-align: center;
+    margin-bottom: 4.5rem;
+  }
+  .countdown-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .countdown-headline {
+    font-family: var(--ff-display);
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+    color: var(--white);
+    margin-bottom: 0.375rem;
+    line-height: 1.1;
+  }
+  .countdown-headline em { color: var(--gold-lt); font-style: italic; }
+  .countdown-sub {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.04em;
+  }
+  .countdown-tiles {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .countdown-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 88px;
+  }
+  .countdown-num {
+    font-family: var(--ff-display);
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    line-height: 1;
+    color: var(--gold-lt);
+    background: rgba(200,150,42,0.1);
+    border: 1px solid rgba(200,150,42,0.25);
+    border-radius: 12px;
+    width: 100%;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    min-width: 88px;
+    position: relative;
+    overflow: hidden;
+  }
+  .countdown-num::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%; height: 1px;
+    background: rgba(200,150,42,0.15);
+  }
+  .countdown-unit {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+  .countdown-sep {
+    font-family: var(--ff-display);
+    font-size: 3rem;
+    color: rgba(200,150,42,0.35);
+    align-self: center;
+    padding-bottom: 1.5rem;
+    line-height: 1;
+  }
+
+  /* ── GALLERY ── */
+  .gallery-section {
+    margin-top: 0;
+  }
+  .gallery-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .gallery-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .gallery-title {
+    font-family: var(--ff-display);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    color: var(--white);
+    margin-bottom: 0.375rem;
+  }
+  .gallery-title em { color: var(--gold-lt); font-style: italic; }
+  .gallery-desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .gallery-item {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    border: 1px solid rgba(200,150,42,0.2);
+    cursor: pointer;
+    background: rgba(255,255,255,0.03);
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  }
+  .gallery-item:hover {
+    border-color: rgba(200,150,42,0.55);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(200,150,42,0.18), 0 0 0 1px rgba(200,150,42,0.12);
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,22,40,0.7) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity var(--transition);
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+  .gallery-item-overlay span {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  /* featured first item is larger */
+  /* (removed span-2 so all images show equally in the grid) */
+  @media (max-width: 640px) {
+    .gallery-item:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+    .countdown-sep { display: none; }
+    .countdown-tiles { gap: 0.75rem; }
+    .countdown-tile { min-width: 72px; }
+    .countdown-num { min-width: 72px; font-size: 2.5rem; }
+  }
+
+  /* Lightbox */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    background: rgba(5,10,20,0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #lightbox.visible { opacity: 1; pointer-events: all; }
+  #lightbox img {
+    max-width: 92vw;
+    max-height: 88vh;
+    border-radius: 10px;
+    border: 1px solid rgba(200,150,42,0.3);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    object-fit: contain;
+  }
+  #lightboxClose {
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    background: none; border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color var(--transition);
+  }
+  #lightboxClose:hover { color: var(--gold-lt); }
+  #lightboxPrev, #lightboxNext {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: rgba(200,150,42,0.15);
+    border: 1px solid rgba(200,150,42,0.3);
+    border-radius: 50%;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--gold-lt);
+    font-size: 1.25rem;
+    transition: background var(--transition);
+  }
+  #lightboxPrev:hover, #lightboxNext:hover { background: rgba(200,150,42,0.35); }
+  #lightboxPrev { left: 1.5rem; }
+  #lightboxNext { right: 1.5rem; }
 </style>
 </head>
 <body>
@@ -939,13 +1390,182 @@
   <a href="contact.html">Contact Us</a>
 </div>
 
-<section class="hero" aria-label="Hero">
-  <div class="hero-bg">
-    <div class="hero-grid"></div>
+<section class="hero" aria-label="Hero" id="heroSection">
+
+  <!-- 2D Parallax Scene -->
+  <div class="parallax-scene" id="parallaxScene">
+
+    <!-- Layer 0: back glow (slowest, barely moves) -->
+    <div class="parallax-layer" id="pl-glow" style="transform:translateY(0px)">
+      <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" style="position:absolute;right:-4%;top:50%;transform:translateY(-50%);width:min(560px,46vw,70vh);opacity:0.18">
+        <defs>
+          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C8962A" stop-opacity="1"/>
+            <stop offset="60%" stop-color="#1A3A6B" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#0A1628" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="400" cy="400" r="380" fill="url(#glowGrad)"/>
+      </svg>
+    </div>
+
+    <!-- Layer 1: far ring (slow) -->
+    <div class="parallax-layer" id="pl-ring1" style="transform:translateY(0px)">
+      <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" style="position:absolute;right:3%;top:50%;transform:translateY(-50%);width:min(480px,40vw,60vh);opacity:0.12">
+        <circle cx="300" cy="300" r="270" fill="none" stroke="#C8962A" stroke-width="1.5"/>
+        <circle cx="300" cy="300" r="240" fill="none" stroke="#F0C14B" stroke-width="0.5"/>
+      </svg>
+    </div>
+
+    <!-- Layer 2: mid ring (medium speed) -->
+    <div class="parallax-layer" id="pl-ring2" style="transform:translateY(0px)">
+      <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" style="position:absolute;right:3%;top:50%;transform:translateY(-50%);width:min(480px,40vw,60vh);opacity:0.22">
+        <circle cx="300" cy="300" r="200" fill="none" stroke="#F0C14B" stroke-width="1" stroke-dasharray="6 14"/>
+      </svg>
+    </div>
+
+    <!-- Layer 3: key shadow (medium-slow) -->
+    <div class="parallax-layer" id="pl-shadow" style="transform:translateY(0px)">
+      <div class="key-wrap" style="filter:blur(28px);opacity:0.35;transform:translateY(-50%) translateX(8px)">
+        <svg viewBox="0 0 200 480" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+          <g fill="#C8962A">
+            <!-- bow -->
+            <circle cx="100" cy="95" r="70" fill="#C8962A"/>
+            <circle cx="100" cy="95" r="42" fill="#0A1628"/>
+            <!-- shank -->
+            <rect x="86" y="155" width="28" height="260" rx="4"/>
+            <!-- teeth -->
+            <rect x="114" y="210" width="30" height="22" rx="3"/>
+            <rect x="114" y="268" width="24" height="18" rx="3"/>
+            <rect x="114" y="322" width="28" height="16" rx="3"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Layer 4: key body (main, moves most) -->
+    <div class="parallax-layer" id="pl-key" style="transform:translateY(0px)">
+      <div class="key-wrap" id="keyWrap" style="cursor:pointer;" title="Click to unlock">
+        <svg viewBox="0 0 200 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;filter:drop-shadow(0 8px 40px rgba(200,150,42,0.35)) drop-shadow(0 2px 8px rgba(200,150,42,0.2))">
+          <defs>
+            <linearGradient id="bowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#F5D170"/>
+              <stop offset="35%" stop-color="#C8962A"/>
+              <stop offset="70%" stop-color="#A67820"/>
+              <stop offset="100%" stop-color="#E8B840"/>
+            </linearGradient>
+            <linearGradient id="shankGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#E8B840"/>
+              <stop offset="40%" stop-color="#C8962A"/>
+              <stop offset="100%" stop-color="#8A6018"/>
+            </linearGradient>
+            <linearGradient id="toothGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#D4A030"/>
+              <stop offset="100%" stop-color="#8A6018"/>
+            </linearGradient>
+            <radialGradient id="bowShine" cx="38%" cy="35%" r="55%">
+              <stop offset="0%" stop-color="#FFF0B0" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#C8962A" stop-opacity="0"/>
+            </radialGradient>
+            <!-- Shimmer sweep gradient -->
+            <linearGradient id="shimmer" x1="-100%" y1="0%" x2="200%" y2="0%" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="white" stop-opacity="0"/>
+              <stop offset="45%" stop-color="white" stop-opacity="0"/>
+              <stop offset="50%" stop-color="white" stop-opacity="0.22"/>
+              <stop offset="55%" stop-color="white" stop-opacity="0"/>
+              <stop offset="100%" stop-color="white" stop-opacity="0"/>
+              <animateTransform attributeName="gradientTransform" type="translate" from="-200 0" to="400 0" dur="3.2s" repeatCount="indefinite"/>
+            </linearGradient>
+            <!-- Circular text path around the bow -->
+            <path id="bowTextPath" d="M 100,95 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0"/>
+          </defs>
+
+          <!-- ── Bow ── -->
+          <circle cx="100" cy="95" r="72" fill="url(#bowGrad)"/>
+          <circle cx="100" cy="95" r="72" fill="url(#bowShine)"/>
+          <!-- Shimmer sweep over bow -->
+          <circle cx="100" cy="95" r="72" fill="url(#shimmer)"/>
+          <!-- Inner cutout -->
+          <circle cx="100" cy="95" r="46" fill="#0A1628"/>
+          <!-- Inner ring detail -->
+          <circle cx="100" cy="95" r="46" fill="none" stroke="#C8962A" stroke-width="1.5" stroke-opacity="0.4"/>
+
+          <!-- ── Text inside the bow hole ── -->
+          <!-- "MO-ARK" — big, centered -->
+          <text x="100" y="89" text-anchor="middle" font-family="'DM Sans', system-ui, sans-serif"
+                font-size="13.5" font-weight="700" letter-spacing="1.5"
+                fill="#F0C14B">
+            MO-ARK
+            <animate attributeName="opacity" values="0;1" dur="1s" begin="0.3s" fill="freeze"/>
+          </text>
+          <!-- "KEY CLUB" — smaller, below -->
+          <text x="100" y="103" text-anchor="middle" font-family="'DM Sans', system-ui, sans-serif"
+                font-size="7.5" font-weight="500" letter-spacing="2.2"
+                fill="#C8962A" fill-opacity="0.85">
+            KEY CLUB
+            <animate attributeName="opacity" values="0;1" dur="1s" begin="0.6s" fill="freeze"/>
+          </text>
+          <!-- Thin divider line between the two text lines -->
+          <line x1="72" y1="93.5" x2="128" y2="93.5" stroke="#C8962A" stroke-width="0.6" stroke-opacity="0.4">
+            <animate attributeName="opacity" values="0;1" dur="0.8s" begin="0.4s" fill="freeze"/>
+          </line>
+
+          <!-- ── Shank ── -->
+          <rect x="86" y="158" width="28" height="262" rx="5" fill="url(#shankGrad)"/>
+          <!-- Shank edge highlight -->
+          <rect x="86" y="158" width="6" height="262" rx="3" fill="#F0C14B" fill-opacity="0.3"/>
+          <!-- Shank edge shadow -->
+          <rect x="108" y="158" width="6" height="262" rx="3" fill="#5A3A08" fill-opacity="0.35"/>
+          <!-- Shimmer on shank -->
+          <rect x="86" y="158" width="28" height="262" rx="5" fill="url(#shimmer)"/>
+
+          <!-- "DISTRICT" text rotated along the shank -->
+          <text transform="rotate(-90, 100, 289)" x="100" y="293"
+                text-anchor="middle" font-family="'DM Sans', system-ui, sans-serif"
+                font-size="6" font-weight="600" letter-spacing="3.5"
+                fill="#0A1628" fill-opacity="0.55">
+            DISTRICT
+            <animate attributeName="opacity" values="0;0.55" dur="1.2s" begin="0.9s" fill="freeze"/>
+          </text>
+
+          <!-- ── Teeth ── -->
+          <rect x="114" y="205" width="34" height="24" rx="4" fill="url(#toothGrad)"/>
+          <rect x="114" y="205" width="34" height="6" rx="3" fill="#F0C14B" fill-opacity="0.25"/>
+
+          <rect x="114" y="262" width="27" height="20" rx="4" fill="url(#toothGrad)"/>
+          <rect x="114" y="262" width="27" height="6" rx="3" fill="#F0C14B" fill-opacity="0.25"/>
+
+          <rect x="114" y="316" width="32" height="18" rx="4" fill="url(#toothGrad)"/>
+          <rect x="114" y="316" width="32" height="5" rx="3" fill="#F0C14B" fill-opacity="0.22"/>
+
+          <!-- ── Tip cap ── -->
+          <rect x="86" y="408" width="28" height="12" rx="4" fill="#E8B840"/>
+
+          <!-- ── Animated gold pulse ring on the bow ── -->
+          <circle cx="100" cy="95" r="72" fill="none" stroke="#F0C14B" stroke-width="1.5" stroke-opacity="0">
+            <animate attributeName="r" values="72;90" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+            <animate attributeName="stroke-opacity" values="0.35;0" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+          </circle>
+          <circle cx="100" cy="95" r="72" fill="none" stroke="#F0C14B" stroke-width="1" stroke-opacity="0">
+            <animate attributeName="r" values="72;90" dur="2.5s" repeatCount="indefinite" begin="1.75s"/>
+            <animate attributeName="stroke-opacity" values="0.2;0" dur="2.5s" repeatCount="indefinite" begin="1.75s"/>
+          </circle>
+          <!-- ── Full-key transparent hit area (ensures entire key is clickable) ── -->
+          <rect x="28" y="23" width="144" height="437" rx="10" fill="transparent" pointer-events="all" style="cursor:pointer"/>
+        </svg>
+        <div class="key-click-hint">🔑 Press the Key · DLC 2026 Memories &amp; Countdown</div>
+      </div>
+    </div>
+
+    <!-- Layer 5: floating particles (fast) -->
+    <div class="parallax-layer" id="pl-particles" style="transform:translateY(0px)">
+      <canvas id="particle-canvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+    </div>
+
   </div>
 
   <div class="hero-bg">
-    <div class="hero-featured-art" id="starsContainer" style="position:absolute;inset:0;"></div>
+    <div class="hero-grid"></div>
   </div>
 
   <div class="hero-inner">
@@ -1022,16 +1642,6 @@
         <h3>About MO-ARK</h3>
         <p>Learn about the Missouri-Arkansas district, our history, and our mission.</p>
         <span class="quicklink-arrow">Learn more →</span>
-      </a>
-      <a href="dlc.html" class="quicklink-card fade-in">
-        <div class="quicklink-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-          </svg>
-        </div>
-        <h3>DLC 2026</h3>
-        <p>Everything about the District Leadership Conference — registration, forms, and awards.</p>
-        <span class="quicklink-arrow">View DLC info →</span>
       </a>
       <a href="our-district.html#board" class="quicklink-card fade-in">
         <div class="quicklink-icon">
@@ -1284,6 +1894,170 @@
   </div>
 </div>
 
+<!-- ============================================================
+     UNLOCK OVERLAY
+============================================================ -->
+<div id="unlockOverlay" role="dialog" aria-modal="true" aria-label="DLC Memories">
+
+  <!-- Close button (appears after animation) -->
+  <button id="unlockClose" aria-label="Close">✕</button>
+
+  <!-- Animation stage -->
+  <div id="animStage">
+    <div id="unlockBurst"></div>
+
+    <!-- Lock SVG -->
+    <div id="lockWrap">
+      <svg viewBox="0 0 180 220" xmlns="http://www.w3.org/2000/svg" width="180">
+        <defs>
+          <linearGradient id="lockBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2A4A8A"/>
+            <stop offset="100%" stop-color="#0A1628"/>
+          </linearGradient>
+          <linearGradient id="lockGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F5D170"/>
+            <stop offset="50%" stop-color="#C8962A"/>
+            <stop offset="100%" stop-color="#8A6018"/>
+          </linearGradient>
+        </defs>
+        <!-- Shackle -->
+        <g id="lockShackle">
+          <path d="M54 110 L54 68 Q54 28 90 28 Q126 28 126 68 L126 110"
+                fill="none" stroke="url(#lockGoldGrad)" stroke-width="18" stroke-linecap="round"/>
+          <path d="M54 110 L54 68 Q54 28 90 28 Q126 28 126 68 L126 110"
+                fill="none" stroke="#F5D170" stroke-width="5" stroke-linecap="round" stroke-opacity="0.3"/>
+        </g>
+        <!-- Body -->
+        <rect x="18" y="100" width="144" height="110" rx="14" fill="url(#lockBodyGrad)"/>
+        <rect x="18" y="100" width="144" height="110" rx="14" fill="none" stroke="url(#lockGoldGrad)" stroke-width="2" stroke-opacity="0.6"/>
+        <!-- Keyhole -->
+        <circle cx="90" cy="148" r="16" fill="#0A1628" stroke="#C8962A" stroke-width="1.5" stroke-opacity="0.5"/>
+        <rect x="84" y="156" width="12" height="20" rx="4" fill="#0A1628"/>
+        <!-- Keyhole highlight (animates when unlocked) -->
+        <circle id="keyholeGlow" cx="90" cy="148" r="16" fill="rgba(200,150,42,0)" />
+        <!-- Body sheen -->
+        <rect x="22" y="104" width="60" height="40" rx="10" fill="white" fill-opacity="0.04"/>
+      </svg>
+    </div>
+
+    <!-- Flying key clone (built by JS) -->
+    <div id="flyKey"></div>
+  </div>
+
+  <!-- Content revealed after animation -->
+  <div id="unlockContent">
+    <div class="unlock-divider"></div>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown-wrap">
+      <div class="countdown-label">Next Up</div>
+      <h2 class="countdown-headline">DLC <em>2027</em> Countdown</h2>
+      <!--
+        ╔══════════════════════════════════════════════════════╗
+        ║  CHANGE THIS DATE to next year's DLC start date     ║
+        ║  Format: "Month DD, YYYY HH:MM:SS"                  ║
+        ╚══════════════════════════════════════════════════════╝
+      -->
+      <p class="countdown-sub" id="dlcDateDisplay"></p>
+      <div class="countdown-tiles">
+        <div class="countdown-tile">
+          <div class="countdown-num" id="cd-days">--</div>
+          <div class="countdown-unit">Days</div>
+        </div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-tile">
+          <div class="countdown-num" id="cd-hours">--</div>
+          <div class="countdown-unit">Hours</div>
+        </div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-tile">
+          <div class="countdown-num" id="cd-mins">--</div>
+          <div class="countdown-unit">Minutes</div>
+        </div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-tile">
+          <div class="countdown-num" id="cd-secs">--</div>
+          <div class="countdown-unit">Seconds</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery-section">
+      <div class="gallery-header">
+        <div class="gallery-label">Memories</div>
+        <h2 class="gallery-title">DLC <em>2026</em> Highlights</h2>
+        <p class="gallery-desc">A look back at the moments that made this year unforgettable.</p>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <!--
+          ╔══════════════════════════════════════════════════════════════╗
+          ║  ADD / REMOVE images below. All images live in Images/       ║
+          ║  Just change the src filenames and optional caption text.     ║
+          ╚══════════════════════════════════════════════════════════════╝
+        -->
+        <div class="gallery-item" data-index="0">
+          <img src="Images/Key_Slideshow1.PNG" alt="DLC 2026 Photo 1" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="1">
+          <img src="Images/Key_Slideshow2.PNG" alt="DLC 2026 Photo 2" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="2">
+          <img src="Images/Key_Slideshow3.PNG" alt="DLC 2026 Photo 3" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="3">
+          <img src="Images/Key_Slideshow4.PNG" alt="DLC 2026 Photo 4" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="4">
+          <img src="Images/Key_Slideshow5.PNG" alt="DLC 2026 Photo 5" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="5">
+          <img src="Images/Key_Slideshow6.PNG" alt="DLC 2026 Photo 6" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="6">
+          <img src="Images/Key_Slideshow7.PNG" alt="DLC 2026 Photo 7" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="7">
+          <img src="Images/Key_Slideshow8.PNG" alt="DLC 2026 Photo 8" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="8">
+          <img src="Images/Key_Slideshow9.PNG" alt="DLC 2026 Photo 9" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="9">
+          <img src="Images/Key_Slideshow10.PNG" alt="DLC 2026 Photo 10" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="10">
+          <img src="Images/Key_Slideshow11.PNG" alt="DLC 2026 Photo 11" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <div class="gallery-item" data-index="11">
+          <img src="Images/Key_Slideshow12.PNG" alt="DLC 2026 Photo 12" loading="lazy">
+          <div class="gallery-item-overlay"><span>DLC 2026</span></div>
+        </div>
+        <!-- Add more gallery-item divs here following the same pattern -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox">
+  <button id="lightboxClose" aria-label="Close lightbox">✕</button>
+  <button id="lightboxPrev" aria-label="Previous">&#8249;</button>
+  <img id="lightboxImg" src="" alt="Gallery photo">
+  <button id="lightboxNext" aria-label="Next">&#8250;</button>
+</div>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
@@ -1384,28 +2158,124 @@
     });
   });
 
-  /* Generate twinkling stars in hero */
-  function makeStars(containerId, count) {
-    const c = document.getElementById(containerId);
-    if (!c) return;
-    for (let i = 0; i < count; i++) {
-      const s = document.createElement('div');
-      const size = Math.random() * 2.5 + 0.5;
-      s.style.cssText = `
-        position:absolute;
-        left:${Math.random()*100}%;
-        top:${Math.random()*100}%;
-        width:${size}px; height:${size}px;
-        background:white; border-radius:50%;
-        opacity:${Math.random()*0.6+0.1};
-        animation: twinkle ${Math.random()*4+2}s ease-in-out infinite;
-        animation-delay:${Math.random()*4}s;
-      `;
-      c.appendChild(s);
+  /* ── 2D PARALLAX KEY ── */
+  (function() {
+    const hero = document.getElementById('heroSection');
+    if (!hero) return;
+
+    // Dynamically fit the key to the available hero height
+    function fitKey() {
+      const heroH = hero.offsetHeight;
+      const heroW = hero.offsetWidth;
+      const keyWraps = document.querySelectorAll('.key-wrap');
+      // Key SVG is 200w × 480h → aspect ratio 200/480 = 0.4167
+      const KEY_ASPECT = 200 / 480;
+      // Max height = hero height minus nav + top/bottom padding
+      const maxH = heroH - 68 - 48;
+      // Max width = 38% of hero width (so text content has space)
+      const maxW = heroW * 0.38;
+      // Pick the smaller constraint
+      const targetH = Math.min(maxH, maxW / KEY_ASPECT);
+      const targetW = Math.min(maxW, targetH * KEY_ASPECT);
+
+      keyWraps.forEach(kw => {
+        // Only apply on screens wide enough to show the key
+        if (heroW > 768) {
+          kw.style.width = Math.round(targetW) + 'px';
+        }
+      });
     }
-  }
-  makeStars('starsContainer', 60);
-  makeStars('heroStars', 40);
+
+    fitKey();
+    window.addEventListener('resize', fitKey);
+
+    // Layer elements and their parallax speeds (px moved per 100px scrolled)
+    const layers = [
+      { el: document.getElementById('pl-glow'),      speed: 0.06 },
+      { el: document.getElementById('pl-ring1'),     speed: 0.12 },
+      { el: document.getElementById('pl-ring2'),     speed: 0.22 },
+      { el: document.getElementById('pl-particles'), speed: 0.62 },
+    ];
+
+    // Key elements moved directly (position:fixed, so layer transform won't affect them)
+    const keyLayers = [
+      { el: document.querySelector('#pl-shadow .key-wrap'), speed: 0.30 },
+      { el: document.getElementById('keyWrap'),             speed: 0.45 },
+    ];
+
+    // Scroll-driven parallax
+    function onScroll() {
+      const sy = window.scrollY;
+      const heroBottom = hero.offsetTop + hero.offsetHeight;
+      layers.forEach(({ el, speed }) => {
+        if (!el) return;
+        el.style.transform = `translateY(${-sy * speed}px)`;
+      });
+      // Key-wraps are position:fixed so we adjust their translateY directly
+      // and hide them once the hero scrolls out of view
+      keyLayers.forEach(({ el, speed }) => {
+        if (!el) return;
+        el.style.transform = `translateY(calc(-50% + ${-sy * speed}px))`;
+        el.style.visibility = sy > heroBottom ? 'hidden' : 'visible';
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Auto-hide gallery items with missing images ──
+  document.querySelectorAll('.gallery-item img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.closest('.gallery-item').style.display = 'none';
+    });
+  });
+
+    // ── Particle canvas ──
+    const pc = document.getElementById('particle-canvas');
+    if (!pc) return;
+
+    function resizeCanvas() {
+      pc.width  = hero.offsetWidth;
+      pc.height = hero.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const ctx = pc.getContext('2d');
+    const PARTICLE_COUNT = 90;
+    const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+      x: Math.random() * 1600,
+      y: Math.random() * 900,
+      r: Math.random() * 2 + 0.5,
+      dx: (Math.random() - 0.5) * 0.35,
+      dy: (Math.random() - 0.5) * 0.22,
+      alpha: Math.random() * 0.45 + 0.1,
+      pulse: Math.random() * Math.PI * 2,
+    }));
+
+    let t = 0;
+    function drawParticles() {
+      requestAnimationFrame(drawParticles);
+      t += 0.018;
+      ctx.clearRect(0, 0, pc.width, pc.height);
+
+      const W = pc.width, H = pc.height;
+      particles.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H;
+        if (p.y > H) p.y = 0;
+
+        const a = p.alpha * (0.7 + 0.3 * Math.sin(t + p.pulse));
+        ctx.beginPath();
+        ctx.arc(p.x * (W / 1600), p.y * (H / 900), p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240, 193, 75, ${a})`;
+        ctx.fill();
+      });
+    }
+    drawParticles();
+  })();
 
   /* Scroll-triggered fade-in */
   const observer = new IntersectionObserver((entries) => {
@@ -1420,5 +2290,251 @@
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 
+<script>
+/* ============================================================
+   UNLOCK SEQUENCE
+   ============================================================ */
+(function() {
+
+  /* ── CONFIG ─────────────────────────────────────────────── */
+  //  Change this to next year's DLC date/time (local time)
+  const DLC_DATE = new Date("March 12, 2027 08:00:00");
+  const DLC_LABEL = "March 12–14, 2027 · Springfield, MO";
+  /* ────────────────────────────────────────────────────────── */
+
+  const keyWrap   = document.getElementById('keyWrap');
+  const overlay   = document.getElementById('unlockOverlay');
+  const closeBtn  = document.getElementById('unlockClose');
+  const flyKey    = document.getElementById('flyKey');
+  const lockWrap  = document.getElementById('lockWrap');
+  const lockShackle = document.getElementById('lockShackle');
+  const burst     = document.getElementById('unlockBurst');
+  const content   = document.getElementById('unlockContent');
+  const dateDisp  = document.getElementById('dlcDateDisplay');
+  const animStage = document.getElementById('animStage');
+
+  if (dateDisp) dateDisp.textContent = DLC_LABEL;
+
+  let animDone = false;
+  let cdInterval = null;
+
+  /* Build a clone of the real key SVG into flyKey */
+  function buildFlyKey() {
+    const realSvg = keyWrap.querySelector('svg');
+    if (!realSvg) return;
+    flyKey.innerHTML = realSvg.outerHTML;
+    flyKey.querySelector('svg').style.cssText =
+      'width:140px;height:auto;filter:drop-shadow(0 12px 60px rgba(200,150,42,0.7));display:block;';
+  }
+
+  /* Get centre position of keyWrap relative to viewport */
+  function keyCenter() {
+    const r = keyWrap.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  }
+
+  /* Position flyKey absolutely in the animStage (which is 100vh centred) */
+  function placeFlyKeyAt(vx, vy) {
+    // animStage is position:relative; its centre is (50vw, 50vh)
+    const sx = vx - window.innerWidth / 2;
+    const sy = vy - window.innerHeight / 2;
+    flyKey.style.transform = `translate(${sx}px, ${sy}px) scale(0.9)`;
+    flyKey.style.opacity   = '1';
+  }
+
+  /* Main animation sequence */
+  function runUnlock() {
+    if (animDone) { showContent(); return; }
+    animDone = true;
+
+    buildFlyKey();
+    const kc = keyCenter();
+    flyKey.style.transition = 'none';
+    flyKey.style.opacity = '0';
+    flyKey.style.transform = `translate(${kc.x - window.innerWidth/2}px, ${kc.y - window.innerHeight/2}px) scale(0.9)`;
+
+    // Show overlay
+    overlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+
+    // Step 1: fade in flyKey at key's original position
+    requestAnimationFrame(() => {
+      flyKey.style.transition = 'opacity 0.35s ease';
+      flyKey.style.opacity = '1';
+
+      // Step 2: animate key flying toward camera (scale up + move centre)
+      setTimeout(() => {
+        flyKey.style.transition = 'transform 0.65s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease';
+        flyKey.style.transform = `translate(0px, -60px) scale(1.6) perspective(800px) rotateX(18deg)`;
+
+        // Step 3: slam back to centre, key shrinks to go-into-lock size
+        setTimeout(() => {
+          flyKey.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease';
+          flyKey.style.transform = `translate(0px, -20px) scale(0.7)`;
+
+          // Step 4: fade in lock
+          setTimeout(() => {
+            lockWrap.classList.add('visible');
+
+            // Step 5: key slides down into keyhole
+            setTimeout(() => {
+              flyKey.style.transition = 'transform 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease';
+              flyKey.style.transform = `translate(0px, 48px) scale(0.38)`;
+
+              // Step 6: key twist + shackle open
+              setTimeout(() => {
+                flyKey.style.transition = 'transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease';
+                flyKey.style.transform = `translate(0px, 48px) scale(0.38) rotate(90deg)`;
+
+                setTimeout(() => {
+                  lockShackle.classList.add('open');
+
+                  // Glow the keyhole
+                  const glow = document.getElementById('keyholeGlow');
+                  if (glow) {
+                    glow.style.transition = 'fill 0.4s ease';
+                    glow.setAttribute('fill', 'rgba(200,150,42,0.45)');
+                    setTimeout(() => glow.setAttribute('fill', 'rgba(200,150,42,0)'), 800);
+                  }
+
+                  // Step 7: burst + fade out stage
+                  setTimeout(() => {
+                    burst.classList.add('pop');
+                    flyKey.style.opacity = '0';
+
+                    setTimeout(() => {
+                      // Fade out stage, slide in content
+                      animStage.style.transition = 'opacity 0.6s ease, max-height 0.8s ease';
+                      animStage.style.opacity = '0';
+                      animStage.style.maxHeight = '0';
+                      animStage.style.overflow = 'hidden';
+                      animStage.style.minHeight = '0';
+
+                      showContent();
+                      closeBtn.classList.add('visible');
+                    }, 600);
+                  }, 400);
+                }, 350);
+              }, 500);
+            }, 600);
+          }, 300);
+        }, 500);
+      }, 200);
+    });
+  }
+
+  function showContent() {
+    content.classList.add('visible');
+    startCountdown();
+  }
+
+  /* Close overlay */
+  function closeOverlay() {
+    overlay.classList.remove('visible');
+    closeBtn.classList.remove('visible');
+    document.body.style.overflow = '';
+    if (cdInterval) { clearInterval(cdInterval); cdInterval = null; }
+  }
+
+  /* Click detection: attach to the SVG so hitting the actual gold key shape
+     triggers the animation — not just the bounding box around it.
+     pointer-events on the SVG paths means only visible key pixels are clickable. */
+  const keySvg = keyWrap.querySelector('svg');
+  if (keySvg) {
+    keySvg.style.pointerEvents = 'all';
+    keySvg.style.cursor = 'pointer';
+    /* Set pointer-events:none on the SVG container, then visibleFill on child shapes
+       so only the gold parts are hot — not empty transparent areas */
+    keySvg.setAttribute('pointer-events', 'none');
+    keySvg.querySelectorAll('circle, rect, path, text').forEach(el => {
+      el.setAttribute('pointer-events', 'visibleFill');
+    });
+    keySvg.addEventListener('click', runUnlock);
+  } else {
+    keyWrap.addEventListener('click', runUnlock);
+  }
+  closeBtn.addEventListener('click', closeOverlay);
+
+  // Also close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('visible')) closeOverlay();
+  });
+
+  /* ============================================================
+     COUNTDOWN
+     ============================================================ */
+  function startCountdown() {
+    if (cdInterval) return;
+    function tick() {
+      const now  = new Date();
+      const diff = DLC_DATE - now;
+      if (diff <= 0) {
+        document.getElementById('cd-days').textContent  = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-mins').textContent  = '00';
+        document.getElementById('cd-secs').textContent  = '00';
+        clearInterval(cdInterval);
+        return;
+      }
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000)  / 60000);
+      const secs  = Math.floor((diff % 60000)    / 1000);
+      document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+    }
+    tick();
+    cdInterval = setInterval(tick, 1000);
+  }
+
+  /* ============================================================
+     GALLERY LIGHTBOX
+     ============================================================ */
+  const lightbox     = document.getElementById('lightbox');
+  const lightboxImg  = document.getElementById('lightboxImg');
+  const lbClose      = document.getElementById('lightboxClose');
+  const lbPrev       = document.getElementById('lightboxPrev');
+  const lbNext       = document.getElementById('lightboxNext');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  let currentIdx = 0;
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    const imgEl = galleryItems[idx].querySelector('img');
+    lightboxImg.src = imgEl.src;
+    lightboxImg.alt = imgEl.alt;
+    lightbox.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('visible');
+    // restore overlay scroll (not page scroll)
+    document.body.style.overflow = 'hidden'; // overlay is still open
+  }
+  function nextImg(dir) {
+    currentIdx = (currentIdx + dir + galleryItems.length) % galleryItems.length;
+    const imgEl = galleryItems[currentIdx].querySelector('img');
+    lightboxImg.src = imgEl.src;
+    lightboxImg.alt = imgEl.alt;
+  }
+
+  galleryItems.forEach((item, i) => {
+    item.addEventListener('click', () => openLightbox(i));
+  });
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click',  () => nextImg(-1));
+  lbNext.addEventListener('click',  () => nextImg(1));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('visible')) return;
+    if (e.key === 'ArrowRight') nextImg(1);
+    if (e.key === 'ArrowLeft')  nextImg(-1);
+    if (e.key === 'Escape')     closeLightbox();
+  });
+
+})();
+</script>
 </body>
 </html>
