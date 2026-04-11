@@ -1355,7 +1355,6 @@
           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="nav-dropdown">
-          <a href="dlc.html">DLC 2027</a>
           <a href="dlc.html#calendar">Event Calendar</a>
           <a href="dlc.html">District Leadership Conference</a>
         </div>
@@ -1611,12 +1610,12 @@
         <div class="hero-card-label">Upcoming Event</div>
         <div class="hero-card-title">District Leadership Conference</div>
         <div class="hero-card-sub">University Plaza Hotel · Springfield, MO</div>
-        <div class="hero-card-badge">March 3-6, 2027</div>
+        <div class="hero-card-badge">March 3–6, 2027</div>
       </div>
       <div class="hero-card">
         <div class="hero-card-label">DLC 2027 Theme</div>
-        <div class="hero-card-title">Undecided</div>
-        <div class="hero-card-sub">Chosen During April Board Meeting</div>
+        <div class="hero-card-title">UNDECIDED</div>
+        <div class="hero-card-sub">TBD: April 17</div>
       </div>
       <div class="hero-card">
         <div class="hero-card-label">Resources</div>
@@ -1652,7 +1651,7 @@
           </svg>
         </div>
         <h3>District Board</h3>
-        <p>Meet your '25–'26 executive and lieutenant governors across all 10 divisions.</p>
+        <p>Meet your '26–'27 executive and lieutenant governors across all 10 divisions.</p>
         <span class="quicklink-arrow">Meet the board →</span>
       </a>
       <a href="resources.html" class="quicklink-card fade-in">
@@ -1730,41 +1729,67 @@
     <h2 class="section-title">News &amp; <em>Events</em></h2>
   </div>
   <div class="news-grid">
-    <a href="dlc.html" class="news-featured fade-in" aria-label="DLC 2027">
-      <div class="news-featured-bg"></div>
-      <div class="news-featured-art" id="heroStars"></div>
-      <div class="news-featured-content">
-        <span class="news-tag">Featured Event</span>
-        <h3>Missouri-Arkansas District Leadership Conference 2027</h3>
-        <p>Join us March 3–6, 2027 at University Plaza Hotel in Springfield, Missouri for forums, contests, elections, and a year of celebration.</p>
-        <div class="news-featured-meta">March 3–6, 2027 · Springfield, MO · Theme: UNDECIDED</div>
+
+    <!-- FEATURED SLIDESHOW -->
+    <div style="position:relative;border-radius:var(--radius);overflow:hidden;min-height:380px;" class="fade-in">
+
+      <!-- Slide 1: DLC (default) -->
+      <a href="dlc.html" id="news-slide-dlc" class="news-featured" aria-label="DLC 2027" style="position:absolute;inset:0;min-height:unset;opacity:1;transition:opacity 0.7s ease;z-index:2;">
+        <div class="news-featured-bg"></div>
+        <div class="news-featured-art" id="heroStars"></div>
+        <div class="news-featured-content">
+          <span class="news-tag">Featured Event</span>
+          <h3>Missouri-Arkansas District Leadership Conference 2027</h3>
+          <p>Join us March 3–6, 2027 at University Plaza Hotel in Springfield, Missouri for forums, contests, elections, and a year of celebration.</p>
+          <div class="news-featured-meta">March 3–6, 2027 · Springfield, MO · Theme: TBD</div>
+        </div>
+      </a>
+
+      <!-- Slide 2: ICON -->
+      <a href="https://www.keyclub.org/events/convention/" target="_blank" id="news-slide-icon" class="news-featured" aria-label="Key Club International Convention 2026" style="position:absolute;inset:0;min-height:unset;opacity:0;transition:opacity 0.7s ease;z-index:1;pointer-events:none;">
+        <div class="news-featured-bg" style="background:linear-gradient(135deg,#2A1A60 0%,#1A0A40 60%,#0A1628 100%);"></div>
+        <div class="news-featured-art" id="iconStars"></div>
+        <div class="news-featured-content">
+          <span class="news-tag" style="background:linear-gradient(90deg,#7C3AED,#A855F7);color:white;">Featured Event</span>
+          <h3>2026 Key Club International Convention</h3>
+          <p>Thousands of Key Clubbers from around the world gather in Dallas, Texas — make lifelong connections, compete, and celebrate service on an international stage.</p>
+          <div class="news-featured-meta">July 1–5, 2026 · Dallas, Texas · ICON 2026</div>
+        </div>
+      </a>
+
+      <!-- Slide dots -->
+      <div style="position:absolute;bottom:1rem;right:1rem;z-index:10;display:flex;gap:6px;">
+        <button id="dot-dlc" onclick="showSlide('dlc')" aria-label="DLC slide" style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;background:var(--gold);opacity:1;transition:opacity 0.3s;"></button>
+        <button id="dot-icon" onclick="showSlide('icon')" aria-label="ICON slide" style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;background:white;opacity:0.4;transition:opacity 0.3s;"></button>
       </div>
-    </a>
+    </div>
+
+    <!-- SIDEBAR -->
     <div class="news-sidebar">
-      <a href="newsletters.html" class="news-item fade-in">
-        <div class="news-item-date">
-          <div class="news-item-date-month">Apr</div>
-          <div class="news-item-date-day">26</div>
-        </div>
-        <div class="news-item-body">
-          <h4>April Newsletters Available</h4>
-          <p>Division newsletters from lieutenant governors now posted.</p>
-        </div>
-      </a>
-      <a href="resources.html#forms" class="news-item fade-in">
-        <div class="news-item-date">
-          <div class="news-item-date-month">Feb</div>
-          <div class="news-item-date-day">1</div>
-        </div>
-        <div class="news-item-body">
-          <h4>DLC Forms Deadline</h4>
-          <p>All paper forms due February 1st. Clubs on t-shirt back must submit by this date.</p>
-        </div>
-      </a>
       <a href="dlc.html#calendar" class="news-item fade-in">
         <div class="news-item-date">
           <div class="news-item-date-month">Apr</div>
-          <div class="news-item-date-day">7</div>
+          <div class="news-item-date-day">17</div>
+        </div>
+        <div class="news-item-body">
+          <h4>District Board Meeting</h4>
+          <p>All board members and LTGs meet to discuss district updates and upcoming events.</p>
+        </div>
+      </a>
+      <a href="https://www.keyclub.org/events/convention/" target="_blank" class="news-item fade-in">
+        <div class="news-item-date" style="background:linear-gradient(135deg,#2A1A60,#1A0A40);border-color:#7C3AED;">
+          <div class="news-item-date-month" style="color:#A855F7;">Jul</div>
+          <div class="news-item-date-day" style="color:white;">1</div>
+        </div>
+        <div class="news-item-body">
+          <h4>🌐 ICON — International Convention</h4>
+          <p>Key Club International's global convention in Dallas, TX. Compete, connect, and celebrate.</p>
+        </div>
+      </a>
+      <a href="dlc.html#calendar" class="news-item fade-in" id="news-live-date">
+        <div class="news-item-date">
+          <div class="news-item-date-month" id="live-month">Apr</div>
+          <div class="news-item-date-day" id="live-day">10</div>
         </div>
         <div class="news-item-body">
           <h4>View Full Event Calendar</h4>
@@ -1774,6 +1799,50 @@
     </div>
   </div>
 </div>
+
+<script>
+  /* ── News Slideshow ── */
+  let currentSlide = 'dlc';
+  function showSlide(which) {
+    const dlc  = document.getElementById('news-slide-dlc');
+    const icon = document.getElementById('news-slide-icon');
+    const dotDlc  = document.getElementById('dot-dlc');
+    const dotIcon = document.getElementById('dot-icon');
+    if (which === 'dlc') {
+      dlc.style.opacity  = '1'; dlc.style.zIndex  = '2'; dlc.style.pointerEvents  = 'all';
+      icon.style.opacity = '0'; icon.style.zIndex = '1'; icon.style.pointerEvents = 'none';
+      dotDlc.style.opacity = '1'; dotIcon.style.opacity = '0.4';
+    } else {
+      icon.style.opacity = '1'; icon.style.zIndex = '2'; icon.style.pointerEvents = 'all';
+      dlc.style.opacity  = '0'; dlc.style.zIndex  = '1'; dlc.style.pointerEvents  = 'none';
+      dotIcon.style.opacity = '1'; dotDlc.style.opacity = '0.4';
+    }
+    currentSlide = which;
+  }
+  let slideTimer = setInterval(() => showSlide(currentSlide === 'dlc' ? 'icon' : 'dlc'), 6000);
+  /* Reset timer when manually clicking a dot */
+  document.getElementById('dot-dlc').addEventListener('click',  () => { clearInterval(slideTimer); slideTimer = setInterval(() => showSlide(currentSlide === 'dlc' ? 'icon' : 'dlc'), 6000); });
+  document.getElementById('dot-icon').addEventListener('click', () => { clearInterval(slideTimer); slideTimer = setInterval(() => showSlide(currentSlide === 'dlc' ? 'icon' : 'dlc'), 6000); });
+
+  /* ── Live date on calendar item ── */
+  (function() {
+    const now = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('live-month').textContent = months[now.getMonth()];
+    document.getElementById('live-day').textContent   = now.getDate();
+  })();
+
+  /* ── ICON stars ── */
+  const iconStarsC = document.getElementById('iconStars');
+  if (iconStarsC) {
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      const sz = Math.random() * 2.5 + 0.5;
+      s.style.cssText = `position:absolute;left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:white;border-radius:50%;opacity:${Math.random()*0.5+0.1};animation:twinkle ${Math.random()*4+2}s ease-in-out infinite;animation-delay:${Math.random()*4}s;`;
+      iconStarsC.appendChild(s);
+    }
+  }
+</script>
 
 <div class="snapshot-bg section-full">
   <div class="section-inner">
@@ -1792,7 +1861,7 @@
       <div class="snapshot-card fade-in">
         <div class="snapshot-card-num">10</div>
         <h4>Divisions</h4>
-        <p>Each led by an elected lieutenant governor serving their region</p>
+        <p>Each led by an elected lieutenant governor</p>
         <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:100%"></div></div>
       </div>
       <div class="snapshot-card fade-in">
@@ -1885,7 +1954,7 @@
 
     <div class="resources-cta-box fade-in">
       <h3>District Leadership Conference</h3>
-      <p>The 2027 DLC will be held March 3–6 at the University Plaza Hotel in Springfield, Missouri. Theme: <strong style="color:var(--gold-lt)">UNDECIDED</strong></p>
+      <p>The 2027 DLC will be held March 3–6 at the University Plaza Hotel in Springfield, Missouri. Theme: <strong style="color:var(--gold-lt)">TBD — announced at the April board meeting.</strong></p>
       <p style="margin-top:0.5rem">Access registration forms, award applications, candidate packets, and contest entries.</p>
       <a href="dlc.html" class="btn btn-primary" style="margin-top:0.5rem">
         View DLC Info &amp; Forms
@@ -2299,8 +2368,8 @@
 
   /* ── CONFIG ─────────────────────────────────────────────── */
   //  Change this to next year's DLC date/time (local time)
-  const DLC_DATE = new Date("March 12, 2027 08:00:00");
-  const DLC_LABEL = "March 12–14, 2027 · Springfield, MO";
+  const DLC_DATE = new Date("March 3, 2027 08:00:00");
+  const DLC_LABEL = "March 3–6, 2027 · Springfield, MO";
   /* ────────────────────────────────────────────────────────── */
 
   const keyWrap   = document.getElementById('keyWrap');
