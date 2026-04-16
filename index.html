@@ -238,12 +238,39 @@
     position: relative;
     min-height: 100svh;
     display: flex; align-items: center;
-    background: var(--navy);
     overflow: hidden;
     padding-top: 68px;
+
+    /* Photo background — crop top 33% by starting at 33% of the image height.
+       background-size: cover ensures it fills the hero width.
+       The dark overlay (next rule) keeps text readable on any photo. */
+    background-color: var(--navy);
+    background-image:
+      linear-gradient(
+        to bottom,
+        rgba(10, 22, 40, 0.88) 0%,
+        rgba(10, 22, 40, 0.78) 40%,
+        rgba(10, 22, 40, 0.90) 100%
+      ),
+      url('Images/Key_Slideshow13.PNG');
+    background-size: cover;
+    /* Start at 33% down the image to crop the Instagram text at the top */
+    background-position: center 53%;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* subtle parallax on desktop */
   }
 
-  /* Geometric background patterns */
+  /* On mobile, fixed attachment causes rendering issues — switch to scroll */
+  @media (max-width: 768px) {
+    .hero {
+      background-attachment: scroll;
+      /* On smaller screens, push a touch further down the image
+         to keep the subject (people/action) centered */
+      background-position: center 40%;
+    }
+  }
+
+  /* Geometric background patterns — layered on top of the photo */
   .hero-bg {
     position: absolute; inset: 0;
     overflow: hidden;
@@ -254,7 +281,7 @@
     position: absolute;
     top: -20%; right: -10%;
     width: 65vw; height: 65vw;
-    background: radial-gradient(ellipse at 60% 40%, rgba(200,150,42,0.12) 0%, rgba(26,58,107,0.2) 50%, transparent 75%);
+    background: radial-gradient(ellipse at 60% 40%, rgba(200,150,42,0.08) 0%, rgba(26,58,107,0.12) 50%, transparent 75%);
     border-radius: 50%;
   }
   .hero-bg::after {
@@ -262,14 +289,14 @@
     position: absolute;
     bottom: -10%; left: -5%;
     width: 50vw; height: 50vw;
-    background: radial-gradient(ellipse, rgba(26,58,107,0.4) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(26,58,107,0.25) 0%, transparent 70%);
     border-radius: 50%;
   }
   .hero-grid {
     position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
   }
