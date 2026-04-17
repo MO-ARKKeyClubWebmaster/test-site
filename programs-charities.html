@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
 <style>
   :root{--navy:#0A1628;--blue:#1A3A6B;--gold:#C8962A;--gold-lt:#F0C14B;--cream:#F7F4EE;--white:#FFFFFF;--text:#1C1C1C;--muted:#5A5A6A;--border:rgba(10,22,40,0.12);--radius:14px;--radius-sm:8px;--ff-display:'DM Serif Display',Georgia,serif;--ff-body:'DM Sans',system-ui,sans-serif;--transition:0.25s cubic-bezier(0.4,0,0.2,1);--shadow-card:0 2px 12px rgba(10,22,40,0.08),0 1px 3px rgba(10,22,40,0.06);--shadow-hover:0 8px 32px rgba(10,22,40,0.14),0 2px 8px rgba(10,22,40,0.08);}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -504,23 +505,6 @@
 </footer>
 
 <script>
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20), {passive:true});
-
-  const toggle = document.getElementById('navToggle');
-  const mobile = document.getElementById('navMobile');
-  toggle.addEventListener('click', () => {
-    const open = mobile.classList.toggle('open');
-    toggle.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-  });
-  mobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    mobile.classList.remove('open');
-    toggle.classList.remove('open');
-    toggle.setAttribute('aria-expanded', false);
-    document.body.style.overflow = '';
-  }));
 
   // Section tab active state on scroll
   const tabs = document.querySelectorAll('.section-tab');
