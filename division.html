@@ -119,8 +119,8 @@
   margin-bottom: 1rem;
   max-width: 50ch;
 }
-.ltg-profile-quote::before { content: '"'; }
-.ltg-profile-quote::after { content: '"'; }
+.ltg-profile-quote::before { content: '\201C'; }
+.ltg-profile-quote::after { content: '\201D'; }
 .ltg-profile-email {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.8125rem;
@@ -294,10 +294,10 @@ footer{background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);paddin
       <div class="ltg-profile-eyebrow" id="profileEyebrow">Lieutenant Governor</div>
       <h1 class="ltg-profile-name" id="profileName">Loading…</h1>
       <p class="ltg-profile-div" id="profileDiv"></p>
-      <p class="ltg-profile-quote" id="profileQuote">PERSONAL QUOTE</p>
+      <p class="ltg-profile-quote" id="profileQuote"></p>
       <a class="ltg-profile-email" id="profileEmail" href="#">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M1 6l7 4.5L15 6"/></svg>
-        EMAIL
+        <span id="profileEmailText"></span>
       </a>
     </div>
   </div>
@@ -393,16 +393,16 @@ const DIV_NAMES = {
 };
 
 const LTG_DATA = {
-  1: { name:'Savannah Scruggs', img:'Board Photos/ltg1.png' },
-  2: { name:'Pritam Avuthu',    img:'Board Photos/ltg2.png' },
-  3: { name:'Mary Gingerich',   img:'Board Photos/ltg3.png' },
-  4: { name:'Geo Reji',         img:'Board Photos/ltg4.png' },
-  5: { name:'Makenlei Shafferkoetter', img:'Board Photos/ltg5.png' },
-  6: { name:'Ava Long',         img:'Board Photos/ltg6.png' },
-  7: { name:'Jayden Salzman',   img:'Board Photos/ltg7.png' },
-  8: { name:'Andy Santizo',     img:'Board Photos/ltg8.png' },
-  9: { name:'Amara Miles',      img:'Board Photos/ltg9.png' },
-  10:{ name:'Tanvi Narendhula', img:'Board Photos/ltg10.png' }
+  1:  { name:'Savannah Scruggs',        img:'Board Photos/ltg1.jpeg',  email:'ltg.01@moarkkeyclub.com', slogan:'Be The Key That Opens Doors For Others' },
+  2:  { name:'Pritam Avuthu',           img:'Board Photos/ltg2.jpeg',  email:'ltg.02@moarkkeyclub.com', slogan:'Service And Success' },
+  3:  { name:'Mary Gingerich',          img:'Board Photos/ltg3.jpeg',  email:'ltg.03@moarkkeyclub.com', slogan:'Learn, Lead, Serve' },
+  4:  { name:'Geo Reji',               img:'Board Photos/ltg4.jpeg',  email:'ltg.04@moarkkeyclub.com', slogan:'In Service We Trust' },
+  5:  { name:'Makenlei Shafferkoetter', img:'Board Photos/ltg5.jpeg',  email:'ltg.05@moarkkeyclub.com', slogan:'Lead With Service, Serve With Heart' },
+  6:  { name:'Ava Long',               img:'Board Photos/ltg6.jpeg',  email:'ltg.06@moarkkeyclub.com', slogan:'Turning Vision Into Action' },
+  7:  { name:'Jayden Salzman',         img:'Board Photos/ltg7.jpeg',  email:'ltg.07@moarkkeyclub.com', slogan:'' },
+  8:  { name:'Andy Santizo',           img:'Board Photos/ltg8.jpeg',  email:'ltg.08@moarkkeyclub.com', slogan:'Vini Vidi Vici' },
+  9:  { name:'Amara Miles',            img:'Board Photos/ltg9.jpeg',  email:'ltg.09@moarkkeyclub.com', slogan:'Everyone Can Be Great Because Everyone Can Serve' },
+  10: { name:'Tanvi Narendhula',       img:'Board Photos/ltg10.jpeg', email:'ltg.10@moarkkeyclub.com', slogan:'Service Is The Key' }
 };
 
 /* ── COUNTY → DIVISION (full mirror of our-district.html) ── */
@@ -561,7 +561,7 @@ const params = new URLSearchParams(window.location.search);
 const divNum = parseInt(params.get('div')) || 1;
 const divColor = DIV_COLORS[divNum] || '#888';
 const divName = DIV_NAMES[divNum] || `Division ${divNum}`;
-const ltg = LTG_DATA[divNum] || { name:'TBA', img:'' };
+const ltg = LTG_DATA[divNum] || { name:'TBA', img:'', email:'', slogan:'' };
 
 // Update page title
 document.title = `${divName} | MO-ARK District Key Club`;
@@ -570,13 +570,14 @@ document.title = `${divName} | MO-ARK District Key Club`;
 document.getElementById('heroColorBar').style.background = divColor;
 
 // Division stripe
-document.getElementById('divStripe').style.background = `linear-gradient(90deg, ${divColor} 0%, transparent 100%)`;
-document.getElementById('divStripe').style.opacity = '0.7';
+const stripeEl = document.getElementById('divStripe');
+stripeEl.style.background = `linear-gradient(90deg, ${divColor} 0%, transparent 100%)`;
+stripeEl.style.opacity = '0.7';
 
 // Breadcrumb
 document.getElementById('breadcrumbDiv').textContent = divName.split('—')[0].trim();
 
-// Map title
+// Map title & desc
 document.getElementById('mapTitle').innerHTML = `${divName.split('—')[0].trim()} <em>Map</em>`;
 document.getElementById('mapDesc').textContent = `County shading shows all district divisions. Division ${divNum} counties are outlined with a glowing border.`;
 document.getElementById('schoolsDesc').textContent = `The following Key Club chapters are part of ${divName.split('—')[0].trim()}.`;
@@ -586,6 +587,24 @@ document.getElementById('profileEyebrow').textContent = `Lieutenant Governor · 
 document.getElementById('profileName').textContent = ltg.name;
 document.getElementById('profileDiv').textContent = divName;
 document.getElementById('profileAvatar').textContent = divNum;
+
+// Slogan
+const quoteEl = document.getElementById('profileQuote');
+if (ltg.slogan) {
+  quoteEl.textContent = ltg.slogan;
+} else {
+  quoteEl.style.display = 'none';
+}
+
+// Email
+const emailLink = document.getElementById('profileEmail');
+const emailText = document.getElementById('profileEmailText');
+if (ltg.email) {
+  emailLink.href = `mailto:${ltg.email}`;
+  emailText.textContent = ltg.email;
+} else {
+  emailLink.style.display = 'none';
+}
 
 // Try loading the LTG photo
 const imgWrap = document.getElementById('profileImgWrap');
@@ -620,8 +639,6 @@ divSchools.forEach(s => {
 /* ═══════════════════════════════════════════════════════
    MAP — same base as our-district.html
    ═══════════════════════════════════════════════════════ */
-
-// Per-division map centers & zoom levels
 const DIV_VIEWS = {
   1: {center:[39.1,-94.2], zoom:7},
   2: {center:[39.3,-92.3], zoom:7},
@@ -642,10 +659,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png
   attribution: '&copy; <a href="https://carto.com/">CARTO</a>', maxZoom: 18
 }).addTo(map);
 
-// We'll store features of THIS division to compute outline
-let divisionLayer = null;
-let divisionFeatures = [];
-
 fetch('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json')
   .then(r => r.json())
   .then(data => {
@@ -654,7 +667,6 @@ fetch('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties
       features: data.features.filter(f => f.properties.STATE === '29' || f.properties.STATE === '05')
     };
 
-    // Draw all counties with their division colors (same as our-district.html)
     L.geoJSON(moar, {
       style(feature) {
         const fips = feature.properties.GEO_ID.replace('0500000US', '');
@@ -679,41 +691,28 @@ fetch('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties
       }
     }).addTo(map);
 
-    // Build outline layer for just THIS division — combine border counties
-    // Strategy: draw this division's counties with a glowing stroke on top
+    // Glow outline for this division
     const thisDivFeatures = moar.features.filter(f => {
       const fips = f.properties.GEO_ID.replace('0500000US', '');
       return CD[fips] === divNum;
     });
 
     if (thisDivFeatures.length > 0) {
-      // Glow layer (wider, transparent)
       L.geoJSON({type:'FeatureCollection', features: thisDivFeatures}, {
         style: {
-          fillColor: 'transparent',
-          fillOpacity: 0,
-          color: divColor,
-          weight: 8,
-          opacity: 0.25,
-          interactive: false
+          fillColor: 'transparent', fillOpacity: 0,
+          color: divColor, weight: 8, opacity: 0.25, interactive: false
         }
       }).addTo(map);
 
-      // Core glow line
       L.geoJSON({type:'FeatureCollection', features: thisDivFeatures}, {
         style: {
-          fillColor: 'transparent',
-          fillOpacity: 0,
-          color: divColor,
-          weight: 3.5,
-          opacity: 0.9,
-          interactive: false,
-          dashArray: null
+          fillColor: 'transparent', fillOpacity: 0,
+          color: divColor, weight: 3.5, opacity: 0.9, interactive: false
         }
       }).addTo(map);
     }
 
-    // City/road labels on top
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
       maxZoom: 18, pane: 'shadowPane'
     }).addTo(map);
@@ -722,7 +721,6 @@ fetch('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {maxZoom: 18}).addTo(map);
   });
 
-// School markers — same icon system as our-district.html
 function makeIcon(div) {
   const c = DIV_COLORS[div] || '#888';
   return L.divIcon({
@@ -737,7 +735,6 @@ SCHOOLS.forEach(s => {
     .bindPopup(`<div class="popup-name">${s.name}</div><div class="popup-div">${DIV_NAMES[s.div]}</div><div class="popup-addr">${s.addr}</div>`);
 });
 
-// Legend
 const legend = L.control({position: 'bottomright'});
 legend.onAdd = () => {
   const d = L.DomUtil.create('div', 'map-legend');
