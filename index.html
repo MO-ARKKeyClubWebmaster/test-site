@@ -16,7 +16,7 @@
 <title>MO-ARK District | Key Club International</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
 <style>
   /* ============================================================
@@ -40,9 +40,9 @@
     background-image:
       linear-gradient(
         to bottom,
-        rgba(10, 22, 40, 0.88) 0%,
-        rgba(10, 22, 40, 0.78) 40%,
-        rgba(10, 22, 40, 0.90) 100%
+        rgba(10, 22, 40, 0.62) 0%,
+        rgba(10, 22, 40, 0.55) 40%,
+        rgba(10, 22, 40, 0.72) 100%
       ),
       url('Images/Key_Slideshow13.PNG');
     background-size: cover;
@@ -267,7 +267,7 @@
   }
 
   .hero-stats {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 1px solid rgba(255,255,255,0.1);
@@ -736,7 +736,7 @@
     .nav-toggle { display: flex; }
     .values-grid { grid-template-columns: 1fr; }
     .snapshot-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
     .hero-stat-value { font-size: 1.5rem; }
     .section { padding: 4rem 1.25rem; }
     .footer-top { grid-template-columns: 1fr; gap: 2rem; }
@@ -749,6 +749,193 @@
     .btn { width: 100%; justify-content: center; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
   }
+
+  /* ============================================================
+     GRAIN / NOISE TEXTURE OVERLAY ON HERO
+     ============================================================ */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.032;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 180px 180px;
+  }
+
+  /* ============================================================
+     HERO TITLE ANIMATED ENTRANCE
+     ============================================================ */
+  @keyframes heroLineReveal {
+    from { opacity: 0; transform: translateY(30px); filter: blur(3px); }
+    to   { opacity: 1; transform: translateY(0);   filter: blur(0); }
+  }
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Gold accent rule above eyebrow */
+  .hero-accent-rule {
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+    border-radius: 2px;
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    animation: heroFadeUp 0.5s ease forwards;
+    animation-delay: 0.1s;
+  }
+
+  .hero-eyebrow {
+    opacity: 0;
+    animation: heroFadeUp 0.55s ease forwards;
+    animation-delay: 0.28s;
+  }
+
+  /* Each line of the hero title animates independently */
+  .hero-title-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+  }
+  .hero-title-line-inner {
+    display: block;
+    opacity: 0;
+    animation: heroLineReveal 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .hero-title-line:nth-child(1) .hero-title-line-inner { animation-delay: 0.42s; }
+  .hero-title-line:nth-child(2) .hero-title-line-inner { animation-delay: 0.58s; }
+  .hero-title-line:nth-child(3) .hero-title-line-inner { animation-delay: 0.74s; }
+
+  .hero-desc {
+    opacity: 0;
+    animation: heroFadeUp 0.6s ease forwards;
+    animation-delay: 0.92s;
+  }
+  .hero-actions {
+    opacity: 0;
+    animation: heroFadeUp 0.6s ease forwards;
+    animation-delay: 1.08s;
+  }
+  .hero-stats {
+    opacity: 0;
+    animation: heroFadeUp 0.6s ease forwards;
+    animation-delay: 1.22s;
+  }
+
+  /* ============================================================
+     SECTION LABEL — gold left border editorial accent
+     ============================================================ */
+  .section-label {
+    border-left: 2px solid var(--gold);
+    padding-left: 0.6rem;
+  }
+  /* Strip it from the resources strip (white-on-navy context already has contrast) */
+  .resources-content .section-label {
+    border-left-color: var(--gold-lt);
+  }
+  /* Mission strip */
+  .mission-label {
+    border-left: 2px solid var(--gold);
+    padding-left: 0.6rem;
+  }
+
+  /* ============================================================
+     MOBILE HEADING LINE-HEIGHT FIX
+     ============================================================ */
+  @media (max-width: 480px) {
+    .hero-title, .section-title, .page-title { line-height: 1.18; }
+  }
+
+  /* ============================================================
+     VALUE CARDS — differentiate #1 and #2
+     ============================================================ */
+  .value-card:nth-child(1) { border-top: 3px solid rgba(200,150,42,0.4); }
+  .value-card:nth-child(2) {
+    background: linear-gradient(145deg, #1e4580 0%, #0f2448 100%);
+    border-top: 3px solid var(--gold);
+  }
+  .value-card:nth-child(3) { border-top: 3px solid var(--navy); }
+
+  /* ============================================================
+     MISSION STRIP — watermark key
+     ============================================================ */
+  .mission-strip { position: relative; overflow: hidden; }
+  .mission-watermark {
+    position: absolute;
+    right: -2%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(400px, 42vw);
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .mission-inner { position: relative; z-index: 1; }
+
+  /* ============================================================
+     SNAPSHOT BARS — animated via IntersectionObserver
+     ============================================================ */
+  .snapshot-card-fill {
+    width: 0 !important;
+    transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .snapshot-card-fill.bar-animate {
+    width: var(--bar-target) !important;
+  }
+
+  /* ============================================================
+     MASONRY GALLERY GRID
+     ============================================================ */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 200px;
+    gap: 1.25rem;
+  }
+  .gallery-item { aspect-ratio: unset; height: auto; }
+  .gallery-item:nth-child(1),
+  .gallery-item:nth-child(5),
+  .gallery-item:nth-child(9)  { grid-row: span 2; }
+
+  @media (max-width: 768px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 155px; }
+  }
+  @media (max-width: 480px) {
+    .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+    .gallery-item:nth-child(1),
+    .gallery-item:nth-child(5),
+    .gallery-item:nth-child(9) { grid-row: span 1; }
+  }
+
+  /* ============================================================
+     LIGHTBOX — image counter
+     ============================================================ */
+  #lightboxCounter {
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    background: rgba(10,22,40,0.78);
+    border: 1px solid rgba(200,150,42,0.35);
+    border-radius: 100px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gold-lt);
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.08em;
+    pointer-events: none;
+  }
+
+  /* ============================================================
+     STAT COUNTER — tabular nums prevent layout jump
+     ============================================================ */
+  .hero-stat-value { font-variant-numeric: tabular-nums; }
+  .countdown-num   { font-variant-numeric: tabular-nums; }
 
   /* ============================================================
      KEY CLICK HINT
@@ -1895,15 +2082,18 @@ function dismissDLCSplash() {
 
   <div class="hero-inner">
     <div class="hero-content">
+      <span class="hero-accent-rule" aria-hidden="true"></span>
       <div class="hero-eyebrow">
         <div class="hero-eyebrow-dot"></div>
         Missouri-Arkansas District
       </div>
       <h1 class="hero-title">
-        Caring —<br><em>Our Way</em><br>of Life.
+        <span class="hero-title-line"><span class="hero-title-line-inner">Caring —</span></span>
+        <span class="hero-title-line"><span class="hero-title-line-inner"><em>Our Way</em></span></span>
+        <span class="hero-title-line"><span class="hero-title-line-inner">of Life.</span></span>
       </h1>
       <p class="hero-desc">
-        MO-ARK is one of 33 districts of Key Club International — the world's oldest and largest student-led service organization. 126 clubs. 10 divisions. One mission.
+        MO-ARK is one of 33 districts of Key Club International — the world's oldest and largest student-led service organization. 122 clubs. 10 divisions. One mission.
       </p>
       <div class="hero-actions">
         <a href="about.html" class="btn btn-primary">
@@ -1916,15 +2106,19 @@ function dismissDLCSplash() {
       </div>
       <div class="hero-stats">
         <div>
-          <div class="hero-stat-value">126</div>
-          <div class="hero-stat-label">Schools</div>
+          <div class="hero-stat-value" data-count="3576" data-suffix="">3576</div>
+          <div class="hero-stat-label">Key Clubbers</div>
         </div>
         <div>
-          <div class="hero-stat-value">10</div>
+          <div class="hero-stat-value" data-count="122" data-suffix="">122</div>
+          <div class="hero-stat-label">Clubs</div>
+        </div>
+        <div>
+          <div class="hero-stat-value" data-count="10" data-suffix="">10</div>
           <div class="hero-stat-label">Divisions</div>
         </div>
         <div>
-          <div class="hero-stat-value">2</div>
+          <div class="hero-stat-value" data-count="2" data-suffix="">2</div>
           <div class="hero-stat-label">States</div>
         </div>
       </div>
@@ -2017,6 +2211,16 @@ function dismissDLCSplash() {
 </div>
 
 <div class="mission-strip">
+  <!-- Watermark key icon -->
+  <svg class="mission-watermark" viewBox="0 0 200 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="100" cy="95" r="72" fill="#C8962A"/>
+    <circle cx="100" cy="95" r="46" fill="#0A1628"/>
+    <rect x="86" y="158" width="28" height="262" rx="5" fill="#C8962A"/>
+    <rect x="114" y="205" width="34" height="24" rx="4" fill="#C8962A"/>
+    <rect x="114" y="262" width="27" height="20" rx="4" fill="#C8962A"/>
+    <rect x="114" y="316" width="32" height="18" rx="4" fill="#C8962A"/>
+    <rect x="86" y="408" width="28" height="12" rx="4" fill="#C8962A"/>
+  </svg>
   <div class="mission-inner">
     <div class="fade-in">
       <div class="mission-label">Who We Are</div>
@@ -2181,25 +2385,25 @@ function dismissDLCSplash() {
         <div class="snapshot-card-num">126<span class="snapshot-card-unit">+</span></div>
         <h4>Member Schools</h4>
         <p>Active Key Club chapters across Missouri and Arkansas</p>
-        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:84%"></div></div>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="--bar-target:84%"></div></div>
       </div>
       <div class="snapshot-card fade-in">
         <div class="snapshot-card-num">10</div>
         <h4>Divisions</h4>
         <p>Each led by an elected lieutenant governor</p>
-        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:100%"></div></div>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="--bar-target:100%"></div></div>
       </div>
       <div class="snapshot-card fade-in">
         <div class="snapshot-card-num">1947</div>
         <h4>Est. Founding Year</h4>
         <p>First organizational conference held in Hollister, Missouri</p>
-        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:60%"></div></div>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="--bar-target:60%"></div></div>
       </div>
       <div class="snapshot-card fade-in">
         <div class="snapshot-card-num">14<span class="snapshot-card-unit">th</span></div>
         <h4>of 33 Districts</h4>
         <p>One district in Key Club International's global network</p>
-        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="width:50%"></div></div>
+        <div class="snapshot-card-bar"><div class="snapshot-card-fill" style="--bar-target:50%"></div></div>
       </div>
     </div>
   </div>
@@ -2448,6 +2652,7 @@ function dismissDLCSplash() {
 <!-- Lightbox -->
 <div id="lightbox">
   <button id="lightboxClose" aria-label="Close lightbox">✕</button>
+  <span id="lightboxCounter">1 / 12</span>
   <button id="lightboxPrev" aria-label="Previous">&#8249;</button>
   <img id="lightboxImg" src="" alt="Gallery photo">
   <button id="lightboxNext" aria-label="Next">&#8250;</button>
@@ -2529,9 +2734,17 @@ function dismissDLCSplash() {
 <script>
   /* Nav scroll effect */
 
-  /* Close mobile menu on link click */
+  /* Mobile hamburger toggle — was missing click handler */
   const toggle = document.querySelector('.nav-toggle');
   const mobile = document.querySelector('.nav-mobile');
+  toggle.addEventListener('click', () => {
+    const isOpen = mobile.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  /* Close mobile menu on link click */
   window.addEventListener('scroll', () => {
   document.querySelector('.nav').classList.toggle('scrolled', window.scrollY > 10);
   });
@@ -2674,6 +2887,70 @@ function dismissDLCSplash() {
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  /* ── ACTIVE NAV LINK ── */
+  document.querySelectorAll('.nav-link, .nav-dropdown a').forEach(link => {
+    if (link.href === location.href) link.classList.add('active');
+  });
+
+  /* ── HERO STAT COUNT-UP ──
+     Triggered by IntersectionObserver once stats scroll into view.
+     Uses easeOutQuart so numbers slow down near the end. */
+  function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+  function animateCounter(el, target, duration) {
+    const start = performance.now();
+    const isLarge = target >= 1000; // use comma formatting for large nums
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const value = Math.round(easeOutQuart(progress) * target);
+      el.textContent = isLarge ? value.toLocaleString() : value;
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = isLarge ? target.toLocaleString() : target;
+    }
+    requestAnimationFrame(step);
+  }
+
+  const statEls = document.querySelectorAll('.hero-stat-value[data-count]');
+  let statsAnimated = false;
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !statsAnimated) {
+        statsAnimated = true;
+        statEls.forEach((el, i) => {
+          const target = parseInt(el.dataset.count, 10);
+          // Stagger each counter slightly
+          setTimeout(() => animateCounter(el, target, 1800), i * 120);
+        });
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  if (statEls.length) statsObserver.observe(statEls[0].closest('.hero-stats'));
+
+  /* ── SNAPSHOT PROGRESS BARS — animate on scroll ── */
+  const barFills = document.querySelectorAll('.snapshot-card-fill');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Small delay so user sees the animation start
+        setTimeout(() => entry.target.classList.add('bar-animate'), 150);
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  barFills.forEach(bar => barObserver.observe(bar));
+
+  /* ── NEWS SLIDESHOW PAUSE ON HOVER ── */
+  const slideshowEl = document.querySelector('.news-featured')?.closest('[style]');
+  if (slideshowEl) {
+    slideshowEl.addEventListener('mouseenter', () => clearInterval(slideTimer));
+    slideshowEl.addEventListener('mouseleave', () => {
+      slideTimer = setInterval(() => showSlide(currentSlide === 'dlc' ? 'icon' : 'dlc'), 6000);
+    });
+  }
 </script>
 
 <script>
@@ -2880,30 +3157,36 @@ function dismissDLCSplash() {
      ============================================================ */
   const lightbox     = document.getElementById('lightbox');
   const lightboxImg  = document.getElementById('lightboxImg');
+  const lightboxCounter = document.getElementById('lightboxCounter');
   const lbClose      = document.getElementById('lightboxClose');
   const lbPrev       = document.getElementById('lightboxPrev');
   const lbNext       = document.getElementById('lightboxNext');
   const galleryItems = document.querySelectorAll('.gallery-item');
   let currentIdx = 0;
 
+  function updateCounter() {
+    if (lightboxCounter) lightboxCounter.textContent = `${currentIdx + 1} / ${galleryItems.length}`;
+  }
+
   function openLightbox(idx) {
     currentIdx = idx;
     const imgEl = galleryItems[idx].querySelector('img');
     lightboxImg.src = imgEl.src;
     lightboxImg.alt = imgEl.alt;
+    updateCounter();
     lightbox.classList.add('visible');
     document.body.style.overflow = 'hidden';
   }
   function closeLightbox() {
     lightbox.classList.remove('visible');
-    // restore overlay scroll (not page scroll)
-    document.body.style.overflow = 'hidden'; // overlay is still open
+    document.body.style.overflow = 'hidden'; // overlay still open
   }
   function nextImg(dir) {
     currentIdx = (currentIdx + dir + galleryItems.length) % galleryItems.length;
     const imgEl = galleryItems[currentIdx].querySelector('img');
     lightboxImg.src = imgEl.src;
     lightboxImg.alt = imgEl.alt;
+    updateCounter();
   }
 
   galleryItems.forEach((item, i) => {
@@ -2919,6 +3202,16 @@ function dismissDLCSplash() {
     if (e.key === 'ArrowLeft')  nextImg(-1);
     if (e.key === 'Escape')     closeLightbox();
   });
+
+  /* ── Swipe gesture support (mobile) ── */
+  let touchStartX = 0;
+  lightbox.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', e => {
+    const delta = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(delta) > 50) nextImg(delta < 0 ? 1 : -1);
+  }, { passive: true });
 
 })();
 </script>

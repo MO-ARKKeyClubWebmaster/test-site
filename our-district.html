@@ -24,6 +24,27 @@
   .breadcrumb a{color:var(--blue);transition:color var(--transition);}
   .breadcrumb a:hover{color:var(--navy);}
   .breadcrumb-sep{opacity:0.4;}
+  /* LTG clickable card extras */
+  .ltg-card { cursor: pointer !important; }
+  .ltg-card .board-card-front {
+    border-top: 2.5px solid var(--gold);
+    position: relative;
+  }
+  .ltg-nav-hint {
+    position: absolute;
+    bottom: 0.6rem; right: 0.7rem;
+    width: 20px; height: 20px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition), transform var(--transition);
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  .ltg-nav-hint svg { width: 10px; height: 10px; color: var(--navy); }
+  .ltg-card:hover .ltg-nav-hint { opacity: 1; transform: translateX(2px); }
+  .board-card.has-photo.ltg-card:hover .board-card-inner { transform: rotateY(180deg); }
   .section-tabs{background:var(--white);border-bottom:2px solid var(--border);position:sticky;top:68px;z-index:200;}
   .section-tabs-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;}
   .section-tab{padding:1rem 1.5rem;font-size:0.875rem;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:color var(--transition),border-color var(--transition);}
@@ -38,13 +59,125 @@
   .board-intro{background:var(--cream);padding:2rem 1.5rem;border-radius:var(--radius);margin-bottom:2.5rem;}
   .board-intro p{font-size:1rem;color:var(--muted);line-height:1.7;max-width:65ch;}
   .board-group-title{font-family:var(--ff-display);font-size:1.25rem;color:var(--navy);margin:2.5rem 0 1.5rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gold);}
-  .board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;margin-bottom:2rem;}
-  .board-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:center;transition:box-shadow var(--transition),transform var(--transition);}
-  .board-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-3px);}
+  /* ── Board photo strip ── */
+  .board-photo-strip{display:flex;gap:1.25rem;margin-bottom:2.5rem;width:100%;}
+  .board-photo-main{flex:3;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);background:var(--cream);}
+  .board-photo-mascot{flex:1;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);background:var(--cream);}
+  .board-photo-main img,.board-photo-mascot img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+  @media(max-width:600px){.board-photo-strip{flex-direction:column;}.board-photo-mascot{flex:unset;height:220px;}}
+  .board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;margin-bottom:2rem;align-items:stretch;}
+
+  /* ── FLIP CARD SYSTEM ── */
+  /*
+     Strategy: the .board-card-inner uses transform-style:preserve-3d.
+     The FRONT is in normal flow (position:relative) so it naturally
+     sets the card's height based on content. The BACK is position:absolute
+     inset:0 so it stretches to match. Both are rotated on the Z-axis
+     so only one face is visible at a time.
+  */
+  .board-card {
+    perspective: 900px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius);
+    cursor: default;
+  }
+
+  .board-card-inner {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    border-radius: var(--radius);
+  }
+
+  /* Flip on hover only when image confirmed present */
+  .board-card.has-photo:hover .board-card-inner {
+    transform: rotateY(180deg);
+  }
+  /* Regular lift for non-photo cards */
+  .board-card:not(.has-photo):hover .board-card-front {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* FRONT — in normal flow so it controls the height */
+  .board-card-front {
+    position: relative;        /* stays in flow → drives height */
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  /* Gold top border hints at flip */
+  .board-card.has-photo .board-card-front {
+    border-top: 2.5px solid var(--gold);
+  }
+
+  /* BACK — absolutely fills the same space as the front */
+  .board-card-back {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: rotateY(180deg);
+    overflow: hidden;
+    background: var(--navy);
+    box-shadow: var(--shadow-hover);
+  }
+  .board-card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+  .board-card-back-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(10,22,40,0.9) 0%, transparent 100%);
+    padding: 1.25rem 1rem 0.875rem;
+  }
+  .board-card-back-name {
+    font-family: var(--ff-display);
+    font-size: 0.9375rem;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .board-card-back-role {
+    font-size: 0.7rem;
+    color: var(--gold-lt);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-weight: 600;
+    margin-top: 0.2rem;
+  }
+  /* Flip-hint icon in top-right of front */
+  .flip-hint {
+    position: absolute;
+    top: 0.6rem; right: 0.7rem;
+    width: 18px; height: 18px;
+    opacity: 0.3;
+    color: var(--gold);
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
   .board-avatar{width:72px;height:72px;border-radius:50%;background:var(--navy);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:1.5rem;color:var(--gold);}
   .board-name{font-weight:600;font-size:0.9375rem;color:var(--navy);margin-bottom:0.25rem;}
   .board-role{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:500;}
-  .board-email{font-size:0.75rem;color:var(--blue);margin-top:0.5rem;word-break:break-all;}
+  .board-email{font-size:0.75rem;color:var(--blue);margin-top:0.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;}
   .map-section-wrap{background:var(--cream);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
   .map-layout{display:flex;height:700px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.09);}
   .map-sidebar{width:300px;flex-shrink:0;background:var(--white);display:flex;flex-direction:column;border-right:1px solid var(--border);}
@@ -172,38 +305,362 @@
   <div class="board-intro">
     <p>The district board is responsible for overseeing all 10 divisions in the district. Board meetings are held throughout the service year where members discuss the district bylaw, work in committees, and plan the District Leadership Conference. For more information about DLC, <a href="dlc.html" style="color:var(--blue);font-weight:600;">visit the DLC page.</a></p>
   </div>
+  <!-- ── BOARD PHOTO STRIP ── -->
+  <div class="board-photo-strip fade-in">
+    <div class="board-photo-main">
+      <img src="BOARDPIC.png" alt="District Board Photo">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.75rem;flex:1;">
+          <div class="board-photo-mascot" style="flex:1;">
+            <img src="MASCOT.jpeg" alt="District Mascot">
+          </div>
+          <div style="display:flex;justify-content:center;">
+            <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,150,42,0.15);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:0.375rem 0.875rem;font-size:0.75rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Marty the Meerkat - Our District Mascot
+            </div>
+          </div>
+        </div>
+      </div>
+
   <div class="board-group-title">Executive Board Members</div>
   <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;">These positions are the officers of the board. They fulfill the day-to-day staff and administrative work needed to keep things running.</p>
-  <div class="board-grid">
-    <div class="board-card fade-in"><div class="board-avatar">G</div><div class="board-name">Dakota Menning</div><div class="board-role">Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">S</div><div class="board-name">Omar Vargas Garcia</div><div class="board-role">Secretary</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">T</div><div class="board-name">Abraham Ireland</div><div class="board-role">Treasurer</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">W</div><div class="board-name">Rahul Awasthi</div><div class="board-role">Webmaster</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">E</div><div class="board-name">Nandu Rakesh Nair</div><div class="board-role">Editor</div></div>
+  <div class="board-grid" id="exec-grid">
+    <div class="board-card fade-in" data-img="Board Photos/governor.png">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">G</div>
+          <div class="board-name">Dakota Menning</div>
+          <div class="board-role">Governor</div>
+          <div class="board-email">governor@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Dakota Menning</div>
+            <div class="board-card-back-role">Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/secretary.png">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">S</div>
+          <div class="board-name">Omar Vargas Garcia</div>
+          <div class="board-role">Secretary</div>
+          <div class="board-email">secretary@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Omar Vargas Garcia</div>
+            <div class="board-card-back-role">Secretary</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/treasurer.png">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">T</div>
+          <div class="board-name">Abraham Ireland</div>
+          <div class="board-role">Treasurer</div>
+          <div class="board-email">treasurer@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Abraham Ireland</div>
+            <div class="board-card-back-role">Treasurer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/webmaster.png">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">W</div>
+          <div class="board-name">Rahul Awasthi</div>
+          <div class="board-role">Webmaster</div>
+          <div class="board-email">webmaster@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Rahul Awasthi</div>
+            <div class="board-card-back-role">Webmaster</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/editor.png">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">E</div>
+          <div class="board-name">Nandu Rakesh Nair</div>
+          <div class="board-role">Editor</div>
+          <div class="board-email">editor@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Nandu Rakesh Nair</div>
+            <div class="board-card-back-role">Editor</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div class="board-group-title">Board Members — Lieutenant Governors</div>
-  <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;">Each leads a division in MO-ARK. Use the Club Directory map below to find your division.</p>
-  <div class="board-grid">
-    <div class="board-card fade-in"><div class="board-avatar">1</div><div class="board-name">Savannah Scruggs</div><div class="board-role">Division 1 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">2</div><div class="board-name">Pritam Avuthu</div><div class="board-role">Division 2 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">3</div><div class="board-name">Mary Gingerich</div><div class="board-role">Division 3 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">4</div><div class="board-name">Geo Reji</div><div class="board-role">Division 4 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">5</div><div class="board-name">Makenlei Shafferkoetter</div><div class="board-role">Division 5 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">6</div><div class="board-name">Ava Long</div><div class="board-role">Division 6 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">7</div><div class="board-name">Jayden Salzman</div><div class="board-role">Division 7 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">8</div><div class="board-name">Andy Santizo</div><div class="board-role">Division 8 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">9</div><div class="board-name">Amara Miles</div><div class="board-role">Division 9 — Lt. Governor</div></div>
-    <div class="board-card fade-in"><div class="board-avatar">10</div><div class="board-name">Tanvi Narendhula</div><div class="board-role">Division 10 — Lt. Governor</div></div>
+  <p style="font-size:0.875rem;color:var(--muted);margin-bottom:0.75rem;">Each leads a division in MO-ARK. Use the Club Directory map below to find your division.</p>
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,150,42,0.1);border:1px solid rgba(200,150,42,0.28);border-radius:100px;padding:0.4rem 1rem;font-size:0.775rem;font-weight:600;color:var(--gold);margin-bottom:1.5rem;letter-spacing:0.03em;">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1v14M1 8h14"/><circle cx="8" cy="8" r="7"/></svg>
+    Click any LTG card to view their division page
   </div>
+  <div class="board-grid" id="ltg-grid">
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg1.jpeg" data-div="1" style="cursor:pointer;" onclick="window.location='division.html?div=1'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">1</div>
+          <div class="board-name">Savannah Scruggs</div>
+          <div class="board-role">Division 1 — Lt. Governor</div>
+          <div class="board-email">ltg.01@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Savannah Scruggs</div>
+            <div class="board-card-back-role">Division 1 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg2.jpeg" data-div="2" style="cursor:pointer;" onclick="window.location='division.html?div=2'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">2</div>
+          <div class="board-name">Pritam Avuthu</div>
+          <div class="board-role">Division 2 — Lt. Governor</div>
+          <div class="board-email">ltg.02@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Pritam Avuthu</div>
+            <div class="board-card-back-role">Division 2 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg3.jpeg" data-div="3" style="cursor:pointer;" onclick="window.location='division.html?div=3'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">3</div>
+          <div class="board-name">Mary Gingerich</div>
+          <div class="board-role">Division 3 — Lt. Governor</div>
+          <div class="board-email">ltg.03@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Mary Gingerich</div>
+            <div class="board-card-back-role">Division 3 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg4.jpeg" data-div="4" style="cursor:pointer;" onclick="window.location='division.html?div=4'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">4</div>
+          <div class="board-name">Geo Reji</div>
+          <div class="board-role">Division 4 — Lt. Governor</div>
+          <div class="board-email">ltg.04@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Geo Reji</div>
+            <div class="board-card-back-role">Division 4 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg5.jpeg" data-div="5" style="cursor:pointer;" onclick="window.location='division.html?div=5'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">5</div>
+          <div class="board-name">Makenlei Shafferkoetter</div>
+          <div class="board-role">Division 5 — Lt. Governor</div>
+          <div class="board-email">ltg.05@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Makenlei Shafferkoetter</div>
+            <div class="board-card-back-role">Division 5 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg6.jpeg" data-div="6" style="cursor:pointer;" onclick="window.location='division.html?div=6'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">6</div>
+          <div class="board-name">Ava Long</div>
+          <div class="board-role">Division 6 — Lt. Governor</div>
+          <div class="board-email">ltg.06@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Ava Long</div>
+            <div class="board-card-back-role">Division 6 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg7.jpeg" data-div="7" style="cursor:pointer;" onclick="window.location='division.html?div=7'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">7</div>
+          <div class="board-name">Jayden Salzman</div>
+          <div class="board-role">Division 7 — Lt. Governor</div>
+          <div class="board-email">ltg.07@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Jayden Salzman</div>
+            <div class="board-card-back-role">Division 7 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg8.jpeg" data-div="8" style="cursor:pointer;" onclick="window.location='division.html?div=8'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">8</div>
+          <div class="board-name">Andy Santizo</div>
+          <div class="board-role">Division 8 — Lt. Governor</div>
+          <div class="board-email">ltg.08@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Andy Santizo</div>
+            <div class="board-card-back-role">Division 8 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg9.jpeg" data-div="9" style="cursor:pointer;" onclick="window.location='division.html?div=9'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">9</div>
+          <div class="board-name">Amara Miles</div>
+          <div class="board-role">Division 9 — Lt. Governor</div>
+          <div class="board-email">ltg.09@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Amara Miles</div>
+            <div class="board-card-back-role">Division 9 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in ltg-card" data-img="Board Photos/ltg10.jpeg" data-div="10" style="cursor:pointer;" onclick="window.location='division.html?div=10'">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar">10</div>
+          <div class="board-name">Tanvi Narendhula</div>
+          <div class="board-role">Division 10 — Lt. Governor</div>
+          <div class="board-email">ltg.10@moarkkeyclub.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Tanvi Narendhula</div>
+            <div class="board-card-back-role">Division 10 — Lt. Governor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="board-group-title">Adult Staff</div>
   <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;">Our adult staff mentors the board and ensures operations follow protocol.</p>
-  <div class="board-grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">
-    <div class="board-card fade-in"><div class="board-avatar" style="background:var(--blue);">A</div><div class="board-name">Cheryl Anderson</div><div class="board-role">District Administrator</div><div class="board-email">clanderson8247@sbcglobal.net</div></div>
-    <div class="board-card fade-in"><div class="board-avatar" style="background:var(--blue);">A</div><div class="board-name">Gaylon Lewis</div><div class="board-role">Adult Staff</div></div>
-    <div class="board-card fade-in"><div class="board-avatar" style="background:var(--blue);">A</div><div class="board-name">Carla OBrien</div><div class="board-role">Adult Staff</div></div>
-    <div class="board-card fade-in"><div class="board-avatar" style="background:var(--blue);">A</div><div class="board-name">Jim Fritz</div><div class="board-role">Adult Staff</div></div>
-    <div class="board-card fade-in"><div class="board-avatar" style="background:var(--blue);">A</div><div class="board-name">Miranda Young</div><div class="board-role">Adult Staff</div></div>
-    <div class="board-card fade-in"><div class="board-avatar" style="background:var(--blue);">A</div><div class="board-name">James Sturch</div><div class="board-role">Adult Staff</div></div>
+  <div class="board-grid" style="grid-template-columns:repeat(5,1fr);" id="staff-grid">
+    <div class="board-card fade-in" data-img="Board Photos/AS1.jpeg">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar" style="background:var(--blue);">A</div>
+          <div class="board-name">Cheryl Anderson</div>
+          <div class="board-role">District Administrator</div>
+          <div class="board-email">clanderson8247@sbcglobal.net</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Cheryl Anderson</div>
+            <div class="board-card-back-role">District Administrator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/AS2.jpeg">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar" style="background:var(--blue);">A</div>
+          <div class="board-name">Gaylon Lewis</div>
+          <div class="board-role">Adult Staff</div>
+          <div class="board-email">EMAIL</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Gaylon Lewis</div>
+            <div class="board-card-back-role">Adult Staff</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/AS3.jpeg">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar" style="background:var(--blue);">A</div>
+          <div class="board-name">Carla OBrien</div>
+          <div class="board-role">Adult Staff</div>
+          <div class="board-email">carla.obrien@outlook.com</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Carla OBrien</div>
+            <div class="board-card-back-role">Adult Staff</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="board-card fade-in" data-img="Board Photos/AS4.jpeg">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar" style="background:var(--blue);">A</div>
+          <div class="board-name">Miranda Young</div>
+          <div class="board-role">Adult Staff</div>
+          <div class="board-email">EMAIL</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">Miranda Young</div>
+            <div class="board-card-back-role">Adult Staff</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="board-card fade-in" data-img="Board Photos/AS5.jpeg">
+      <div class="board-card-inner">
+        <div class="board-card-front">
+          <div class="board-avatar" style="background:var(--blue);">A</div>
+          <div class="board-name">James Sturch</div>
+          <div class="board-role">Adult Staff</div>
+          <div class="board-email">james.sturch@southsideschools.org</div>
+        </div>
+        <div class="board-card-back">
+          <div class="board-card-back-overlay">
+            <div class="board-card-back-name">James Sturch</div>
+            <div class="board-card-back-role">Adult Staff</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -860,6 +1317,68 @@ const nt=document.getElementById('navToggle'),nm=document.getElementById('navMob
 if(nt)nt.addEventListener('click',()=>{
   const o=nm.classList.toggle('open');
   nt.setAttribute('aria-expanded',o);
+});
+
+/* ── LTG CLICK NAVIGATION HINTS ─────────────────────────────
+   For LTG cards, inject a small gold arrow hint in the front face.
+   Click navigates; hover still flips (handled by CSS).
+────────────────────────────────────────────────────────────── */
+document.querySelectorAll('.ltg-card').forEach(card => {
+  const front = card.querySelector('.board-card-front');
+  if (front) {
+    const hint = document.createElement('span');
+    hint.className = 'ltg-nav-hint';
+    hint.title = 'Click to view division page';
+    hint.innerHTML = `<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h6M5 2l3 3-3 3"/></svg>`;
+    front.appendChild(hint);
+  }
+});
+
+/* ── FLIP CARD PHOTO PROBE ──────────────────────────────────────
+   For every board card that has a data-img attribute, we silently
+   try to load the image. If it loads successfully, we:
+     1. Inject the <img> into the card's back face
+     2. Add .has-photo to the card (enables CSS hover-flip + gold border)
+     3. Add a small flip-hint SVG icon to the front
+   If the image 404s or errors, the card stays as a normal hover card.
+   No flip happens, no broken-image icon appears — completely silent.
+──────────────────────────────────────────────────────────────── */
+document.querySelectorAll('.board-card[data-img]').forEach(card => {
+  const src = card.dataset.img;
+  if (!src) return;
+
+  const probe = new Image();
+  probe.onload = function() {
+    // Image exists — wire up the flip
+    const back = card.querySelector('.board-card-back');
+    if (!back) return;
+
+    // Insert image before the overlay
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = (card.querySelector('.board-name')?.textContent || '') + ' photo';
+    img.loading = 'lazy';
+    back.insertBefore(img, back.firstChild);
+
+    // Enable flip behaviour
+    card.classList.add('has-photo');
+
+    // Add the subtle flip-hint icon to the front
+    const front = card.querySelector('.board-card-front');
+    if (front) {
+      const hint = document.createElement('span');
+      hint.className = 'flip-hint';
+      hint.title = 'Hover to see photo';
+      hint.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-4"/>
+      </svg>`;
+      front.appendChild(hint);
+    }
+  };
+
+  // onload only fires if image loads — errors/404s are silently ignored
+  probe.src = src;
 });
 </script>
 </body>
