@@ -24,7 +24,6 @@
   .breadcrumb a{color:var(--blue);transition:color var(--transition);}
   .breadcrumb a:hover{color:var(--navy);}
   .breadcrumb-sep{opacity:0.4;}
-  /* LTG clickable card extras */
   .ltg-card { cursor: pointer !important; }
   .ltg-card .board-card-front {
     border-top: 2.5px solid var(--gold);
@@ -59,22 +58,12 @@
   .board-intro{background:var(--cream);padding:2rem 1.5rem;border-radius:var(--radius);margin-bottom:2.5rem;}
   .board-intro p{font-size:1rem;color:var(--muted);line-height:1.7;max-width:65ch;}
   .board-group-title{font-family:var(--ff-display);font-size:1.25rem;color:var(--navy);margin:2.5rem 0 1.5rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gold);}
-  /* ── Board photo strip ── */
   .board-photo-strip{display:flex;gap:1.25rem;margin-bottom:2.5rem;width:100%;}
-  .board-photo-main{flex:3;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);background:var(--cream);}
+  .board-photo-main{flex:3;border-radius:var(--radius);overflow:visible;border:1px solid var(--border);box-shadow:var(--shadow-card);background:var(--cream);}
   .board-photo-mascot{flex:1;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-card);background:var(--cream);}
   .board-photo-main img,.board-photo-mascot img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
   @media(max-width:600px){.board-photo-strip{flex-direction:column;}.board-photo-mascot{flex:unset;height:220px;}}
   .board-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;margin-bottom:2rem;align-items:stretch;}
-
-  /* ── FLIP CARD SYSTEM ── */
-  /*
-     Strategy: the .board-card-inner uses transform-style:preserve-3d.
-     The FRONT is in normal flow (position:relative) so it naturally
-     sets the card's height based on content. The BACK is position:absolute
-     inset:0 so it stretches to match. Both are rotated on the Z-axis
-     so only one face is visible at a time.
-  */
   .board-card {
     perspective: 900px;
     background: transparent;
@@ -82,7 +71,6 @@
     border-radius: var(--radius);
     cursor: default;
   }
-
   .board-card-inner {
     position: relative;
     width: 100%;
@@ -90,20 +78,15 @@
     transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
     border-radius: var(--radius);
   }
-
-  /* Flip on hover only when image confirmed present */
   .board-card.has-photo:hover .board-card-inner {
     transform: rotateY(180deg);
   }
-  /* Regular lift for non-photo cards */
   .board-card:not(.has-photo):hover .board-card-front {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
   }
-
-  /* FRONT — in normal flow so it controls the height */
   .board-card-front {
-    position: relative;        /* stays in flow → drives height */
+    position: relative;
     width: 100%;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -119,12 +102,9 @@
     box-shadow: var(--shadow-card);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
   }
-  /* Gold top border hints at flip */
   .board-card.has-photo .board-card-front {
     border-top: 2.5px solid var(--gold);
   }
-
-  /* BACK — absolutely fills the same space as the front */
   .board-card-back {
     position: absolute;
     inset: 0;
@@ -163,7 +143,6 @@
     font-weight: 600;
     margin-top: 0.2rem;
   }
-  /* Flip-hint icon in top-right of front */
   .flip-hint {
     position: absolute;
     top: 0.6rem; right: 0.7rem;
@@ -173,7 +152,6 @@
     pointer-events: none;
     flex-shrink: 0;
   }
-
   .board-avatar{width:72px;height:72px;border-radius:50%;background:var(--navy);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:1.5rem;color:var(--gold);}
   .board-name{font-weight:600;font-size:0.9375rem;color:var(--navy);margin-bottom:0.25rem;}
   .board-role{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:500;}
@@ -240,6 +218,100 @@
   .section-divider{border:none;border-top:1px solid var(--border);margin:0;}
   @media(max-width:1024px){.bylaws-card{flex-direction:column;gap:1.5rem;}.footer-top{grid-template-columns:1fr 1fr;gap:2rem;}.map-layout{height:600px;}.map-sidebar{width:255px;}}
   @media(max-width:768px){.nav-links{display:none;}.nav-toggle{display:flex;}.board-grid{grid-template-columns:repeat(2,1fr);}.section-tab{padding:0.75rem 1rem;font-size:0.8rem;}.footer-top{grid-template-columns:1fr;}.map-layout{flex-direction:column;height:auto;}.map-sidebar{width:100%;height:280px;border-right:none;border-bottom:1px solid var(--border);}}
+
+  /* ══════════════════════════════════════════
+     BOARD PHOTO INTERACTIVE OVERLAY
+  ══════════════════════════════════════════ */
+  .board-photo-main {
+    flex: 3;
+    border-radius: var(--radius);
+    overflow: visible; /* let label boxes escape the photo boundary */
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    background: var(--cream);
+  }
+  .bpo-wrap {
+    position: relative;
+    display: block;
+    line-height: 0;
+    border-radius: var(--radius);
+    overflow: visible;
+  }
+  .bpo-wrap > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: var(--radius);
+  }
+  /* Hover hint badge */
+  .bpo-hint {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(10,22,40,0.82);
+    border: 1px solid rgba(200,150,42,0.45);
+    border-radius: 100px;
+    padding: 0.35rem 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(200,150,42,0.9);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .bpo-hint svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .bpo-wrap:hover .bpo-hint { opacity: 0; }
+  /* Hit zone divs (injected by JS) */
+  .bpo-hit-div {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    background: transparent;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+  }
+  /* Label box */
+  .bpo-label-div {
+    position: absolute;
+    background: #0a1628;
+    border: 2px solid #C8962A;
+    border-radius: 10px;
+    padding: 10px 16px 8px;
+    pointer-events: none;
+    z-index: 20;
+    white-space: nowrap;
+    box-shadow:
+      0 0 12px 3px rgba(200,150,42,0.55),
+      0 0 24px 6px rgba(200,150,42,0.25);
+    transform: translate(-50%, 0);
+    transition: opacity 0.15s ease;
+  }
+  .bpo-label-div .bpo-label-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1rem;
+    color: #ffffff;
+    line-height: 1.2;
+  }
+  .bpo-label-div .bpo-label-role {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    color: #C8962A;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
 </style>
 </head>
 <body>
@@ -305,28 +377,86 @@
   <div class="board-intro">
     <p>The district board is responsible for overseeing all 10 divisions in the district. Board meetings are held throughout the service year where members discuss the district bylaw, work in committees, and plan the District Leadership Conference. For more information about DLC, <a href="dlc.html" style="color:var(--blue);font-weight:600;">visit the DLC page.</a></p>
   </div>
+
   <!-- ── BOARD PHOTO STRIP ── -->
   <div class="board-photo-strip fade-in">
+
+    <!-- ══ INTERACTIVE GROUP PHOTO ══ -->
     <div class="board-photo-main">
-      <img src="BOARDPIC.png" alt="District Board Photo">
+      <div class="bpo-wrap" id="bpoWrap">
+        <img src="BOARDPIC.png" alt="District Board Photo" id="bpoImg">
+
+        <!-- Hover hint badge -->
+        <div class="bpo-hint" id="bpoHint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          Hover over a person to see their name
+        </div>
+
+        <!--
+          Canvas for the neon ellipse + line drawing.
+          Sized and redrawn in JS on every hover/resize.
+        -->
+        <canvas id="bpoCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+
+        <!-- Label box (single, repositioned by JS) -->
+        <div id="bpoLabel" class="bpo-label-div" style="display:none;">
+          <div class="bpo-label-name" id="bpoLabelName"></div>
+          <div class="bpo-label-role" id="bpoLabelRole"></div>
+        </div>
+
+        <!--
+          Person data — coords in native image pixels (1600×1087).
+          JS converts to screen coords on every render/resize.
+          data-cx, data-cy = ellipse center
+          data-rx, data-ry = ellipse radii
+          data-side = label direction: top|bottom|left|right
+        -->
+        <div class="bpo-persons" style="display:none;">
+          <!-- BACK ROW -->
+          <span data-cx="424"  data-cy="208" data-rx="75" data-ry="93"  data-side="top"    data-name="Rahul Awasthi"           data-role="Webmaster"></span>
+          <span data-cx="556"  data-cy="205" data-rx="75" data-ry="93"  data-side="top"    data-name="Geo Reji"                data-role="Div. 4 Lt. Governor"></span>
+          <span data-cx="674"  data-cy="191" data-rx="75" data-ry="93"  data-side="top"    data-name="Abraham Ireland"         data-role="Treasurer"></span>
+          <span data-cx="811"  data-cy="200" data-rx="75" data-ry="93"  data-side="top"    data-name="Nandu Rakesh Nair"       data-role="Editor"></span>
+          <span data-cx="980"  data-cy="201" data-rx="75" data-ry="93"  data-side="top"    data-name="Omar Vargas Garcia"      data-role="Secretary"></span>
+          <span data-cx="1093" data-cy="201" data-rx="75" data-ry="93"  data-side="right"  data-name="Dakota Menning"          data-role="Governor"></span>
+          <span data-cx="1228" data-cy="188" data-rx="75" data-ry="93"  data-side="right"  data-name="Amara Miles"             data-role="Div. 9 Lt. Governor"></span>
+          <!-- FRONT ROW -->
+          <span data-cx="110"  data-cy="431" data-rx="66" data-ry="122" data-side="left"   data-name="Cheryl Anderson"         data-role="District Administrator"></span>
+          <span data-cx="247"  data-cy="414" data-rx="72" data-ry="128" data-side="left"   data-name="Miranda Young"           data-role="Adult Staff"></span>
+          <span data-cx="417"  data-cy="414" data-rx="72" data-ry="128" data-side="left"   data-name="Andy Santizo"            data-role="Div. 8 Lt. Governor"></span>
+          <span data-cx="546"  data-cy="430" data-rx="72" data-ry="128" data-side="bottom" data-name="Savanna Scruggs"         data-role="Div. 1 Lt. Governor"></span>
+          <span data-cx="678"  data-cy="409" data-rx="77" data-ry="133" data-side="bottom" data-name="Pritam Avuthu"           data-role="Div. 2 Lt. Governor"></span>
+          <span data-cx="816"  data-cy="450" data-rx="72" data-ry="128" data-side="bottom" data-name="Makenlei Shafferkoetter" data-role="Div. 5 Lt. Governor"></span>
+          <span data-cx="993"  data-cy="431" data-rx="72" data-ry="128" data-side="bottom" data-name="Ava Long"                data-role="Div. 6 Lt. Governor"></span>
+          <span data-cx="1118" data-cy="450" data-rx="72" data-ry="128" data-side="bottom" data-name="Tanvi Narendhula"        data-role="Div. 10 Lt. Governor"></span>
+          <span data-cx="1218" data-cy="448" data-rx="72" data-ry="128" data-side="right"  data-name="Mary Ann Gingerich"      data-role="Div. 3 Lt. Governor"></span>
+          <span data-cx="1334" data-cy="414" data-rx="72" data-ry="128" data-side="right"  data-name="Carla OBrien"            data-role="Adult Staff"></span>
+          <span data-cx="1462" data-cy="423" data-rx="72" data-ry="128" data-side="right"  data-name="James Sturch"            data-role="Adult Staff"></span>
+        </div>
+
+        <!-- Invisible hit-zone divs injected by JS, positioned in screen px -->
+        <div id="bpoHitContainer" style="position:absolute;inset:0;pointer-events:none;"></div>
+      </div>
     </div>
+    <!-- ══ END INTERACTIVE GROUP PHOTO ══ -->
+
     <div style="display:flex;flex-direction:column;gap:0.75rem;flex:1;">
-          <div class="board-photo-mascot" style="flex:1;">
-            <img src="MASCOT.jpeg" alt="District Mascot">
-          </div>
-          <div style="display:flex;justify-content:center;">
-            <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,150,42,0.15);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:0.375rem 0.875rem;font-size:0.75rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-              Marty the Meerkat - Our District Mascot
-            </div>
-          </div>
+      <div class="board-photo-mascot" style="flex:1;">
+        <img src="MASCOT.jpeg" alt="District Mascot">
+      </div>
+      <div style="display:flex;justify-content:center;">
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,150,42,0.15);border:1px solid rgba(200,150,42,0.3);border-radius:10px;padding:0.375rem 0.875rem;font-size:0.75rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Marty the Meerkat - Our District Mascot
         </div>
       </div>
+    </div>
+  </div>
 
   <div class="board-group-title">Executive Board Members</div>
   <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;">These positions are the officers of the board. They fulfill the day-to-day staff and administrative work needed to keep things running.</p>
   <div class="board-grid" id="exec-grid">
-    <div class="board-card fade-in" data-img="Board Photos/governor.png">
+    <div class="board-card fade-in" data-img="Board Photos/governor.png" style="cursor:pointer;" onclick="window.location='exec-profile.html?id=governor'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">G</div>
@@ -342,7 +472,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/secretary.png">
+    <div class="board-card fade-in" data-img="Board Photos/secretary.png" style="cursor:pointer;" onclick="window.location='exec-profile.html?id=secretary'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">S</div>
@@ -358,7 +488,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/treasurer.png">
+    <div class="board-card fade-in" data-img="Board Photos/treasurer.png" style="cursor:pointer;" onclick="window.location='exec-profile.html?id=treasurer'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">T</div>
@@ -374,7 +504,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/webmaster.png">
+    <div class="board-card fade-in" data-img="Board Photos/webmaster.png" style="cursor:pointer;" onclick="window.location='exec-profile.html?id=webmaster'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">W</div>
@@ -390,7 +520,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/editor.png">
+    <div class="board-card fade-in" data-img="Board Photos/editor.png" style="cursor:pointer;" onclick="window.location='exec-profile.html?id=editor'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">E</div>
@@ -580,7 +710,7 @@
   <div class="board-group-title">Adult Staff</div>
   <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;">Our adult staff mentors the board and ensures operations follow protocol.</p>
   <div class="board-grid" style="grid-template-columns:repeat(5,1fr);" id="staff-grid">
-    <div class="board-card fade-in" data-img="Board Photos/AS1.jpeg">
+    <div class="board-card fade-in" data-img="Board Photos/AS1.jpeg" style="cursor:pointer;" onclick="window.location='adult-profile.html?id=as1'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar" style="background:var(--blue);">A</div>
@@ -596,7 +726,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/AS2.jpeg">
+    <div class="board-card fade-in" data-img="Board Photos/AS2.jpeg" style="cursor:pointer;" onclick="window.location='adult-profile.html?id=as2'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar" style="background:var(--blue);">A</div>
@@ -612,7 +742,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/AS3.jpeg">
+    <div class="board-card fade-in" data-img="Board Photos/AS3.jpeg" style="cursor:pointer;" onclick="window.location='adult-profile.html?id=as3'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar" style="background:var(--blue);">A</div>
@@ -628,8 +758,7 @@
         </div>
       </div>
     </div>
-
-    <div class="board-card fade-in" data-img="Board Photos/AS4.jpeg">
+    <div class="board-card fade-in" data-img="Board Photos/AS4.jpeg" style="cursor:pointer;" onclick="window.location='adult-profile.html?id=as4'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar" style="background:var(--blue);">A</div>
@@ -645,7 +774,7 @@
         </div>
       </div>
     </div>
-    <div class="board-card fade-in" data-img="Board Photos/AS5.jpeg">
+    <div class="board-card fade-in" data-img="Board Photos/AS5.jpeg" style="cursor:pointer;" onclick="window.location='adult-profile.html?id=as5'">
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar" style="background:var(--blue);">A</div>
@@ -745,302 +874,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const DIV_COLORS = {
-  1:'#d94f4f', // Red
-  2:'#4a82c4', // Blue
-  3:'#2e7d4f', // Dark Green
-  4:'#d4b030', // Yellow/Gold
-  5:'#6b3fa0', // Plum/Dark Purple
-  6:'#9b30d0', // Bright Purple
-  7:'#d4682a', // Orange/Rust
-  8:'#20a8a0', // Teal/Cyan
-  9:'#7a9a30', // Olive Green
-  10:'#e060a0', // Pink
+  1:'#d94f4f',2:'#4a82c4',3:'#2e7d4f',4:'#d4b030',5:'#6b3fa0',
+  6:'#9b30d0',7:'#d4682a',8:'#20a8a0',9:'#7a9a30',10:'#e060a0',
 };
 const DIV_NAMES = {
-  1:'Division 1 — Western Missouri',
-  2:'Division 2 — North/Central Missouri',
-  3:'Division 3 — Central & Southwest Missouri',
-  4:'Division 4 — St. Charles Corridor',
-  5:'Division 5 — Southeast Missouri',
-  6:'Division 6 — Northwest Arkansas',
-  7:'Division 7 — Southwest Arkansas',
-  8:'Division 8 — Northeast Arkansas',
-  9:'Division 9 — Central & South Arkansas',
-  10:'Division 10 — St. Louis Metro'
+  1:'Division 1 — Western Missouri',2:'Division 2 — North/Central Missouri',
+  3:'Division 3 — Central & Southwest Missouri',4:'Division 4 — St. Charles Corridor',
+  5:'Division 5 — Southeast Missouri',6:'Division 6 — Northwest Arkansas',
+  7:'Division 7 — Southwest Arkansas',8:'Division 8 — Northeast Arkansas',
+  9:'Division 9 — Central & South Arkansas',10:'Division 10 — St. Louis Metro'
 };
-
-/*
- * COUNTY → DIVISION  (one entry per county, no duplicates)
- *
- * Missouri FIPS verified against Census Bureau reference:
- *  Adair=001 Andrew=003 Atchison=005 Audrain=007 Barry=009
- *  Barton=011 Bates=013 Benton=015 Bollinger=017 Boone=019
- *  Buchanan=021 Butler=023 Caldwell=025 Callaway=027 Camden=029
- *  CapGirardeau=031 Carroll=033 Carter=035 Cass=037 Cedar=039
- *  Chariton=041 Christian=043 Clark=045 Clay=047 Clinton=049
- *  Cole=051 Cooper=053 Crawford=055 Dade=057 Dallas=059
- *  Daviess=061 DeKalb=063 Dent=065 Douglas=067 Dunklin=069
- *  Franklin=071 Gasconade=073 Gentry=075 Greene=077 Grundy=079
- *  Harrison=081 Henry=083 Hickory=085 Holt=087 Howard=089
- *  Howell=091 Iron=093 Jackson=095 Jasper=097 Jefferson=099
- *  Johnson=101 Knox=103 Laclede=105 Lafayette=107 Lawrence=109
- *  Lewis=111 Lincoln=113 Linn=115 Livingston=117 McDonald=119
- *  Macon=121 Madison=123 Maries=125 Marion=127 Mercer=129
- *  Miller=131 Mississippi=133 Moniteau=135 Monroe=137 Montgomery=139
- *  Morgan=141 NewMadrid=143 Newton=145 Nodaway=147 Oregon=149
- *  Osage=151 Ozark=153 Pemiscot=155 Perry=157 Pettis=159
- *  Phelps=161 Pike=163 Platte=165 Polk=167 Pulaski=169
- *  Putnam=171 Ralls=173 Randolph=175 Ray=177 Reynolds=179
- *  Ripley=181 StCharles=183 StClair=185 SteGenevieve=186 StFrancois=187
- *  StLouis=189 Saline=195 Schuyler=193 Scotland=199 Scott=197
- *  Shannon=203 Shelby=201 Sullivan=211 Taney=213 Texas=215
- *  Vernon=217 Warren=219 Washington=221 Wayne=223 Webster=225
- *  Worth=227 Wright=229 StLouisCity=510
- *
- * Arkansas FIPS verified:
- *  Arkansas=001 Ashley=003 Baxter=005 Benton=007 Boone=009
- *  Bradley=011 Calhoun=013 Carroll=015 Chicot=017 Clark=019
- *  Clay=021 Cleburne=023 Cleveland=025 Columbia=027 Conway=029
- *  Craighead=031 Crawford=033 Crittenden=035 Cross=037 Dallas=039
- *  Desha=041 Drew=043 Faulkner=045 Franklin=047 Fulton=049
- *  Garland=051 Grant=053 Greene=055 Hempstead=057 HotSpring=059
- *  Howard=061 Independence=063 Izard=065 Jackson=067 Jefferson=069
- *  Johnson=071 Lafayette=073 Lawrence=075 Lee=077 Lincoln=079
- *  LittleRiver=081 Logan=083 Lonoke=085 Madison=087 Marion=089
- *  Miller=091 Mississippi=093 Monroe=095 Montgomery=097 Nevada=099
- *  Newton=101 Ouachita=103 Perry=105 Phillips=107 Pike=109
- *  Poinsett=111 Polk=113 Pope=115 Prairie=117 Pulaski=119
- *  Randolph=121 StFrancis=123 Saline=125 Scott=127 Searcy=129
- *  Sebastian=131 Sevier=133 Sharp=135 Stone=137 Union=139
- *  VanBuren=141 Washington=143 White=145 Woodruff=147 Yell=149
- */
 const CD = {
-  // ══════════════════════════════════════════════════════════════
-  // MISSOURI
-  // ══════════════════════════════════════════════════════════════
-
-  // ── DIV 1: Western MO border strip + KC Metro ──
-  '29005':1, // Atchison
-  '29147':1, // Nodaway
-  '29227':1, // Worth
-  '29081':1, // Harrison
-  '29129':1, // Mercer
-  '29171':1, // Putnam
-  '29087':1, // Holt
-  '29003':1, // Andrew
-  '29075':1, // Gentry
-  '29061':1, // Daviess
-  '29079':1, // Grundy
-  '29211':1, // Sullivan
-  '29021':1, // Buchanan
-  '29063':1, // DeKalb
-  '29049':1, // Clinton
-  '29025':1, // Caldwell
-  '29117':1, // Livingston
-  '29115':1, // Linn
-  '29033':1, // Carroll
-  '29041':1, // Chariton
-  '29165':1, // Platte
-  '29047':1, // Clay
-  '29177':1, // Ray
-  '29095':1, // Jackson
-  '29107':1, // Lafayette
-  '29195':1, // Saline
-  '29037':1, // Cass
-  '29101':1, // Johnson
-
-  // ── DIV 2: North/Central Missouri ──
-  '29197':2, // Schuyler
-  '29199':2, // Scotland
-  '29045':2, // Clark
-  '29001':2, // Adair
-  '29103':2, // Knox
-  '29111':2, // Lewis
-  '29121':2, // Macon
-  '29205':2, // Shelby
-  '29127':2, // Marion
-  '29175':2, // Randolph
-  '29137':2, // Monroe
-  '29173':2, // Ralls
-  '29007':2, // Audrain
-  '29089':2, // Howard
-  '29019':2, // Boone
-  '29027':2, // Callaway
-  '29053':2, // Cooper
-
-  // ── DIV 3: Central + Southwest Missouri ──
-  '29159':3, // Pettis
-  '29135':3, // Moniteau
-  '29051':3, // Cole
-  '29083':3, // Henry
-  '29015':3, // Benton
-  '29141':3, // Morgan
-  '29131':3, // Miller
-  '29013':3, // Bates
-  '29185':3, // St. Clair
-  '29085':3, // Hickory
-  '29029':3, // Camden
-  '29217':3, // Vernon
-  '29039':3, // Cedar
-  '29167':3, // Polk
-  '29059':3, // Dallas
-  '29105':3, // Laclede
-  '29011':3, // Barton
-  '29057':3, // Dade
-  '29077':3, // Greene
-  '29225':3, // Webster
-  '29229':3, // Wright
-  '29097':3, // Jasper
-  '29109':3, // Lawrence
-  '29043':3, // Christian
-  '29067':3, // Douglas
-  '29145':3, // Newton
-  '29209':3, // Stone (MO) — Taney is Taney, Stone is separate
-  '29213':3, // Taney — NOTE: Taney FIPS is 29213, Stone is 29209; corrected below
-  '29153':3, // Ozark Co
-  '29119':3, // McDonald
-  '29009':3, // Barry
-
-
-  // ── DIV 4: St. Charles corridor ──
-  '29163':4, // Pike
-  '29113':4, // Lincoln
-  '29139':4, // Montgomery
-  '29219':4, // Warren
-  '29183':4, // St. Charles
-
-  // ── DIV 5: Southeast Missouri ──
-  '29151':5, // Osage
-  '29073':5, // Gasconade
-  '29071':5, // Franklin
-  '29125':5, // Maries
-  '29169':5, // Pulaski
-  '29161':5, // Phelps
-  '29055':5, // Crawford
-  '29221':5, // Washington
-  '29187':5, // St. Francois
-  '29186':5, // Ste. Genevieve
-  '29215':5, // Texas
-  '29065':5, // Dent
-  '29093':5, // Iron
-  '29123':5, // Madison
-  '29179':5, // Reynolds
-  '29203':5, // Shannon
-  '29223':5, // Wayne
-  '29035':5, // Carter
-  '29091':5, // Howell
-  '29149':5, // Oregon
-  '29181':5, // Ripley
-  '29023':5, // Butler
-  '29099':5, // Jefferson
-  '29157':5, // Perry
-  '29017':5, // Bollinger
-  '29031':5, // Cape Girardeau
-  '29201':5, // Scott
-  '29207':5, // Stodard
-  '29143':5, // New Madrid
-  '29133':5, // Mississippi
-
-  // ── DIV 10: St. Louis City + County + Jefferson ──
-  '29189':10, // St. Louis County
-  '29510':10, // St. Louis City
-
-  // ══════════════════════════════════════════════════════════════
-  // ARKANSAS
-  // ══════════════════════════════════════════════════════════════
-
-  // ── DIV 6: Northwest Arkansas ──
-  '05007':6,  // Benton
-  '05015':6,  // Carroll
-  '05009':6,  // Boone
-  '05089':6,  // Marion
-  '05005':6,  // Baxter
-  '05143':6,  // Washington
-  '05087':6,  // Madison
-  '05101':6,  // Newton
-  '05129':6,  // Searcy
-  '05137':6,  // Stone
-  '05065':6,  // Izard
-  '05049':6,  // Fulton
-
-  // ── DIV 7: Southwest Arkansas ──
-  '05033':7,  // Crawford
-  '05047':7,  // Franklin
-  '05071':7,  // Johnson
-  '05115':7,  // Pope
-  '05131':7,  // Sebastian
-  '05083':7,  // Logan
-  '05149':7,  // Yell
-  '05127':7,  // Scott
-  '05113':7,  // Polk
-  '05097':7,  // Montgomery (AR)
-  '05061':7,  // Howard
-  '05109':7,  // Pike
-  '05133':7,  // Sevier
-  '05081':7,  // Little River
-  '05057':7,  // Hempstead
-  '05099':7,  // Nevada
-  '05103':7,  // Ouachita
-  '05013':7,  // Calhoun
-  '05091':7,  // Miller
-  '05073':7,  // Lafayette
-  '05027':7,  // Columbia
-  '05139':7,  // Union
-  '05011':7,  // Bradley
-  '05043':7,  // Drew
-  '05003':7,  // Ashley
-  '05017':7,  // Chicot
-
-
-
-
-  // ── DIV 8: Northeast + East Arkansas ──
-  '05135':8,  // Sharp
-  '05121':8,  // Randolph
-  '05021':8,  // Clay
-  '05075':8,  // Lawrence
-  '05055':8,  // Greene
-  '29069':8,  // Dunklin (MO school Kennett listed here; Dunklin is MO 29069 → Div5, AR 05069 is separate)
-  '05063':8,  // Independence
-  '05067':8,  // Jackson
-  '05031':8,  // Craighead
-  '05093':8,  // Mississippi
-  '05023':8,  // Cleburne
-  '05145':8,  // White
-  '05147':8,  // Woodruff
-  '05037':8,  // Cross
-  '05111':8,  // Poinsett
-  '05123':8,  // St. Francis
-  '05035':8,  // Crittenden
-  '05077':8,  // Lee
-  '29155':8,  // Pemsicot
-
-
-  // ── DIV 9: Central + South Arkansas ──
-  '05141':9,  // Van Buren
-  '05029':9,  // Conway
-  '05045':9,  // Faulkner
-  '05145':9,  // White (shared with Div8 — Div9 wins for south portion; last write wins)
-  '05085':9,  // Lonoke
-  '05117':9,  // Prairie
-  '05105':9,  // Perry
-  '05119':9,  // Pulaski
-  '05125':9,  // Saline
-  '05051':9,  // Garland
-  '05095':9,  // Monroe
-  '05107':9,  // Phillips
-  '05053':9,  // Grant
-  '05069':9,  // Jefferson (AR) — overrides Div8 entry above (05069 = Jefferson AR)
-  '05001':9,  // Arkansas Co
-  '05059':9,  // Hot Spring
-  '05019':9,  // Clark
-  '05039':9,  // Dallas
-  '05025':9,  // Cleveland
-  '05079':9,  // Lincoln
-  '05041':9,  // Desha
+  '29005':1,'29147':1,'29227':1,'29081':1,'29129':1,'29171':1,'29087':1,'29003':1,'29075':1,'29061':1,'29079':1,'29211':1,'29021':1,'29063':1,'29049':1,'29025':1,'29117':1,'29115':1,'29033':1,'29041':1,'29165':1,'29047':1,'29177':1,'29095':1,'29107':1,'29195':1,'29037':1,'29101':1,
+  '29197':2,'29199':2,'29045':2,'29001':2,'29103':2,'29111':2,'29121':2,'29205':2,'29127':2,'29175':2,'29137':2,'29173':2,'29007':2,'29089':2,'29019':2,'29027':2,'29053':2,
+  '29159':3,'29135':3,'29051':3,'29083':3,'29015':3,'29141':3,'29131':3,'29013':3,'29185':3,'29085':3,'29029':3,'29217':3,'29039':3,'29167':3,'29059':3,'29105':3,'29011':3,'29057':3,'29077':3,'29225':3,'29229':3,'29097':3,'29109':3,'29043':3,'29067':3,'29145':3,'29209':3,'29213':3,'29153':3,'29119':3,'29009':3,
+  '29163':4,'29113':4,'29139':4,'29219':4,'29183':4,
+  '29151':5,'29073':5,'29071':5,'29125':5,'29169':5,'29161':5,'29055':5,'29221':5,'29187':5,'29186':5,'29215':5,'29065':5,'29093':5,'29123':5,'29179':5,'29203':5,'29223':5,'29035':5,'29091':5,'29149':5,'29181':5,'29023':5,'29099':5,'29157':5,'29017':5,'29031':5,'29201':5,'29207':5,'29143':5,'29133':5,
+  '29189':10,'29510':10,
+  '05007':6,'05015':6,'05009':6,'05089':6,'05005':6,'05143':6,'05087':6,'05101':6,'05129':6,'05137':6,'05065':6,'05049':6,
+  '05033':7,'05047':7,'05071':7,'05115':7,'05131':7,'05083':7,'05149':7,'05127':7,'05113':7,'05097':7,'05061':7,'05109':7,'05133':7,'05081':7,'05057':7,'05099':7,'05103':7,'05013':7,'05091':7,'05073':7,'05027':7,'05139':7,'05011':7,'05043':7,'05003':7,'05017':7,
+  '05135':8,'05121':8,'05021':8,'05075':8,'05055':8,'29069':8,'05063':8,'05067':8,'05031':8,'05093':8,'05023':8,'05145':8,'05147':8,'05037':8,'05111':8,'05123':8,'05035':8,'05077':8,'05077':8,'29155':8,
+  '05141':9,'05029':9,'05045':9,'05085':9,'05117':9,'05105':9,'05119':9,'05125':9,'05051':9,'05095':9,'05107':9,'05053':9,'05069':9,'05001':9,'05059':9,'05019':9,'05039':9,'05025':9,'05079':9,'05041':9,
 };
-
-/* ── SCHOOLS ── */
 const SCHOOLS = [
   {name:"Académie Lafayette",div:1,addr:"3421 Madison Ave, Kansas City, MO 64111",lat:39.0670,lng:-94.5780},
   {name:"Carrollton High School",div:1,addr:"1306 N Mason St, Carrollton, MO 64633",lat:39.3580,lng:-93.4990},
@@ -1154,59 +1009,34 @@ const SCHOOLS = [
 ];
 SCHOOLS.sort((a,b)=>a.div-b.div||a.name.localeCompare(b.name));
 
-/* ── LEAFLET MAP ── */
 const map = L.map('districtMap',{center:[37.4,-92.3],zoom:6,zoomControl:true});
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{
-  attribution:'&copy; <a href="https://carto.com/">CARTO</a>',maxZoom:18
-}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://carto.com/">CARTO</a>',maxZoom:18}).addTo(map);
 
 fetch('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json')
   .then(r=>r.json())
   .then(data=>{
-    const moar={
-      type:'FeatureCollection',
-      features:data.features.filter(f=>f.properties.STATE==='29'||f.properties.STATE==='05')
-    };
+    const moar={type:'FeatureCollection',features:data.features.filter(f=>f.properties.STATE==='29'||f.properties.STATE==='05')};
     L.geoJSON(moar,{
       style(feature){
         const fips=feature.properties.GEO_ID.replace('0500000US','');
         const div=CD[fips];
-        return{
-          fillColor:div?DIV_COLORS[div]:'#e0e0e0',
-          fillOpacity:0.55,
-          color:'rgba(255,255,255,0.85)',
-          weight:1.0,
-          interactive:true
-        };
+        return{fillColor:div?DIV_COLORS[div]:'#e0e0e0',fillOpacity:0.55,color:'rgba(255,255,255,0.85)',weight:1.0,interactive:true};
       },
       onEachFeature(feature,layer){
         const fips=feature.properties.GEO_ID.replace('0500000US','');
         const div=CD[fips];
-        layer.bindTooltip(
-          `<strong>${feature.properties.NAME} Co.</strong><br>${div?DIV_NAMES[div]:'—'}`,
-          {sticky:true,className:'county-tooltip'}
-        );
+        layer.bindTooltip(`<strong>${feature.properties.NAME} Co.</strong><br>${div?DIV_NAMES[div]:'—'}`,{sticky:true,className:'county-tooltip'});
         layer.on('mouseover',function(){this.setStyle({fillOpacity:0.78});});
         layer.on('mouseout',function(){this.setStyle({fillOpacity:0.55});});
       }
     }).addTo(map);
-    // City/road labels on top
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',{
-      maxZoom:18,pane:'shadowPane'
-    }).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',{maxZoom:18,pane:'shadowPane'}).addTo(map);
   })
-  .catch(()=>{
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);
-  });
+  .catch(()=>{L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:18}).addTo(map);});
 
 function makeIcon(div){
   const c=DIV_COLORS[div]||'#888';
-  return L.divIcon({
-    className:'',
-    html:`<div style="width:11px;height:11px;border-radius:50%;background:${c};border:2.5px solid white;box-shadow:0 1px 5px rgba(0,0,0,0.4);"></div>`,
-    iconSize:[11,11],iconAnchor:[5.5,5.5],popupAnchor:[0,-8]
-  });
+  return L.divIcon({className:'',html:`<div style="width:11px;height:11px;border-radius:50%;background:${c};border:2.5px solid white;box-shadow:0 1px 5px rgba(0,0,0,0.4);"></div>`,iconSize:[11,11],iconAnchor:[5.5,5.5],popupAnchor:[0,-8]});
 }
 const markerMap={};
 SCHOOLS.forEach(s=>{
@@ -1219,10 +1049,7 @@ SCHOOLS.forEach(s=>{
 const legend=L.control({position:'bottomright'});
 legend.onAdd=()=>{
   const d=L.DomUtil.create('div','map-legend');
-  d.innerHTML='<div class="map-legend-title">Divisions</div>'+
-    Object.entries(DIV_COLORS).map(([div,col])=>
-      `<div class="map-legend-row"><div class="map-legend-sw" style="background:${col}"></div>Div ${div}</div>`
-    ).join('');
+  d.innerHTML='<div class="map-legend-title">Divisions</div>'+Object.entries(DIV_COLORS).map(([div,col])=>`<div class="map-legend-row"><div class="map-legend-sw" style="background:${col}"></div>Div ${div}</div>`).join('');
   return d;
 };
 legend.addTo(map);
@@ -1238,141 +1065,609 @@ function renderList(q){
   q=(q||'').toLowerCase().trim();
   listEl.innerHTML='';
   const grouped={};
-  SCHOOLS.forEach(s=>{
-    if(q&&!s.name.toLowerCase().includes(q))return;
-    if(!grouped[s.div])grouped[s.div]=[];
-    grouped[s.div].push(s);
-  });
+  SCHOOLS.forEach(s=>{if(q&&!s.name.toLowerCase().includes(q))return;if(!grouped[s.div])grouped[s.div]=[];grouped[s.div].push(s);});
   const divs=Object.keys(grouped).map(Number).sort((a,b)=>a-b);
-  if(!divs.length){
-    listEl.innerHTML='<div style="padding:1rem 1.25rem;font-size:0.8rem;color:var(--muted);">No schools found.</div>';
-    return;
-  }
+  if(!divs.length){listEl.innerHTML='<div style="padding:1rem 1.25rem;font-size:0.8rem;color:var(--muted);">No schools found.</div>';return;}
   divs.forEach(d=>{
     const g=document.createElement('div');
-    const lbl=document.createElement('div');
-    lbl.className='sdiv-label';
+    const lbl=document.createElement('div');lbl.className='sdiv-label';
     lbl.innerHTML=`<span class="sdiv-swatch" style="background:${DIV_COLORS[d]}"></span>Division ${d}`;
     g.appendChild(lbl);
     grouped[d].forEach(s=>{
-      const el=document.createElement('div');
-      el.className='sitem';
-      el.dataset.name=s.name;
+      const el=document.createElement('div');el.className='sitem';el.dataset.name=s.name;
       el.innerHTML=`<div class="sitem-name">${s.name}</div>`;
-      el.addEventListener('click',()=>{
-        map.setView([s.lat,s.lng],13,{animate:true});
-        markerMap[s.name]?.openPopup();
-        selectSchool(s);
-      });
+      el.addEventListener('click',()=>{map.setView([s.lat,s.lng],13,{animate:true});markerMap[s.name]?.openPopup();selectSchool(s);});
       g.appendChild(el);
     });
     listEl.appendChild(g);
   });
 }
-
 function selectSchool(s){
   document.querySelectorAll('.sitem').forEach(el=>el.classList.remove('active'));
   const el=listEl.querySelector(`[data-name="${CSS.escape(s.name)}"]`);
   if(el){el.classList.add('active');el.scrollIntoView({block:'nearest',behavior:'smooth'});}
-  detailName.textContent=s.name;
-  detailDiv.textContent=DIV_NAMES[s.div];
-  detailAddress.textContent=s.addr;
+  detailName.textContent=s.name;detailDiv.textContent=DIV_NAMES[s.div];detailAddress.textContent=s.addr;
   detailPanel.classList.add('on');
 }
-
-document.getElementById('detailClose').addEventListener('click',()=>{
-  detailPanel.classList.remove('on');
-  document.querySelectorAll('.sitem').forEach(el=>el.classList.remove('active'));
-  map.closePopup();
-});
+document.getElementById('detailClose').addEventListener('click',()=>{detailPanel.classList.remove('on');document.querySelectorAll('.sitem').forEach(el=>el.classList.remove('active'));map.closePopup();});
 searchEl.addEventListener('input',()=>renderList(searchEl.value));
 renderList('');
 
 const tabs=document.querySelectorAll('.section-tab');
 const sections=['board','clubs','bylaws'].map(id=>document.getElementById(id));
-window.addEventListener('scroll',()=>{
-  let cur=0;
-  sections.forEach((s,i)=>{if(s&&window.scrollY>=s.offsetTop-150)cur=i;});
-  tabs.forEach((t,i)=>t.classList.toggle('active',i===cur));
-},{passive:true});
+window.addEventListener('scroll',()=>{let cur=0;sections.forEach((s,i)=>{if(s&&window.scrollY>=s.offsetTop-150)cur=i;});tabs.forEach((t,i)=>t.classList.toggle('active',i===cur));},{passive:true});
 
-const obs=new IntersectionObserver((entries)=>{
-  entries.forEach((e,i)=>{
-    if(e.isIntersecting){
-      setTimeout(()=>e.target.classList.add('visible'),i*80);
-      obs.unobserve(e.target);
-    }
-  });
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target);}});},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 
 const nt=document.getElementById('navToggle'),nm=document.getElementById('navMobile');
-if(nt)nt.addEventListener('click',()=>{
-  const o=nm.classList.toggle('open');
-  nt.setAttribute('aria-expanded',o);
+if(nt)nt.addEventListener('click',()=>{const o=nm.classList.toggle('open');nt.setAttribute('aria-expanded',o);});
+
+document.querySelectorAll('.ltg-card').forEach(card=>{
+  const front=card.querySelector('.board-card-front');
+  if(front){const hint=document.createElement('span');hint.className='ltg-nav-hint';hint.title='Click to view division page';hint.innerHTML=`<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h6M5 2l3 3-3 3"/></svg>`;front.appendChild(hint);}
 });
 
-/* ── LTG CLICK NAVIGATION HINTS ─────────────────────────────
-   For LTG cards, inject a small gold arrow hint in the front face.
-   Click navigates; hover still flips (handled by CSS).
-────────────────────────────────────────────────────────────── */
-document.querySelectorAll('.ltg-card').forEach(card => {
-  const front = card.querySelector('.board-card-front');
-  if (front) {
-    const hint = document.createElement('span');
-    hint.className = 'ltg-nav-hint';
-    hint.title = 'Click to view division page';
-    hint.innerHTML = `<svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h6M5 2l3 3-3 3"/></svg>`;
-    front.appendChild(hint);
-  }
-});
-
-/* ── FLIP CARD PHOTO PROBE ──────────────────────────────────────
-   For every board card that has a data-img attribute, we silently
-   try to load the image. If it loads successfully, we:
-     1. Inject the <img> into the card's back face
-     2. Add .has-photo to the card (enables CSS hover-flip + gold border)
-     3. Add a small flip-hint SVG icon to the front
-   If the image 404s or errors, the card stays as a normal hover card.
-   No flip happens, no broken-image icon appears — completely silent.
-──────────────────────────────────────────────────────────────── */
-document.querySelectorAll('.board-card[data-img]').forEach(card => {
-  const src = card.dataset.img;
-  if (!src) return;
-
-  const probe = new Image();
-  probe.onload = function() {
-    // Image exists — wire up the flip
-    const back = card.querySelector('.board-card-back');
-    if (!back) return;
-
-    // Insert image before the overlay
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = (card.querySelector('.board-name')?.textContent || '') + ' photo';
-    img.loading = 'lazy';
-    back.insertBefore(img, back.firstChild);
-
-    // Enable flip behaviour
+document.querySelectorAll('.board-card[data-img]').forEach(card=>{
+  const src=card.dataset.img;if(!src)return;
+  const probe=new Image();
+  probe.onload=function(){
+    const back=card.querySelector('.board-card-back');if(!back)return;
+    const img=document.createElement('img');img.src=src;img.alt=(card.querySelector('.board-name')?.textContent||'')+' photo';img.loading='lazy';
+    back.insertBefore(img,back.firstChild);
     card.classList.add('has-photo');
-
-    // Add the subtle flip-hint icon to the front
-    const front = card.querySelector('.board-card-front');
-    if (front) {
-      const hint = document.createElement('span');
-      hint.className = 'flip-hint';
-      hint.title = 'Hover to see photo';
-      hint.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-4"/>
-      </svg>`;
-      front.appendChild(hint);
-    }
+    const front=card.querySelector('.board-card-front');
+    if(front){const hint=document.createElement('span');hint.className='flip-hint';hint.title='Hover to see photo';hint.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>`;front.appendChild(hint);}
   };
-
-  // onload only fires if image loads — errors/404s are silently ignored
-  probe.src = src;
+  probe.src=src;
 });
+
+/* ═══════════════════════════════════════════════════════════════
+   BOARD PHOTO INTERACTIVE OVERLAY
+   Uses actual rendered image dimensions to position hit zones.
+   Recalculates on every resize so it's always pixel-accurate.
+═══════════════════════════════════════════════════════════════ */
+(function() {
+  const IMG_W = 1600, IMG_H = 1087; // native image dimensions
+
+  const img        = document.getElementById('bpoImg');
+  const wrap       = document.getElementById('bpoWrap');
+  const canvas     = document.getElementById('bpoCanvas');
+  const label      = document.getElementById('bpoLabel');
+  const labelName  = document.getElementById('bpoLabelName');
+  const labelRole  = document.getElementById('bpoLabelRole');
+  const hitCont    = document.getElementById('bpoHitContainer');
+  const hint       = document.getElementById('bpoHint');
+
+  if (!img || !wrap || !canvas) return;
+
+  const ctx = canvas.getContext('2d');
+
+  // Read all person data from the hidden spans
+  const people = Array.from(document.querySelectorAll('.bpo-persons span')).map(function(s) {
+    return {
+      cx:   +s.dataset.cx,
+      cy:   +s.dataset.cy,
+      rx:   +s.dataset.rx,
+      ry:   +s.dataset.ry,
+      side: s.dataset.side || 'top',
+      name: s.dataset.name,
+      role: s.dataset.role
+    };
+  });
+
+  let activePerson = null;
+  let scale = 1, offX = 0, offY = 0;
+
+  /* ── Calculate how object-fit:cover renders the image inside its container ── */
+  function getImageRenderRect() {
+    // Use the actual rendered size of the img element itself
+    const rect = img.getBoundingClientRect();
+    const cW = rect.width;
+    const cH = rect.height;
+    const imgRatio = IMG_W / IMG_H;
+    const conRatio = cW / cH;
+
+    let renderW, renderH;
+    if (imgRatio > conRatio) {
+      // Image is wider relative to container → height fills, width overflows (cropped sides)
+      renderH = cH;
+      renderW = cH * imgRatio;
+    } else {
+      // Image is taller relative to container → width fills, height overflows (cropped top/bottom)
+      renderW = cW;
+      renderH = cW / imgRatio;
+    }
+
+    const scale = renderW / IMG_W; // same as renderH / IMG_H
+    // object-position: center → center the rendered image in the container
+    const ox = (cW - renderW) / 2;
+    const oy = (cH - renderH) / 2;
+    return { renderW, renderH, ox, oy, cW, cH, scale };
+  }
+
+  /* ── Convert native image px → container px ── */
+  function imgToScreen(ix, iy) {
+    const r = getImageRenderRect();
+    return {
+      x: r.ox + ix * r.scale,
+      y: r.oy + iy * r.scale
+    };
+  }
+
+  /* ── Size canvas to match container exactly ── */
+  function resizeCanvas() {
+    canvas.width  = img.clientWidth;
+    canvas.height = img.clientHeight;
+  }
+
+  /* ── Build / reposition all hit-zone divs ── */
+  function rebuildHitZones() {
+    hitCont.innerHTML = '';
+    const r = getImageRenderRect();
+
+    people.forEach(function(p, i) {
+      const cx = r.ox + p.cx * r.scale;
+      const cy = r.oy + p.cy * r.scale;
+      const rx = p.rx * r.scale;
+      const ry = p.ry * r.scale;
+
+      const div = document.createElement('div');
+      div.className = 'bpo-hit-div';
+      div.style.left   = cx + 'px';
+      div.style.top    = cy + 'px';
+      div.style.width  = (rx * 2) + 'px';
+      div.style.height = (ry * 2) + 'px';
+      div.dataset.idx  = i;
+
+      div.addEventListener('mouseenter', function() {
+        activePerson = p;
+        hint.style.opacity = '0';
+        drawActive(p);
+        showLabel(p);
+      });
+      div.addEventListener('mouseleave', function() {
+        activePerson = null;
+        clearCanvas();
+        hideLabel();
+        hint.style.opacity = '';
+      });
+      div.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        if (activePerson === p) {
+          activePerson = null;
+          clearCanvas();
+          hideLabel();
+        } else {
+          activePerson = p;
+          drawActive(p);
+          showLabel(p);
+        }
+      }, { passive: false });
+
+      hitCont.appendChild(div);
+    });
+  }
+
+  /* ── Draw neon ellipse + connector line on canvas ── */
+  function drawActive(p) {
+    resizeCanvas();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const r   = getImageRenderRect();
+    const cx  = r.ox + p.cx * r.scale;
+    const cy  = r.oy + p.cy * r.scale;
+    const rx  = p.rx * r.scale;
+    const ry  = p.ry * r.scale;
+
+    // ── Neon fill + stroke ellipse ──
+    ctx.save();
+    ctx.shadowBlur  = 22;
+    ctx.shadowColor = 'rgba(200,150,42,0.9)';
+
+    // Fill
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(200,150,42,0.10)';
+    ctx.fill();
+
+    // Stroke (draw twice for extra glow)
+    for (let i = 0; i < 2; i++) {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = '#C8962A';
+      ctx.lineWidth   = 2.5;
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // ── Connector line ──
+    const OFFSET = 20;
+    let lx1, ly1, lx2, ly2;
+    if      (p.side === 'top')    { lx1 = cx;      ly1 = cy - ry; lx2 = cx;      ly2 = ly1 - OFFSET; }
+    else if (p.side === 'bottom') { lx1 = cx;      ly1 = cy + ry; lx2 = cx;      ly2 = ly1 + OFFSET; }
+    else if (p.side === 'left')   { lx1 = cx - rx; ly1 = cy;      lx2 = lx1 - OFFSET; ly2 = cy; }
+    else                          { lx1 = cx + rx; ly1 = cy;      lx2 = lx1 + OFFSET; ly2 = cy; }
+
+    ctx.save();
+    ctx.shadowBlur  = 12;
+    ctx.shadowColor = 'rgba(200,150,42,0.8)';
+    ctx.beginPath();
+    ctx.moveTo(lx1, ly1);
+    ctx.lineTo(lx2, ly2);
+    ctx.strokeStyle = '#C8962A';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  /* ── Position and show label div ── */
+  function showLabel(p) {
+    labelName.textContent = p.name;
+    labelRole.textContent = p.role.toUpperCase();
+    label.style.display = 'block';
+
+    // Position after making visible so we can measure width
+    requestAnimationFrame(function() {
+      const r      = getImageRenderRect();
+      const cx     = r.ox + p.cx * r.scale;
+      const cy     = r.oy + p.cy * r.scale;
+      const rx     = p.rx * r.scale;
+      const ry     = p.ry * r.scale;
+      const lW     = label.offsetWidth;
+      const lH     = label.offsetHeight;
+      const GAP    = 20;
+      const cW     = img.clientWidth;
+      const cH     = img.clientHeight;
+
+      let top, left;
+      if (p.side === 'top') {
+        top  = cy - ry - GAP - lH;
+        left = cx - lW / 2;
+      } else if (p.side === 'bottom') {
+        top  = cy + ry + GAP;
+        left = cx - lW / 2;
+      } else if (p.side === 'left') {
+        top  = cy - lH / 2;
+        left = cx - rx - GAP - lW;
+      } else { // right
+        top  = cy - lH / 2;
+        left = cx + rx + GAP;
+      }
+
+      // Clamp so label stays inside/near the wrap
+      left = Math.max(-lW * 0.1, Math.min(left, cW - lW * 0.9));
+      top  = Math.max(-lH * 0.5, Math.min(top,  cH + lH * 0.1));
+
+      label.style.left      = left + 'px';
+      label.style.top       = top  + 'px';
+      label.style.transform = 'none'; // override the CSS default
+    });
+  }
+
+  function hideLabel() {
+    label.style.display = 'none';
+  }
+
+  /* ── Dismiss on outside touch ── */
+  document.addEventListener('touchstart', function(e) {
+    if (!e.target.closest('#bpoWrap')) {
+      activePerson = null;
+      clearCanvas();
+      hideLabel();
+    }
+  });
+
+  /* ── Rebuild on resize ── */
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      rebuildHitZones();
+      if (activePerson) { drawActive(activePerson); showLabel(activePerson); }
+      else clearCanvas();
+    }, 60);
+  });
+
+  /* ── Init: wait for image to load then build ── */
+  function init() {
+    resizeCanvas();
+    rebuildHitZones();
+    if (new URLSearchParams(window.location.search).get('debug') === '1') {
+      resizeCanvas();
+      const r = getImageRenderRect();
+      people.forEach(function(p) {
+        const cx = r.ox + p.cx * r.scale;
+        const cy = r.oy + p.cy * r.scale;
+        const rx = p.rx * r.scale;
+        const ry = p.ry * r.scale;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,80,80,0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255,80,80,0.15)';
+        ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(p.name.split(' ')[0], cx - 20, cy + 4);
+      });
+    }
+    if (new URLSearchParams(window.location.search).get('edit') === '1') {
+      launchEditor();
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     VISUAL EDITOR — only active when ?edit=1 in the URL
+     Drag ellipses to the right person, resize with scroll,
+     then click "Copy Coords" to get the HTML to paste back.
+  ══════════════════════════════════════════════════════ */
+  function launchEditor() {
+    // Block normal hover behaviour
+    hitCont.style.pointerEvents = 'none';
+    label.style.display = 'none';
+    hint.style.display  = 'none';
+
+    const IMG_W = 1600, IMG_H = 1087;
+
+    // Editor state — one entry per person, stored in native image px
+    const state = people.map(function(p) {
+      return { cx: p.cx, cy: p.cy, rx: p.rx, ry: p.ry, side: p.side, name: p.name, role: p.role };
+    });
+
+    let selected = null;   // index of selected ellipse
+    let dragMode = null;   // 'move' | 'resizeX' | 'resizeY'
+    let dragStart = null;
+
+    // ── Build editor UI panel ──
+    const panel = document.createElement('div');
+    panel.id = 'bpoEditorPanel';
+    panel.style.cssText = [
+      'position:fixed','bottom:20px','left:50%','transform:translateX(-50%)',
+      'background:#0a1628','border:2px solid #C8962A','border-radius:12px',
+      'padding:14px 20px','z-index:99999','font-family:DM Sans,sans-serif',
+      'display:flex','gap:12px','align-items:center','flex-wrap:wrap',
+      'box-shadow:0 0 30px rgba(200,150,42,0.5)','max-width:90vw'
+    ].join(';');
+
+    const selLabel = document.createElement('span');
+    selLabel.style.cssText = 'color:#C8962A;font-weight:700;font-size:0.85rem;min-width:180px;';
+    selLabel.textContent = 'Click an ellipse to select';
+
+    const sideSelect = document.createElement('select');
+    sideSelect.style.cssText = 'background:#1a2744;color:#C8962A;border:1px solid #C8962A;border-radius:6px;padding:4px 8px;font-size:0.8rem;';
+    ['top','bottom','left','right'].forEach(function(s) {
+      const o = document.createElement('option'); o.value = s; o.textContent = s;
+      sideSelect.appendChild(o);
+    });
+    sideSelect.addEventListener('change', function() {
+      if (selected !== null) { state[selected].side = sideSelect.value; redraw(); }
+    });
+
+    const infoTip = document.createElement('span');
+    infoTip.style.cssText = 'color:rgba(255,255,255,0.5);font-size:0.75rem;';
+    infoTip.textContent = 'Drag=move • Shift+drag=resize • Scroll=resize';
+
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = '📋 Copy Coords';
+    copyBtn.style.cssText = 'background:#C8962A;color:#0a1628;font-weight:700;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-size:0.85rem;';
+    copyBtn.addEventListener('click', copyCoords);
+
+    const doneBtn = document.createElement('button');
+    doneBtn.textContent = '✕ Exit Editor';
+    doneBtn.style.cssText = 'background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:0.85rem;';
+    doneBtn.addEventListener('click', function() {
+      window.location.href = window.location.pathname;
+    });
+
+    panel.appendChild(selLabel);
+    panel.appendChild(sideSelect);
+    panel.appendChild(infoTip);
+    panel.appendChild(copyBtn);
+    panel.appendChild(doneBtn);
+    document.body.appendChild(panel);
+
+    // ── Overlay canvas (full image, pointer events on) ──
+    const eCanvas = document.createElement('canvas');
+    eCanvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;z-index:100;';
+    wrap.appendChild(eCanvas);
+    const ec = eCanvas.getContext('2d');
+
+    function sizeEditorCanvas() {
+      eCanvas.width  = img.clientWidth;
+      eCanvas.height = img.clientHeight;
+    }
+
+    // ── Get image render rect ──
+    function getRR() {
+      const cW = img.clientWidth, cH = img.clientHeight;
+      const imgR = IMG_W / IMG_H, conR = cW / cH;
+      let rW, rH;
+      if (imgR > conR) { rH = cH; rW = cH * imgR; }
+      else             { rW = cW; rH = cW / imgR; }
+      const sc = rW / IMG_W;
+      return { ox: (cW - rW)/2, oy: (cH - rH)/2, scale: sc, cW, cH };
+    }
+
+    // ── Native ↔ screen conversion ──
+    function toScreen(nx, ny) { const r=getRR(); return { x: r.ox+nx*r.scale, y: r.oy+ny*r.scale }; }
+    function toNative(sx, sy) { const r=getRR(); return { x: (sx-r.ox)/r.scale, y: (sy-r.oy)/r.scale }; }
+
+    // ── Draw all ellipses ──
+    function redraw() {
+      sizeEditorCanvas();
+      const r = getRR();
+      ec.clearRect(0, 0, eCanvas.width, eCanvas.height);
+
+      state.forEach(function(p, i) {
+        const cx = r.ox + p.cx * r.scale;
+        const cy = r.oy + p.cy * r.scale;
+        const rx = p.rx * r.scale;
+        const ry = p.ry * r.scale;
+        const isSel = i === selected;
+
+        // Ellipse fill
+        ec.beginPath();
+        ec.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+        ec.fillStyle = isSel ? 'rgba(200,150,42,0.25)' : 'rgba(200,150,42,0.10)';
+        ec.fill();
+
+        // Ellipse stroke
+        ec.beginPath();
+        ec.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+        ec.strokeStyle = isSel ? '#FFD700' : '#C8962A';
+        ec.lineWidth   = isSel ? 3 : 1.5;
+        ec.stroke();
+
+        // Name label
+        ec.fillStyle = isSel ? '#FFD700' : 'rgba(255,255,255,0.85)';
+        ec.font = isSel ? 'bold 12px sans-serif' : '11px sans-serif';
+        ec.textAlign = 'center';
+        ec.fillText(p.name.split(' ')[0], cx, cy + 4);
+
+        // Resize handles on selected
+        if (isSel) {
+          [[cx+rx, cy],[cx-rx, cy],[cx, cy-ry],[cx, cy+ry]].forEach(function(pt) {
+            ec.beginPath(); ec.arc(pt[0], pt[1], 5, 0, Math.PI*2);
+            ec.fillStyle='#FFD700'; ec.fill();
+          });
+        }
+      });
+      ec.textAlign = 'left';
+    }
+
+    // ── Hit test: which ellipse was clicked? ──
+    function hitTest(sx, sy) {
+      const r = getRR();
+      // Test in reverse order so topmost (last drawn) wins
+      for (let i = state.length-1; i >= 0; i--) {
+        const p = state[i];
+        const cx = r.ox + p.cx * r.scale;
+        const cy = r.oy + p.cy * r.scale;
+        const rx = p.rx * r.scale;
+        const ry = p.ry * r.scale;
+        const dx = (sx - cx) / rx;
+        const dy = (sy - cy) / ry;
+        if (dx*dx + dy*dy <= 1.1) return i;
+      }
+      return null;
+    }
+
+    // ── Mouse events ──
+    function getPos(e) {
+      const rect = eCanvas.getBoundingClientRect();
+      const touch = e.touches ? e.touches[0] : e;
+      return { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
+    }
+
+    eCanvas.addEventListener('mousedown', function(e) {
+      const pos = getPos(e);
+      const hit = hitTest(pos.x, pos.y);
+      if (hit !== null) {
+        selected = hit;
+        sideSelect.value = state[hit].side;
+        selLabel.textContent = state[hit].name;
+        dragMode  = e.shiftKey ? 'resize' : 'move';
+        dragStart = { ...pos, cx: state[hit].cx, cy: state[hit].cy, rx: state[hit].rx, ry: state[hit].ry };
+        e.preventDefault();
+      } else {
+        selected = null;
+        selLabel.textContent = 'Click an ellipse to select';
+      }
+      redraw();
+    });
+
+    window.addEventListener('mousemove', function(e) {
+      if (selected === null || !dragStart) return;
+      const pos  = getPos(e);
+      const r    = getRR();
+      const dx   = (pos.x - dragStart.x) / r.scale;
+      const dy   = (pos.y - dragStart.y) / r.scale;
+      if (dragMode === 'move') {
+        state[selected].cx = Math.round(dragStart.cx + dx);
+        state[selected].cy = Math.round(dragStart.cy + dy);
+      } else {
+        state[selected].rx = Math.max(20, Math.round(dragStart.rx + dx));
+        state[selected].ry = Math.max(20, Math.round(dragStart.ry + dy));
+      }
+      redraw();
+    });
+
+    window.addEventListener('mouseup', function() { dragStart = null; });
+
+    // Scroll to resize selected ellipse
+    eCanvas.addEventListener('wheel', function(e) {
+      if (selected === null) return;
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -3 : 3;
+      if (e.shiftKey) {
+        state[selected].ry = Math.max(20, state[selected].ry + delta);
+      } else {
+        state[selected].rx = Math.max(20, state[selected].rx + delta);
+        state[selected].ry = Math.max(20, state[selected].ry + delta);
+      }
+      redraw();
+    }, { passive: false });
+
+    // ── Copy coords to clipboard ──
+    function copyCoords() {
+      const lines = state.map(function(p) {
+        return `          <span data-cx="${p.cx}" data-cy="${p.cy}" data-rx="${p.rx}" data-ry="${p.ry}" data-side="${p.side}" data-name="${p.name}" data-role="${p.role}"></span>`;
+      });
+      const text = lines.join('\n');
+      navigator.clipboard.writeText(text).then(function() {
+        copyBtn.textContent = '✅ Copied!';
+        setTimeout(function() { copyBtn.textContent = '📋 Copy Coords'; }, 2000);
+      }).catch(function() {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        copyBtn.textContent = '✅ Copied!';
+        setTimeout(function() { copyBtn.textContent = '📋 Copy Coords'; }, 2000);
+      });
+    }
+
+    // ── Keyboard nudge (arrow keys) ──
+    document.addEventListener('keydown', function(e) {
+      if (selected === null) return;
+      const step = e.shiftKey ? 5 : 1;
+      if (e.key==='ArrowLeft')  { state[selected].cx -= step; e.preventDefault(); }
+      if (e.key==='ArrowRight') { state[selected].cx += step; e.preventDefault(); }
+      if (e.key==='ArrowUp')    { state[selected].cy -= step; e.preventDefault(); }
+      if (e.key==='ArrowDown')  { state[selected].cy += step; e.preventDefault(); }
+      if (e.key==='+' || e.key==='=') { state[selected].rx+=2; state[selected].ry+=2; }
+      if (e.key==='-') { state[selected].rx=Math.max(20,state[selected].rx-2); state[selected].ry=Math.max(20,state[selected].ry-2); }
+      // Tab to next person
+      if (e.key==='Tab') {
+        selected = (selected + (e.shiftKey ? -1 : 1) + state.length) % state.length;
+        sideSelect.value = state[selected].side;
+        selLabel.textContent = state[selected].name;
+        e.preventDefault();
+      }
+      redraw();
+    });
+
+    window.addEventListener('resize', function() { redraw(); });
+    redraw();
+  }
+  /* ══ END EDITOR ══ */
+
+  if (img.complete && img.naturalWidth) {
+    init();
+  } else {
+    img.addEventListener('load', init);
+  }
+})();
+/* ═══════════════ END BOARD PHOTO OVERLAY ═══════════════ */
+
 </script>
 <script src="transitions.js"></script>
 </body>
