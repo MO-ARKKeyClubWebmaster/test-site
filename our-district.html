@@ -419,13 +419,13 @@
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">1</div>
-          <div class="board-name">Savannah Scruggs</div>
+          <div class="board-name">Savanna Scruggs</div>
           <div class="board-role">Division 1 — Lt. Governor</div>
           <div class="board-email">ltg.01@moarkkeyclub.com</div>
         </div>
         <div class="board-card-back">
           <div class="board-card-back-overlay">
-            <div class="board-card-back-name">Savannah Scruggs</div>
+            <div class="board-card-back-name">Savanna Scruggs</div>
             <div class="board-card-back-role">Division 1 — Lt. Governor</div>
           </div>
         </div>
@@ -451,13 +451,13 @@
       <div class="board-card-inner">
         <div class="board-card-front">
           <div class="board-avatar">3</div>
-          <div class="board-name">Mary Gingerich</div>
+          <div class="board-name">Mary Ann Gingerich</div>
           <div class="board-role">Division 3 — Lt. Governor</div>
           <div class="board-email">ltg.03@moarkkeyclub.com</div>
         </div>
         <div class="board-card-back">
           <div class="board-card-back-overlay">
-            <div class="board-card-back-name">Mary Gingerich</div>
+            <div class="board-card-back-name">Mary Ann Gingerich</div>
             <div class="board-card-back-role">Division 3 — Lt. Governor</div>
           </div>
         </div>
@@ -745,21 +745,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const DIV_COLORS = {
-  1:'#e07070', 2:'#88b888', 3:'#a090c8', 4:'#f020a0',
-  5:'#7ab0d0', 6:'#60c0b0', 7:'#e0a878', 8:'#a8c860',
-  9:'#70b8c8', 10:'#d4b030'
+  1:'#d94f4f', // Red
+  2:'#4a82c4', // Blue
+  3:'#2e7d4f', // Dark Green
+  4:'#d4b030', // Yellow/Gold
+  5:'#6b3fa0', // Plum/Dark Purple
+  6:'#9b30d0', // Bright Purple
+  7:'#d4682a', // Orange/Rust
+  8:'#20a8a0', // Teal/Cyan
+  9:'#7a9a30', // Olive Green
+  10:'#e060a0', // Pink
 };
 const DIV_NAMES = {
-  1:'Division 1 — Kansas City Metro, MO',
-  2:'Division 2 — Central Missouri',
-  3:'Division 3 — Southwest Missouri',
-  4:'Division 4 — St. Charles County, MO',
+  1:'Division 1 — Western Missouri',
+  2:'Division 2 — North/Central Missouri',
+  3:'Division 3 — Central & Southwest Missouri',
+  4:'Division 4 — St. Charles Corridor',
   5:'Division 5 — Southeast Missouri',
   6:'Division 6 — Northwest Arkansas',
   7:'Division 7 — Southwest Arkansas',
   8:'Division 8 — Northeast Arkansas',
-  9:'Division 9 — Central Arkansas',
-  10:'Division 10 — South St. Louis County, MO'
+  9:'Division 9 — Central & South Arkansas',
+  10:'Division 10 — St. Louis Metro'
 };
 
 /*
@@ -808,244 +815,230 @@ const DIV_NAMES = {
  *  VanBuren=141 Washington=143 White=145 Woodruff=147 Yell=149
  */
 const CD = {
-  // ── DIV 1: KC Metro + Western MO border strip (red/salmon) ──
+  // ══════════════════════════════════════════════════════════════
+  // MISSOURI
+  // ══════════════════════════════════════════════════════════════
+
+  // ── DIV 1: Western MO border strip + KC Metro ──
   '29005':1, // Atchison
   '29147':1, // Nodaway
   '29227':1, // Worth
-  '29075':1, // Gentry
-  '29003':1, // Andrew
+  '29081':1, // Harrison
+  '29129':1, // Mercer
+  '29171':1, // Putnam
   '29087':1, // Holt
+  '29003':1, // Andrew
+  '29075':1, // Gentry
+  '29061':1, // Daviess
+  '29079':1, // Grundy
+  '29211':1, // Sullivan
+  '29021':1, // Buchanan
   '29063':1, // DeKalb
-  '29021':1, // Buchanan (St. Joseph)
   '29049':1, // Clinton
+  '29025':1, // Caldwell
+  '29117':1, // Livingston
+  '29115':1, // Linn
+  '29033':1, // Carroll
+  '29041':1, // Chariton
   '29165':1, // Platte
   '29047':1, // Clay
   '29177':1, // Ray
-  '29095':1, // Jackson (Kansas City)
+  '29095':1, // Jackson
+  '29107':1, // Lafayette
+  '29195':1, // Saline
   '29037':1, // Cass
-  '29013':1, // Bates
-  '29217':1, // Vernon
-  '29011':1, // Barton
-  '29081':1, // Harrison
-  '29079':1, // Grundy
-  '29129':1, // Mercer
-  '29117':1, // Livingston
-  '29061':1, // Daviess
-  '29025':1, // Caldwell
-  '29033':1, // Carroll
-  '29041':1, // Chariton
-  '29115':1, // Linn
-  '29083':1, // Henry
   '29101':1, // Johnson
 
-  // ── DIV 2: Central Missouri (sage green) ──
+  // ── DIV 2: North/Central Missouri ──
+  '29197':2, // Schuyler
+  '29199':2, // Scotland
+  '29045':2, // Clark
   '29001':2, // Adair
   '29103':2, // Knox
   '29111':2, // Lewis
-  '29045':2, // Clark
-  '29199':2, // Scotland
-  '29193':2, // Schuyler
-  '29171':2, // Putnam
-  '29211':2, // Sullivan
   '29121':2, // Macon
-  '29201':2, // Shelby
+  '29205':2, // Shelby
   '29127':2, // Marion
+  '29175':2, // Randolph
+  '29137':2, // Monroe
   '29173':2, // Ralls
   '29007':2, // Audrain
-  '29137':2, // Monroe
-  '29175':2, // Randolph
   '29089':2, // Howard
-  '29019':2, // Boone (Columbia)
+  '29019':2, // Boone
   '29027':2, // Callaway
-  '29051':2, // Cole (Jefferson City)
   '29053':2, // Cooper
-  '29135':2, // Moniteau
-  '29141':2, // Morgan
-  '29131':2, // Miller
-  '29029':2, // Camden
-  '29105':2, // Laclede
-  '29169':2, // Pulaski (Ft. Leonard Wood)
-  '29125':2, // Maries
-  '29151':2, // Osage
-  '29073':2, // Gasconade
-  '29163':2, // Pike
-  '29159':2, // Pettis (Sedalia)
-  '29195':2, // Saline
-  '29139':2, // Montgomery
-  '29107':2, // Lafayette
-  '29057':2, // Dade
-  '29185':2, // St. Clair
-  '29167':2, // Polk
 
-  // ── DIV 3: Southwest Missouri (lavender) ──
-  '29097':3, // Jasper (Joplin)
-  '29145':3, // Newton (Neosho)
-  '29119':3, // McDonald
-  '29009':3, // Barry (Monett)
-  '29109':3, // Lawrence
-  '29077':3, // Greene (Springfield)
-  '29043':3, // Christian (Ozark)
-  '29225':3, // Webster (Mountain Grove area)
-  '29213':3, // Taney (Branson)
-  '29153':3, // Ozark Co.
-  '29067':3, // Douglas
-  '29229':3, // Wright (Mountain Grove)
-  '29215':3, // Texas (Houston MO)
-  '29091':3, // Howell (West Plains)
-  '29149':3, // Oregon
-  '29203':3, // Shannon
-  '29065':3, // Dent
-  '29059':3, // Dallas
-  '29039':3, // Cedar
-  '29085':3, // Hickory
+  // ── DIV 3: Central + Southwest Missouri ──
+  '29159':3, // Pettis
+  '29135':3, // Moniteau
+  '29051':3, // Cole
+  '29083':3, // Henry
   '29015':3, // Benton
+  '29141':3, // Morgan
+  '29131':3, // Miller
+  '29013':3, // Bates
+  '29185':3, // St. Clair
+  '29085':3, // Hickory
+  '29029':3, // Camden
+  '29217':3, // Vernon
+  '29039':3, // Cedar
+  '29167':3, // Polk
+  '29059':3, // Dallas
+  '29105':3, // Laclede
+  '29011':3, // Barton
+  '29057':3, // Dade
+  '29077':3, // Greene
+  '29225':3, // Webster
+  '29229':3, // Wright
+  '29097':3, // Jasper
+  '29109':3, // Lawrence
+  '29043':3, // Christian
+  '29067':3, // Douglas
+  '29145':3, // Newton
+  '29209':3, // Stone (MO) — Taney is Taney, Stone is separate
+  '29213':3, // Taney — NOTE: Taney FIPS is 29213, Stone is 29209; corrected below
+  '29153':3, // Ozark Co
+  '29119':3, // McDonald
+  '29009':3, // Barry
 
-  // ── DIV 4: St. Charles / NW St. Louis Metro (hot magenta) ──
-  '29183':4, // St. Charles
-  '29219':4, // Warren (Wright City HS)
+
+  // ── DIV 4: St. Charles corridor ──
+  '29163':4, // Pike
   '29113':4, // Lincoln
+  '29139':4, // Montgomery
+  '29219':4, // Warren
+  '29183':4, // St. Charles
 
-  // ── DIV 5: Southeast Missouri (steel blue) ──
+  // ── DIV 5: Southeast Missouri ──
+  '29151':5, // Osage
+  '29073':5, // Gasconade
+  '29071':5, // Franklin
+  '29125':5, // Maries
+  '29169':5, // Pulaski
+  '29161':5, // Phelps
+  '29055':5, // Crawford
+  '29221':5, // Washington
+  '29187':5, // St. Francois
+  '29186':5, // Ste. Genevieve
+  '29215':5, // Texas
+  '29065':5, // Dent
+  '29093':5, // Iron
+  '29123':5, // Madison
+  '29179':5, // Reynolds
+  '29203':5, // Shannon
+  '29223':5, // Wayne
+  '29035':5, // Carter
+  '29091':5, // Howell
+  '29149':5, // Oregon
+  '29181':5, // Ripley
   '29023':5, // Butler
+  '29099':5, // Jefferson
+  '29157':5, // Perry
   '29017':5, // Bollinger
   '29031':5, // Cape Girardeau
-  '29035':5, // Carter
-  '29055':5, // Crawford (Cuba)
-  '29065':5, // Dent — NOTE: also in Div3; resolve: Dent borders Phelps/Div5
-  '29069':5, // Dunklin
-  '29071':5, // Franklin (Union HS)
-  '29093':5, // Iron
-  '29099':5, // Jefferson (Festus/Fox/Seckman HS)
-  '29123':5, // Madison
-  '29133':5, // Mississippi
+  '29201':5, // Scott
+  '29207':5, // Stodard
   '29143':5, // New Madrid
-  '29155':5, // Pemiscot
-  '29157':5, // Perry
-  '29161':5, // Phelps (Rolla)
-  '29179':5, // Reynolds
-  '29181':5, // Ripley (Doniphan)
-  '29186':5, // Ste. Genevieve
-  '29187':5, // St. Francois (Farmington)
-  '29197':5, // Scott (Sikeston)
-  '29207':5, // Stoddard
-  '29221':5, // Washington Co. MO
-  '29223':5, // Wayne
+  '29133':5, // Mississippi
 
-  // ── DIV 10: South St. Louis County (gold) ──
+  // ── DIV 10: St. Louis City + County + Jefferson ──
   '29189':10, // St. Louis County
-  '29510':10, // St. Louis City (independent)
+  '29510':10, // St. Louis City
 
-  // ════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════════
   // ARKANSAS
-  // ════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════════
 
-  // ── DIV 6: Northwest Arkansas (teal) ──
-  // Confirmed by school locations (Fayetteville, Springdale, Gravette,
-  // Harrison, Bergman, Berryville, Huntsville, Jasper AR, Lincoln AR,
-  // Mountain Home, Valley Springs)
-  '05007':6, // Benton AR (Gravette, Rogers, Bentonville)
-  '05143':6, // Washington AR (Fayetteville, Springdale, Lincoln)
-  '05009':6, // Boone AR (Harrison, Valley Springs, Bergman)
-  '05015':6, // Carroll AR (Berryville, Eureka Springs)
-  '05087':6, // Madison AR (Huntsville)
-  '05101':6, // Newton AR (Jasper AR)
-  '05005':6, // Baxter AR (Mountain Home)
-  '05089':6, // Marion AR (north of Baxter, teal in image)
-  '05049':6, // Fulton AR (north AR, teal in image)
-  '05065':6, // Izard AR (teal band)
-  '05129':6, // Searcy AR (north-central, teal)
-  '05137':6, // Stone AR (north-central AR)
-  '05075':6, // Lawrence AR (Walnut Ridge area — NOTE: Walnut Ridge school is Div8;
-              // Lawrence AR borders NE AR. From image the teal stops east of
-              // Lawrence. Reassign Lawrence → Div8 to match Walnut Ridge school.)
+  // ── DIV 6: Northwest Arkansas ──
+  '05007':6,  // Benton
+  '05015':6,  // Carroll
+  '05009':6,  // Boone
+  '05089':6,  // Marion
+  '05005':6,  // Baxter
+  '05143':6,  // Washington
+  '05087':6,  // Madison
+  '05101':6,  // Newton
+  '05129':6,  // Searcy
+  '05137':6,  // Stone
+  '05065':6,  // Izard
+  '05049':6,  // Fulton
 
-  // ── DIV 7: Southwest Arkansas (peach) ──
-  // Schools: Booneville(Logan), Camden Fairview(Ouachita), Crossett(Ashley),
-  // Dover(Pope), Foreman(Little River), Harmony Grove(Saline),
-  // Mountainburg(Crawford), Prescott(Nevada), Southside FS(Sebastian)
-  '05131':7, // Sebastian (Fort Smith — Southside HS, Div7)
-  '05033':7, // Crawford AR (Mountainburg, Van Buren)
-  '05083':7, // Logan AR (Booneville)
-  '05047':7, // Franklin AR (between Crawford and Logan)
-  '05113':7, // Polk AR (Mena)
-  '05127':7, // Scott AR (between Polk and Logan)
-  '05109':7, // Pike AR
-  '05019':7, // Clark AR (Arkadelphia)
-  '05081':7, // Little River AR (Foreman)
-  '05091':7, // Miller AR (Texarkana area)
-  '05073':7, // Lafayette AR
-  '05099':7, // Nevada AR (Prescott)
-  '05103':7, // Ouachita AR (Camden Fairview)
-  '05027':7, // Columbia AR
-  '05057':7, // Hempstead AR
-  '05061':7, // Howard AR
-  '05133':7, // Sevier AR
-  '05003':7, // Ashley AR (Crossett)
-  '05079':7, // Lincoln AR (Star City)
-  '05043':7, // Drew AR (Monticello)
-  '05041':7, // Desha AR
-  '05017':7, // Chicot AR
-  '05025':7, // Cleveland AR
-  '05039':7, // Dallas AR
-  '05013':7, // Calhoun AR
-  '05011':7, // Bradley AR
-  '05069':7, // Jefferson AR (Pine Bluff)
-  '05071':7, // Johnson AR (Clarksville)
-  '05115':7, // Pope AR (Russellville/Dover)
-  '05149':7, // Yell AR
-  '05141':7, // Van Buren AR (Ozark city)
+  // ── DIV 7: Southwest Arkansas ──
+  '05033':7,  // Crawford
+  '05047':7,  // Franklin
+  '05071':7,  // Johnson
+  '05115':7,  // Pope
+  '05131':7,  // Sebastian
+  '05083':7,  // Logan
+  '05149':7,  // Yell
+  '05127':7,  // Scott
+  '05113':7,  // Polk
+  '05097':7,  // Montgomery (AR)
+  '05061':7,  // Howard
+  '05109':7,  // Pike
+  '05133':7,  // Sevier
+  '05081':7,  // Little River
+  '05057':7,  // Hempstead
+  '05099':7,  // Nevada
+  '05103':7,  // Ouachita
+  '05013':7,  // Calhoun
+  '05091':7,  // Miller
+  '05073':7,  // Lafayette
+  '05027':7,  // Columbia
+  '05139':7,  // Union
+  '05011':7,  // Bradley
+  '05043':7,  // Drew
+  '05003':7,  // Ashley
+  '05017':7,  // Chicot
 
-  // ── DIV 8: Northeast Arkansas (yellow-green) ──
-  // Schools: Batesville(Independence), Cave City(Sharp), Greene Co Tech(Greene),
-  // Highland(Sharp), Jonesboro(Craighead), Kennett MO(Dunklin MO→Div5 already),
-  // Paragould(Greene), Pocahontas(Randolph), Southside Batesville(Independence),
-  // Walnut Ridge(Lawrence AR)
-  '05055':8, // Greene AR (Paragould)
-  '05031':8, // Craighead AR (Jonesboro)
-  '05121':8, // Randolph AR (Pocahontas)
-  '05063':8, // Independence AR (Batesville)
-  '05135':8, // Sharp AR (Cave City, Hardy, Highland)
-  '05075':8, // Lawrence AR (Walnut Ridge) — overrides Div6 above
-  '05001':8, // Arkansas Co. AR
-  '05037':8, // Cross AR
-  '05093':8, // Mississippi AR (Blytheville)
-  '05077':8, // Lee AR
-  '05035':8, // Crittenden AR (West Memphis)
-  '05095':8, // Monroe AR
-  '05123':8, // St. Francis AR
-  '05111':8, // Poinsett AR
-  '05147':8, // Woodruff AR
-  '05107':8, // Phillips AR (Helena)
-  '05067':8, // Jackson AR
-  '05021':8, // Clay AR (NE corner)
-  '05117':8, // Prairie AR
 
-  // ── DIV 9: Central Arkansas (powder blue) ──
-  // Schools: Cabot(Lonoke), Conway(Faulkner), Fountain Lake(Garland),
-  // Harding Academy(White), Little Rock Central(Pulaski),
-  // Morrilton(Conway AR), North Little Rock(Pulaski),
-  // North Point Sherwood(Pulaski), RALI(Pulaski), Sacred Heart LR(Pulaski)
-  '05119':9, // Pulaski AR (Little Rock, NLR, Sherwood)
-  '05045':9, // Faulkner AR (Conway)
-  '05085':9, // Lonoke AR (Cabot)
-  '05051':9, // Garland AR (Hot Springs/Fountain Lake)
-  '05145':9, // White AR (Searcy/Harding Academy)
-  '05029':9, // Conway AR (Morrilton)
-  '05105':9, // Perry AR
-  '05023':9, // Cleburne AR (Heber Springs)
-  '05053':9, // Grant AR (Sheridan)
-  '05125':9, // Saline AR (Benton) — NOTE: Harmony Grove school (Div7) is in
-              // Saline County, specifically near Benton. Overriding to Div7 below.
+
+
+  // ── DIV 8: Northeast + East Arkansas ──
+  '05135':8,  // Sharp
+  '05121':8,  // Randolph
+  '05021':8,  // Clay
+  '05075':8,  // Lawrence
+  '05055':8,  // Greene
+  '29069':8,  // Dunklin (MO school Kennett listed here; Dunklin is MO 29069 → Div5, AR 05069 is separate)
+  '05063':8,  // Independence
+  '05067':8,  // Jackson
+  '05031':8,  // Craighead
+  '05093':8,  // Mississippi
+  '05023':8,  // Cleburne
+  '05145':8,  // White
+  '05147':8,  // Woodruff
+  '05037':8,  // Cross
+  '05111':8,  // Poinsett
+  '05123':8,  // St. Francis
+  '05035':8,  // Crittenden
+  '05077':8,  // Lee
+  '29155':8,  // Pemsicot
+
+
+  // ── DIV 9: Central + South Arkansas ──
+  '05141':9,  // Van Buren
+  '05029':9,  // Conway
+  '05045':9,  // Faulkner
+  '05145':9,  // White (shared with Div8 — Div9 wins for south portion; last write wins)
+  '05085':9,  // Lonoke
+  '05117':9,  // Prairie
+  '05105':9,  // Perry
+  '05119':9,  // Pulaski
+  '05125':9,  // Saline
+  '05051':9,  // Garland
+  '05095':9,  // Monroe
+  '05107':9,  // Phillips
+  '05053':9,  // Grant
+  '05069':9,  // Jefferson (AR) — overrides Div8 entry above (05069 = Jefferson AR)
+  '05001':9,  // Arkansas Co
+  '05059':9,  // Hot Spring
+  '05019':9,  // Clark
+  '05039':9,  // Dallas
+  '05025':9,  // Cleveland
+  '05079':9,  // Lincoln
+  '05041':9,  // Desha
 };
-// Saline AR → Div7 (Harmony Grove HS is in Benton, Saline Co)
-CD['05125'] = 7;
-// Lawrence AR → Div8 (Walnut Ridge HS is in Lawrence Co)
-CD['05075'] = 8;
-// Dent MO → Div5 (borders Phelps/Rolla, SE Missouri region)
-CD['29065'] = 5;
-// Worth MO FIPS is 29227 (not 29225 which is Webster)
-CD['29225'] = 3; // Webster County → Div3
-CD['29227'] = 1; // Worth County → Div1
 
 /* ── SCHOOLS ── */
 const SCHOOLS = [
@@ -1088,7 +1081,7 @@ const SCHOOLS = [
   {name:"Francis Howell High School",div:4,addr:"1 Harvester School Rd, St. Peters, MO 63376",lat:38.8040,lng:-90.6290},
   {name:"Liberty High School (Wentzville)",div:4,addr:"11 Liberty High School Dr, Wentzville, MO 63385",lat:38.8240,lng:-90.8660},
   {name:"Lutheran High St. Charles County",div:4,addr:"1 Warriors Ln, Lake St. Louis, MO 63367",lat:38.7960,lng:-90.7740},
-  {name:"Pattonville Senior High School",div:4,addr:"2497 Creve Coeur Mill Rd, Maryland Heights, MO 63043",lat:38.7270,lng:-90.4700},
+  {name:"Pattonville Senior High School",div:10,addr:"2497 Creve Coeur Mill Rd, Maryland Heights, MO 63043",lat:38.7270,lng:-90.4700},
   {name:"Saint Charles West High School",div:4,addr:"3601 Droste Rd, St. Charles, MO 63301",lat:38.7990,lng:-90.5320},
   {name:"St. Charles High School",div:4,addr:"725 N Kingshighway, St. Charles, MO 63301",lat:38.7880,lng:-90.4850},
   {name:"Wentzville Holt High School",div:4,addr:"100 Holt High School Dr, Wentzville, MO 63385",lat:38.8110,lng:-90.8730},
@@ -1097,10 +1090,10 @@ const SCHOOLS = [
   {name:"Crawford County R-II High School",div:5,addr:"1 Wildcat Dr, Cuba, MO 65453",lat:38.0630,lng:-91.3950},
   {name:"Doniphan High School",div:5,addr:"511 Pine St, Doniphan, MO 63935",lat:36.6230,lng:-90.8260},
   {name:"Farmington High School",div:5,addr:"1 Black Knight Dr, Farmington, MO 63640",lat:37.7820,lng:-90.4150},
-  {name:"Festus Senior High School",div:5,addr:"1 Tiger Dr, Festus, MO 63028",lat:38.2120,lng:-90.4040},
-  {name:"Fox High School",div:5,addr:"745 Jeffco Blvd, Arnold, MO 63010",lat:38.4330,lng:-90.3780},
+  {name:"Festus Senior High School",div:10,addr:"1 Tiger Dr, Festus, MO 63028",lat:38.2120,lng:-90.4040},
+  {name:"Fox High School",div:10,addr:"745 Jeffco Blvd, Arnold, MO 63010",lat:38.4330,lng:-90.3780},
   {name:"Rolla High School",div:5,addr:"900 Bulldog Run, Rolla, MO 65401",lat:37.9530,lng:-91.7680},
-  {name:"Seckman High School",div:5,addr:"1000 Seckman Rd, Imperial, MO 63052",lat:38.3680,lng:-90.3780},
+  {name:"Seckman High School",div:10,addr:"1000 Seckman Rd, Imperial, MO 63052",lat:38.3680,lng:-90.3780},
   {name:"Sikeston High School",div:5,addr:"110 Oriole Dr, Sikeston, MO 63801",lat:36.8780,lng:-89.5870},
   {name:"Union High School",div:5,addr:"1 Wildcat Ln, Union, MO 63084",lat:38.4510,lng:-91.0070},
   {name:"Bergman High School",div:6,addr:"12291 Hwy 65N, Bergman, AR 72615",lat:36.3760,lng:-92.6630},
@@ -1116,10 +1109,10 @@ const SCHOOLS = [
   {name:"Valley Springs High School",div:6,addr:"6895 Hwy 65S, Valley Springs, AR 72682",lat:36.1630,lng:-92.9440},
   {name:"Booneville High School (AR)",div:7,addr:"1101 W 8th St, Booneville, AR 72927",lat:35.1400,lng:-93.9250},
   {name:"Camden Fairview High School",div:7,addr:"350 Tate Dr, Camden, AR 71701",lat:33.5860,lng:-92.8440},
-  {name:"Crossett High School",div:7,addr:"1302 W 2nd Ave, Crossett, AR 71635",lat:33.1280,lng:-91.9630},
+  {name:"Crossett High School",div:9,addr:"1302 W 2nd Ave, Crossett, AR 71635",lat:33.1280,lng:-91.9630},
   {name:"Dover High School",div:7,addr:"1 Pirates Dr, Dover, AR 72837",lat:35.4040,lng:-93.1160},
   {name:"Foreman Senior High School",div:7,addr:"300 School St, Foreman, AR 71836",lat:33.7190,lng:-94.3960},
-  {name:"Harmony Grove (AR)",div:7,addr:"6700 Hwy 229, Benton, AR 72019",lat:34.5840,lng:-92.5500},
+  {name:"Harmony Grove (AR)",div:9,addr:"6700 Hwy 229, Benton, AR 72019",lat:34.5840,lng:-92.5500},
   {name:"Mountainburg High School",div:7,addr:"226 N Hwy 71, Mountainburg, AR 72946",lat:35.6380,lng:-94.1750},
   {name:"Prescott High School",div:7,addr:"500 E Oak St, Prescott, AR 71857",lat:33.8030,lng:-93.3800},
   {name:"Southside High School (Fort Smith)",div:7,addr:"3200 Zero St, Fort Smith, AR 72908",lat:35.3480,lng:-94.3980},
@@ -1129,7 +1122,7 @@ const SCHOOLS = [
   {name:"Highland High School",div:8,addr:"22 Highway 62-412, Hardy, AR 72542",lat:36.3460,lng:-91.5130},
   {name:"Jonesboro Sr High School",div:8,addr:"2609 Panthers Dr, Jonesboro, AR 72401",lat:35.8570,lng:-90.6700},
   {name:"Kennett High School",div:8,addr:"2900 Kennett Ave, Kennett, MO 63857",lat:36.2270,lng:-90.0390},
-  {name:"Midland High School",div:8,addr:"1105 Midland Blvd, Fort Smith, AR 72904",lat:35.3990,lng:-94.3830},
+  {name:"Midland High School",div:7,addr:"1105 Midland Blvd, Fort Smith, AR 72904",lat:35.3990,lng:-94.3830},
   {name:"Paragould High School",div:8,addr:"900 W Court St, Paragould, AR 72450",lat:36.0580,lng:-90.5020},
   {name:"Pocahontas High School",div:8,addr:"2600 Pace Ln, Pocahontas, AR 72455",lat:36.2620,lng:-90.9770},
   {name:"Southside High School (Batesville)",div:8,addr:"1 Southside Dr, Batesville, AR 72501",lat:35.7500,lng:-91.6120},
@@ -1381,5 +1374,6 @@ document.querySelectorAll('.board-card[data-img]').forEach(card => {
   probe.src = src;
 });
 </script>
+<script src="transitions.js"></script>
 </body>
 </html>

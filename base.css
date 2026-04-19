@@ -25,6 +25,7 @@
   --shadow-hover: 0 8px 32px rgba(10,22,40,0.14), 0 2px 8px rgba(10,22,40,0.08);
 }
 
+
 /* ============================================================
    RESET & BASE
    ============================================================ */
@@ -317,6 +318,16 @@ footer {
    ============================================================ */
 .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   PAGE TRANSITION OVERLAY  (driven by transitions.js)
+   ============================================================ */
+#pt-overlay {
+  /* Sits above everything: DLC splash (99999), nav (1000), Leaflet map (9500) */
+  z-index: 999999 !important;
+  /* Prevent overlay from affecting layout or scroll */
+  pointer-events: none;
+}
 
 /* ============================================================
    SHARED RESPONSIVE
