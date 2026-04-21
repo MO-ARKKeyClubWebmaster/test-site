@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+<script src="marty-chat.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFC2BE8DN1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -852,6 +852,75 @@
   }
 
   /* ============================================================
+     MARTY THE MEERKAT — HERO MASCOT
+     ============================================================ */
+
+
+  /* Speech bubble — floats over Marty's chest/head area */
+  .marty-bubble-wrap {
+    position: absolute;
+    top: 20%;
+    left: 58%;
+    z-index: 6;
+    pointer-events: none;
+  }
+  .marty-bubble {
+    background: #fff;
+    border: 2px solid #C8962A;
+    border-radius: 16px 16px 16px 4px;
+    padding: 8px 13px;
+    font-family: var(--ff-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #0A1628;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    position: relative;
+    transition: opacity 0.3s ease;
+  }
+  .marty-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    left: 14px;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 9px solid #C8962A;
+  }
+  .marty-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 15px;
+    width: 0; height: 0;
+    border-left: 7px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 8px solid #fff;
+    z-index: 1;
+  }
+
+  /* Caption badge below Marty — matching our-district style */
+  .marty-caption {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,150,42,0.15);
+    border: 1px solid rgba(200,150,42,0.3);
+    border-radius: 10px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+
+  /* ============================================================
      VALUE CARDS — differentiate #1 and #2
      ============================================================ */
   .value-card:nth-child(1) { border-top: 3px solid rgba(200,150,42,0.4); }
@@ -1311,7 +1380,6 @@
 </style>
 </head>
 <body>
-
 <!-- ============================================================
      2027 DLC THEME ANNOUNCEMENT SPLASH
      Shows on first 2 visits (tracked via localStorage view count)
@@ -2143,72 +2211,158 @@ function dismissDLCSplash() {
       </div>
     </div>
   </div>
+  <!-- ============================================================
+       MARTY THE MEERKAT — HERO VERSION (bottom-center of hero)
+       ============================================================ -->
 </section>
 
+<!-- ============================================================
+     MARTY THE MEERKAT — STICKY CORNER VERSION
+     ============================================================ -->
+
+
 <div class="quicklinks-bg">
-  <div class="section">
-    <div class="section-header">
-      <div class="section-label">Get Started</div>
-      <h2 class="section-title">Find what you need</h2>
-    </div>
-    <div class="quicklinks-grid">
-      <a href="about.html" class="quicklink-card fade-in">
-        <div class="quicklink-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+  <div class="section" style="padding-top:3.5rem;padding-bottom:3.5rem;">
+    <div style="display:flex;align-items:stretch;gap:1.25rem;padding-left:1rem;">
+
+      <!-- Marty column - hides on narrow screens -->
+      <div id="marty-ql-wrap" aria-hidden="true" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:visible;">
+        <div style="position:relative;width:100%;">
+          <div style="position:absolute;top:28%;left:90%;z-index:6;pointer-events:none;white-space:nowrap;">
+            <div class="marty-bubble" id="marty-bubble-hero">Find all the resources you need! 🔑</div>
+          </div>
+          <svg id="marty-hero-svg" width="auto" height="auto" viewBox="0 0 180 310" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" style="filter:drop-shadow(0 6px 20px rgba(0,0,0,0.22));cursor:crosshair;display:block;">
+            <path d="M74 248 Q56 262 61 276 Q71 287 86 279 Q91 266 91 253" fill="#C8A06A" stroke="#A07840" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M74 252 Q63 263 66 273" stroke="#8B5E2A" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+            <rect x="70" y="248" width="18" height="24" rx="8" fill="#C89050"/>
+            <rect x="92" y="248" width="18" height="24" rx="8" fill="#C89050"/>
+            <ellipse cx="76" cy="276" rx="16" ry="9" fill="#7A4A1A"/>
+            <ellipse cx="66" cy="274" rx="6" ry="5" fill="#6A3A10"/>
+            <ellipse cx="76" cy="272" rx="5.5" ry="4.5" fill="#6A3A10"/>
+            <ellipse cx="86" cy="274" rx="5" ry="4" fill="#6A3A10"/>
+            <ellipse cx="66" cy="272" rx="3" ry="2.2" fill="#8A5020" opacity="0.5"/>
+            <ellipse cx="76" cy="270" rx="2.8" ry="2" fill="#8A5020" opacity="0.5"/>
+            <ellipse cx="86" cy="272" rx="2.5" ry="1.8" fill="#8A5020" opacity="0.5"/>
+            <ellipse cx="104" cy="276" rx="16" ry="9" fill="#7A4A1A"/>
+            <ellipse cx="94" cy="274" rx="5" ry="4" fill="#6A3A10"/>
+            <ellipse cx="104" cy="272" rx="5.5" ry="4.5" fill="#6A3A10"/>
+            <ellipse cx="114" cy="274" rx="6" ry="5" fill="#6A3A10"/>
+            <ellipse cx="94" cy="272" rx="2.5" ry="1.8" fill="#8A5020" opacity="0.5"/>
+            <ellipse cx="104" cy="270" rx="2.8" ry="2" fill="#8A5020" opacity="0.5"/>
+            <ellipse cx="114" cy="272" rx="3" ry="2.2" fill="#8A5020" opacity="0.5"/>
+            <ellipse cx="90" cy="208" rx="43" ry="50" fill="#D4A574"/>
+            <ellipse cx="90" cy="213" rx="24" ry="35" fill="#F0D8B0"/>
+            <path d="M51 176 Q51 155 90 153 Q129 155 129 176 L131 232 Q131 243 90 245 Q49 243 49 232 Z" fill="#1A6BAA"/>
+            <path d="M75 153 Q90 148 105 153 L105 169 Q90 163 75 169 Z" fill="#1558A0"/>
+            <text x="90" y="194" text-anchor="middle" font-size="9" font-family="Georgia,serif" font-style="italic" fill="#C8962A" font-weight="bold">lights camera</text>
+            <text x="90" y="208" text-anchor="middle" font-size="9" font-family="Georgia,serif" font-style="italic" fill="#C8962A" font-weight="bold">service!</text>
+            <ellipse cx="47" cy="198" rx="11" ry="21" fill="#C89050" transform="rotate(-10,47,198)"/>
+            <ellipse cx="133" cy="198" rx="11" ry="21" fill="#C89050" transform="rotate(10,133,198)"/>
+            <ellipse cx="44" cy="218" rx="10" ry="8" fill="#7A4A1A"/>
+            <ellipse cx="136" cy="218" rx="10" ry="8" fill="#7A4A1A"/>
+            <ellipse cx="90" cy="158" rx="21" ry="10" fill="#D4A574"/>
+            <ellipse cx="90" cy="116" rx="45" ry="43" fill="#D4A574"/>
+            <ellipse cx="51" cy="90" rx="12" ry="15" fill="#C89050"/>
+            <ellipse cx="51" cy="90" rx="7.5" ry="9.5" fill="#E8C080" opacity="0.55"/>
+            <ellipse cx="129" cy="90" rx="12" ry="15" fill="#C89050"/>
+            <ellipse cx="129" cy="90" rx="7.5" ry="9.5" fill="#E8C080" opacity="0.55"/>
+            <ellipse cx="74" cy="114" rx="18" ry="15" fill="#6B3A1A" opacity="0.75"/>
+            <ellipse cx="106" cy="114" rx="18" ry="15" fill="#6B3A1A" opacity="0.75"/>
+            <ellipse cx="90" cy="130" rx="23" ry="19" fill="#F0D8B0"/>
+            <ellipse cx="90" cy="126" rx="6.5" ry="4.5" fill="#3A2010"/>
+            <circle cx="87.5" cy="127.5" r="1.6" fill="#251408"/>
+            <circle cx="92.5" cy="127.5" r="1.6" fill="#251408"/>
+            <path d="M83 133 Q90 140 97 133" stroke="#7A4A1A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <ellipse cx="74" cy="112" rx="9.5" ry="10" fill="#FFFEF8"/>
+            <ellipse cx="106" cy="112" rx="9.5" ry="10" fill="#FFFEF8"/>
+            <circle id="h-iris-l" cx="74" cy="112" r="6.5" fill="#3A2010"/>
+            <circle id="h-iris-r" cx="106" cy="112" r="6.5" fill="#3A2010"/>
+            <circle id="h-pupil-l" cx="74" cy="112" r="3.8" fill="#0A0604"/>
+            <circle id="h-pupil-r" cx="106" cy="112" r="3.8" fill="#0A0604"/>
+            <circle id="h-shine-l" cx="76" cy="110" r="2" fill="white" opacity="0.9"/>
+            <circle id="h-shine-r" cx="108" cy="110" r="2" fill="white" opacity="0.9"/>
+            <path d="M63 99 Q74 95 85 99" stroke="#5A3010" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <path d="M95 99 Q106 95 117 99" stroke="#5A3010" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <ellipse cx="90" cy="78" rx="54" ry="11" fill="#1A1008"/>
+            <path d="M46 78 Q44 42 90 39 Q136 42 134 78 Z" fill="#1A1008"/>
+            <path d="M60 62 Q90 56 120 62" stroke="#2A1E0E" stroke-width="3" fill="none"/>
+            <path d="M50 76 Q90 72 130 76" stroke="#8B6020" stroke-width="4.5" fill="none"/>
           </svg>
         </div>
-        <h3>About MO-ARK</h3>
-        <p>Learn about the Missouri-Arkansas district, our history, and our mission.</p>
-        <span class="quicklink-arrow">Learn more →</span>
-      </a>
-      <a href="our-district.html#board" class="quicklink-card fade-in">
-        <div class="quicklink-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
+        <div class="marty-caption" style="margin-top:0.5rem;font-size:0.65rem;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Marty the Meerkat
         </div>
-        <h3>District Board</h3>
-        <p>Meet your '26–'27 executive and lieutenant governors across all 10 divisions.</p>
-        <span class="quicklink-arrow">Meet the board →</span>
-      </a>
-      <a href="resources.html" class="quicklink-card fade-in">
-        <div class="quicklink-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
-          </svg>
+      </div>
+
+      <!-- Cards column -->
+      <div id="marty-cards-col" style="flex:1;min-width:0;">
+        <div class="section-header" style="margin-bottom:2rem;">
+          <div class="section-label">Get Started</div>
+          <h2 class="section-title">Find what you need</h2>
         </div>
-        <h3>Resources</h3>
-        <p>Forms, officer guidebooks, monthly reports, style guides, and more.</p>
-        <span class="quicklink-arrow">Browse resources →</span>
-      </a>
-      <a href="newsletters.html" class="quicklink-card fade-in">
-        <div class="quicklink-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
+        <div class="quicklinks-grid">
+          <a href="about.html" class="quicklink-card fade-in">
+            <div class="quicklink-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </div>
+            <h3>About MO-ARK</h3>
+            <p>Learn about the Missouri-Arkansas district, our history, and our mission.</p>
+            <span class="quicklink-arrow">Learn more →</span>
+          </a>
+          <a href="our-district.html#board" class="quicklink-card fade-in">
+            <div class="quicklink-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3>District Board</h3>
+            <p>Meet your ‘26–27 executive and lieutenant governors across all 10 divisions.</p>
+            <span class="quicklink-arrow">Meet the board →</span>
+          </a>
+          <a href="resources.html" class="quicklink-card fade-in">
+            <div class="quicklink-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+              </svg>
+            </div>
+            <h3>Resources</h3>
+            <p>Forms, officer guidebooks, monthly reports, style guides, and more.</p>
+            <span class="quicklink-arrow">Browse resources →</span>
+          </a>
+          <a href="newsletters.html" class="quicklink-card fade-in">
+            <div class="quicklink-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <h3>Newsletters</h3>
+            <p>Read division newsletters, the Key Way, and Kiwanigram publications.</p>
+            <span class="quicklink-arrow">Read newsletters →</span>
+          </a>
+          <a href="contact.html" class="quicklink-card fade-in">
+            <div class="quicklink-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3>Contact Us</h3>
+            <p>Reach out to the board, find individual member contact info, or ask a question.</p>
+            <span class="quicklink-arrow">Get in touch →</span>
+          </a>
         </div>
-        <h3>Newsletters</h3>
-        <p>Read division newsletters, the Key Way, and Kiwanigram publications.</p>
-        <span class="quicklink-arrow">Read newsletters →</span>
-      </a>
-      <a href="contact.html" class="quicklink-card fade-in">
-        <div class="quicklink-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-        </div>
-        <h3>Contact Us</h3>
-        <p>Reach out to the board, find individual member contact info, or ask a question.</p>
-        <span class="quicklink-arrow">Get in touch →</span>
-      </a>
+      </div>
+
     </div>
   </div>
 </div>
+
 
 <div class="mission-strip">
   <!-- Watermark key icon -->
@@ -3216,5 +3370,184 @@ function dismissDLCSplash() {
 })();
 </script>
 <script src="transitions.js"></script>
+
+<!-- ============================================================
+     MARTY THE MEERKAT — EYE TRACKING & SPEECH BUBBLES
+     ============================================================ -->
+<script>
+/* sizeMarty() -- scales Marty like dragging a corner: fills full section height, width follows aspect ratio */
+function sizeMarty() {
+  var cardsCol  = document.getElementById('marty-cards-col');
+  var martyWrap = document.getElementById('marty-ql-wrap');
+  var martySvg  = document.getElementById('marty-hero-svg');
+  if (!cardsCol || !martyWrap || !martySvg) return;
+
+  var colH = cardsCol.offsetHeight;
+  if (colH < 50) return;
+
+  // SVG viewBox is 180w x 310h, aspect = 0.581
+  var ASPECT = 180 / 310;
+  var targetH = colH;
+  var targetW = Math.round(targetH * ASPECT);
+
+  martyWrap.style.width    = targetW + 'px';
+  martyWrap.style.height   = targetH + 'px';
+  martyWrap.style.minWidth = targetW + 'px';
+
+  martySvg.setAttribute('width',  targetW);
+  martySvg.setAttribute('height', targetH);
+  martySvg.style.width    = targetW + 'px';
+  martySvg.style.height   = targetH + 'px';
+  martySvg.style.minWidth = targetW + 'px';
+}
+
+window.addEventListener('load', sizeMarty);
+window.addEventListener('resize', sizeMarty);
+setTimeout(sizeMarty, 80);
+setTimeout(sizeMarty, 350);
+
+(function() {
+  /* ── Speech bubble message lists ── */
+  const heroMessages = [
+    "Find all the resources you need! 🔑",
+    "Red, White & You — Making a Difference! 🇺🇸",
+    "2027 DLC — Springfield, MO! Let's go!",
+    "Serving MO-ARK since 1947 💛",
+    "Browse forms, guidebooks & more! 📄",
+    "Caring is our way of life! 🤝",
+    "Patriotism is this year's theme!",
+    "Officer guidebooks available now! →",
+    "Howdy, Key Clubber! 🤠",
+    "122 clubs. 10 divisions. One mission."
+  ];
+  const stickyMessages = [
+    "Howdy! 🤠",
+    "Go MO-ARK! 🔑",
+    "Serve boldly! 🌟",
+    "DLC 2027! 🎉",
+    "Red, White & You! 🇺🇸",
+    "122 clubs strong!",
+    "Click the key!",
+    "Caring — our way of life!"
+  ];
+
+  /* ── Cycle hero bubble ── */
+  let heroIdx = 0;
+  const heroBubble = document.getElementById('marty-bubble-hero');
+  if (heroBubble) {
+    setInterval(function() {
+      heroIdx = (heroIdx + 1) % heroMessages.length;
+      heroBubble.style.opacity = '0';
+      setTimeout(function() {
+        heroBubble.textContent = heroMessages[heroIdx];
+        heroBubble.style.opacity = '1';
+      }, 300);
+    }, 3500);
+    heroBubble.style.transition = 'opacity 0.3s ease';
+  }
+
+  /* ── Cycle sticky bubble ── */
+  let stickyIdx = 0;
+  const stickyBubble = document.getElementById('marty-bubble-sticky');
+  if (stickyBubble) {
+    setInterval(function() {
+      stickyIdx = (stickyIdx + 1) % stickyMessages.length;
+      stickyBubble.style.opacity = '0';
+      setTimeout(function() {
+        stickyBubble.textContent = stickyMessages[stickyIdx];
+        stickyBubble.style.opacity = '1';
+      }, 250);
+    }, 2800);
+    stickyBubble.style.transition = 'opacity 0.25s ease';
+  }
+
+  /* ── Show/hide sticky Marty based on scroll ── */
+  var stickyMarty = document.getElementById('marty-sticky');
+  var heroSection = document.getElementById('heroSection');
+  if (stickyMarty && heroSection) {
+    window.addEventListener('scroll', function() {
+      var heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+      if (window.scrollY > heroBottom - 100) {
+        stickyMarty.classList.add('visible');
+      } else {
+        stickyMarty.classList.remove('visible');
+      }
+    }, { passive: true });
+  }
+
+  /* ── Eye tracking helper ── */
+  function moveEyes(svgEl, mouseX, mouseY, prefix) {
+    if (!svgEl) return;
+    var rect = svgEl.getBoundingClientRect();
+    var scaleX = 180 / rect.width;
+    var svgH = (prefix === 'h-') ? 310 : 280;
+    var scaleY = svgH / rect.height;
+    var sx = (mouseX - rect.left) * scaleX;
+    var sy = (mouseY - rect.top) * scaleY;
+
+    var eyeBaseY = (prefix === 'h-') ? 112 : 113;
+    var eyes = [
+      { baseX: 74, baseY: eyeBaseY, maxR: 2.8, irisId: prefix+'iris-l', pupilId: prefix+'pupil-l', shineId: prefix+'shine-l', shineOffX: -1.5 },
+      { baseX: 106, baseY: eyeBaseY, maxR: 2.8, irisId: prefix+'iris-r', pupilId: prefix+'pupil-r', shineId: prefix+'shine-r', shineOffX: -1.5 }
+    ];
+
+    eyes.forEach(function(e) {
+      var dx = sx - e.baseX;
+      var dy = sy - e.baseY;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      var r = Math.min(dist / 10, e.maxR);
+      var angle = Math.atan2(dy, dx);
+      var nx = e.baseX + Math.cos(angle) * r;
+      var ny = e.baseY + Math.sin(angle) * r;
+
+      var iris  = document.getElementById(e.irisId);
+      var pupil = document.getElementById(e.pupilId);
+      var shine = document.getElementById(e.shineId);
+      if (iris)  { iris.setAttribute('cx', nx);  iris.setAttribute('cy', ny); }
+      if (pupil) { pupil.setAttribute('cx', nx); pupil.setAttribute('cy', ny); }
+      if (shine) { shine.setAttribute('cx', nx + e.shineOffX); shine.setAttribute('cy', ny - 1.8); }
+    });
+  }
+
+  function resetEyes(prefix) {
+    var baseY = (prefix === 'h-') ? 112 : 113;
+    var shineY = (prefix === 'h-') ? 110 : 111;
+    var defaults = [
+      { irisId: prefix+'iris-l', pupilId: prefix+'pupil-l', shineId: prefix+'shine-l', bx: 74,  sx: 76  },
+      { irisId: prefix+'iris-r', pupilId: prefix+'pupil-r', shineId: prefix+'shine-r', bx: 106, sx: 108 }
+    ];
+    defaults.forEach(function(d) {
+      var iris  = document.getElementById(d.irisId);
+      var pupil = document.getElementById(d.pupilId);
+      var shine = document.getElementById(d.shineId);
+      if (iris)  { iris.setAttribute('cx',  d.bx); iris.setAttribute('cy',  baseY); }
+      if (pupil) { pupil.setAttribute('cx', d.bx); pupil.setAttribute('cy', baseY); }
+      if (shine) { shine.setAttribute('cx', d.sx); shine.setAttribute('cy', shineY); }
+    });
+  }
+
+  /* ── Attach mousemove listeners ── */
+  var heroSvg   = document.getElementById('marty-hero-svg');
+  var stickySvg = document.getElementById('marty-sticky-svg');
+  var qlSection = document.querySelector('.quicklinks-bg');
+
+  /* Quicklinks Marty tracks mouse across the whole section */
+  if (qlSection && heroSvg) {
+    qlSection.addEventListener('mousemove', function(e) {
+      moveEyes(heroSvg, e.clientX, e.clientY, 'h-');
+    });
+    qlSection.addEventListener('mouseleave', function() {
+      resetEyes('h-');
+    });
+  }
+
+  /* Sticky Marty tracks mouse globally */
+  if (stickySvg) {
+    document.addEventListener('mousemove', function(e) {
+      moveEyes(stickySvg, e.clientX, e.clientY, 's-');
+    });
+  }
+})();
+</script>
 </body>
 </html>
