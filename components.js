@@ -10,7 +10,7 @@
    ============================================================ */
 const BANNER_CONFIG = {
 
-  'BANNER-ACTIVE': true,
+  'BANNER-ACTIVE': false,
 
   messages: [
     {
