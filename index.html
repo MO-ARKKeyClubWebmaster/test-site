@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
+<script src="components.js"></script>
 <style>
   /* ============================================================
      DESIGN TOKENS
@@ -1392,7 +1393,7 @@
   z-index: 99999;
   background: #0A0F1E;
   overflow: hidden;
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'DM Sans', system-ui, sans-serif;
@@ -1743,25 +1744,53 @@
 
 <script>
 (function() {
-  /* ── Show splash only on first 2 visits ── */
-  const KEY = 'dlcSplash2027_views';
-  const views = parseInt(localStorage.getItem(KEY) || '0', 10);
+  /*
+    Visit 1   → splash + fireworks/confetti
+    Visit 2-3 → splash only, no fireworks
+    Visit 4+  → skip entirely
 
-  if (views >= 2) {
-    /* Already seen twice — never show again */
+    Uses localStorage + cookie fallback so it works on file:// too.
+  */
+  const KEY = 'dlcSplash2027_views';
+
+  function readCount() {
+    try {
+      const v = parseInt(localStorage.getItem(KEY) || '0', 10);
+      if (!isNaN(v) && v > 0) return v;
+    } catch(e) {}
+    try {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + KEY + '=([^;]*)'));
+      if (m) return parseInt(decodeURIComponent(m[1]), 10) || 0;
+    } catch(e) {}
+    return 0;
+  }
+
+  function writeCount(n) {
+    try { localStorage.setItem(KEY, String(n)); } catch(e) {}
+    try {
+      const exp = new Date(Date.now() + 365*24*60*60*1000).toUTCString();
+      document.cookie = KEY + '=' + n + '; expires=' + exp + '; path=/; SameSite=Lax';
+    } catch(e) {}
+  }
+
+  const views = readCount();
+  writeCount(views + 1);
+
+  /* Visit 4+ → skip entirely */
+  if (views >= 3) {
     document.getElementById('dlcSplash').style.display = 'none';
     return;
   }
 
-  /* Increment view count */
-  localStorage.setItem(KEY, String(views + 1));
-
-  /* Show the splash */
+  /* Visit 1-3 → show splash */
   document.getElementById('dlcSplash').style.display = 'flex';
   document.body.style.overflow = 'hidden';
 
-  /* ── Animated star field ── */
-  (function buildStars() {
+  /* Gate for fireworks — only on very first visit */
+  const showFireworks = (views === 0);
+
+  /* ── Animated star field (visit 1 only) ── */
+  if (showFireworks) (function buildStars() {
     const svg = document.getElementById('dlcStars');
     const count = 120;
     for (let i = 0; i < count; i++) {
@@ -1784,8 +1813,8 @@
     document.head.appendChild(style);
   })();
 
-  /* ── Confetti system ── */
-  (function runConfetti() {
+  /* ── Confetti system (visit 1 only) ── */
+  if (showFireworks) (function runConfetti() {
     const canvas = document.getElementById('dlcConfetti');
     const ctx = canvas.getContext('2d');
     const colors = ['#B22234','#FFFFFF','#3C3B6E','#F0C14B','#E8E8E8','#8B0000','#C0C0FF'];
@@ -2197,7 +2226,7 @@ function dismissDLCSplash() {
         <div class="hero-card-label">Upcoming Event</div>
         <div class="hero-card-title">District Leadership Conference</div>
         <div class="hero-card-sub">University Plaza Hotel · Springfield, MO</div>
-        <div class="hero-card-badge">March 3–6, 2027</div>
+        <div class="hero-card-badge">March 4–6, 2027</div>
       </div>
       <div class="hero-card">
         <div class="hero-card-label">DLC 2027 Theme</div>
@@ -2423,8 +2452,8 @@ function dismissDLCSplash() {
         <div class="news-featured-content">
           <span class="news-tag">Featured Event</span>
           <h3>Missouri-Arkansas District Leadership Conference 2027</h3>
-          <p>Join us March 3–6, 2027 at University Plaza Hotel in Springfield, Missouri for forums, contests, elections, and a year of celebration.</p>
-          <div class="news-featured-meta">March 3–6, 2027 · Springfield, MO · Theme: Patriotic</div>
+          <p>Join us March 4–6, 2027 at University Plaza Hotel in Springfield, Missouri for forums, contests, elections, and a year of celebration.</p>
+          <div class="news-featured-meta">March 4–6, 2027 · Springfield, MO · Theme: Patriotic</div>
         </div>
       </a>
 
@@ -2637,7 +2666,7 @@ function dismissDLCSplash() {
 
     <div class="resources-cta-box fade-in">
       <h3>District Leadership Conference</h3>
-      <p>The 2027 DLC will be held March 3–6 at the University Plaza Hotel in Springfield, Missouri. Theme: <strong style="color:var(--gold-lt)">Patriotic</strong></p>
+      <p>The 2027 DLC will be held March 4–6 at the University Plaza Hotel in Springfield, Missouri. Theme: <strong style="color:var(--gold-lt)">Patriotic</strong></p>
       <p style="margin-top:0.5rem">Access registration forms, award applications, candidate packets, and contest entries.</p>
       <a href="dlc.html" class="btn btn-primary" style="margin-top:0.5rem">
         View DLC Info &amp; Forms
@@ -3115,8 +3144,8 @@ function dismissDLCSplash() {
 
   /* ── CONFIG ─────────────────────────────────────────────── */
   //  Change this to next year's DLC date/time (local time)
-  const DLC_DATE = new Date("March 3, 2027 08:00:00");
-  const DLC_LABEL = "March 3–6, 2027 · Springfield, MO";
+  const DLC_DATE = new Date("March 4, 2027 08:00:00");
+  const DLC_LABEL = "March 4–6, 2027 · Springfield, MO";
   /* ────────────────────────────────────────────────────────── */
 
   const keyWrap   = document.getElementById('keyWrap');
