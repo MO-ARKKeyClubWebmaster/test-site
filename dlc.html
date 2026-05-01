@@ -64,10 +64,255 @@
   .packet-btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 1.75rem;background:var(--gold);color:var(--navy);font-weight:700;border-radius:var(--radius-sm);font-size:0.9375rem;transition:all var(--transition);}
   .packet-btn:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,150,42,0.5);}
 
-  /* CALENDAR */
-  .calendar-container{width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--cream);}
-  .calendar-embed{width:100%;height:700px;border:none;}
-  .calendar-note{padding:1.25rem 1.5rem;background:var(--cream);font-size:0.875rem;color:var(--muted);text-align:center;}
+  /* ── BUILT-IN CALENDAR ── */
+  .cal-wrapper {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .cal-wrapper { grid-template-columns: 1fr; }
+  }
+
+  /* Mini month picker */
+  .cal-mini {
+    background: var(--navy);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    color: var(--white);
+    position: sticky;
+    top: 88px;
+  }
+  .cal-mini-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .cal-mini-month {
+    font-family: var(--ff-display);
+    font-size: 1.1rem;
+    color: var(--white);
+  }
+  .cal-mini-nav {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    transition: background 0.2s, color 0.2s;
+    font-size: 0.875rem;
+  }
+  .cal-mini-nav:hover { background: rgba(200,150,42,0.2); color: var(--gold-lt); }
+  .cal-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    text-align: center;
+  }
+  .cal-mini-dow {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    font-weight: 700;
+    padding: 0.25rem 0;
+  }
+  .cal-mini-day {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.15rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.6);
+    transition: background 0.15s, color 0.15s;
+    line-height: 1;
+  }
+  .cal-mini-day:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+  .cal-mini-day.has-event { color: var(--white); font-weight: 600; }
+  .cal-mini-day.has-event::after {
+    content: '·';
+    display: block;
+    color: var(--gold);
+    font-size: 1rem;
+    line-height: 0.5;
+    margin-top: 1px;
+  }
+  .cal-mini-day.today {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .cal-mini-day.today::after { color: var(--navy); }
+  .cal-mini-day.other-month { opacity: 0.25; pointer-events: none; }
+  .cal-mini-day.active {
+    background: rgba(200,150,42,0.3);
+    color: var(--gold-lt);
+    outline: 1px solid rgba(200,150,42,0.5);
+  }
+
+  /* Legend */
+  .cal-legend {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .cal-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+  }
+  .cal-legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Event list panel */
+  .cal-events-panel {}
+  .cal-month-group {
+    margin-bottom: 2rem;
+  }
+  .cal-month-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .cal-month-label-text {
+    font-family: var(--ff-display);
+    font-size: 1.25rem;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+  .cal-month-label-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .cal-event-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.75rem;
+    transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .cal-event-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateX(4px);
+    border-color: var(--gold);
+  }
+  .cal-event-date-block {
+    flex-shrink: 0;
+    text-align: center;
+    width: 64px;
+  }
+  .cal-event-date-range {
+    font-family: var(--ff-display);
+    font-size: 1.5rem;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .cal-event-date-month {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+  .cal-event-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .cal-event-body { flex: 1; min-width: 0; }
+  .cal-event-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    margin-bottom: 0.5rem;
+  }
+  .cal-event-tag.district { background: rgba(26,58,107,0.1); color: var(--blue); }
+  .cal-event-tag.conference { background: rgba(200,150,42,0.15); color: #8a6200; }
+  .cal-event-tag.international { background: rgba(34,139,34,0.1); color: #1a6b1a; }
+  .cal-event-tag.board { background: rgba(128,0,128,0.1); color: #6b006b; }
+  .cal-event-tag.dlc { background: rgba(200,150,42,0.25); color: var(--navy); }
+  .cal-event-title {
+    font-family: var(--ff-display);
+    font-size: 1.0625rem;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+  }
+  .cal-event-meta {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .cal-event-meta-sep { opacity: 0.3; }
+
+  /* Filter tabs */
+  .cal-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .cal-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cal-filter-btn:hover { border-color: var(--gold); color: var(--navy); }
+  .cal-filter-btn.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .cal-filter-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+
+  /* Empty state */
+  .cal-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+    background: var(--white);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+  }
+  .cal-empty-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.4; }
+  .cal-empty p { font-size: 0.9375rem; }
 
   footer{background:var(--navy);border-top:1px solid rgba(255,255,255,0.08);padding:4rem 1.5rem 2rem;}
   .footer-inner{max-width:1200px;margin:0 auto;}
@@ -267,10 +512,70 @@
   <div style="max-width:1200px;margin:0 auto;">
     <div class="section-label fade-in">Schedule</div>
     <h2 class="section-title fade-in">Event <em>Calendar</em></h2>
-    <p style="font-size:1rem;color:var(--muted);max-width:55ch;margin-bottom:2.5rem;" class="fade-in">Stay up to date with all district events, deadlines, and meetings throughout the service year.</p>
-    <div class="calendar-container fade-in">
-    <iframe class="calendar-embed" src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FChicago&showPrint=0&src=bW9hcmtrZXljbHVid2VibWFzdGVyQGdtYWlsLmNvbQ&src=YjgzYmYxZjJmNWY5NzEyYTBiMzVhZDAzMWQzMGE0NDRlNzkwZDVmMTQyOTg2YzM1MzRiZmFiNzJlMWMxOWIyOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039be5&color=%23616161&color=%230b8043" frameborder="0" scrolling="no" title="MO-ARK District Event Calendar"></iframe>    </div>
-    <div class="calendar-note">Can't see the calendar? <a href="https://calendar.google.com" target="_blank" style="color:var(--blue);font-weight:600;">Open Google Calendar ↗</a></div>
+    <p style="font-size:1rem;color:var(--muted);max-width:55ch;margin-bottom:2.5rem;" class="fade-in">Stay up to date with all district events, deadlines, and meetings throughout the 2025–2027 service year.</p>
+
+    <div class="cal-wrapper fade-in">
+
+      <!-- ── Mini month navigator + legend ── -->
+      <aside class="cal-mini">
+        <div class="cal-mini-header">
+          <button class="cal-mini-nav" id="miniPrev" aria-label="Previous month">&#8249;</button>
+          <div class="cal-mini-month" id="miniMonthLabel"></div>
+          <button class="cal-mini-nav" id="miniNext" aria-label="Next month">&#8250;</button>
+        </div>
+        <div class="cal-mini-grid" id="miniGrid"></div>
+        <div class="cal-legend">
+          <div class="cal-legend-item">
+            <div class="cal-legend-dot" style="background:#1A3A6B;"></div>
+            District Board Meeting
+          </div>
+          <div class="cal-legend-item">
+            <div class="cal-legend-dot" style="background:#C8962A;"></div>
+            Conference / Training
+          </div>
+          <div class="cal-legend-item">
+            <div class="cal-legend-dot" style="background:#228B22;"></div>
+            International Event
+          </div>
+          <div class="cal-legend-item">
+            <div class="cal-legend-dot" style="background:#800080;"></div>
+            Convention
+          </div>
+          <div class="cal-legend-item">
+            <div class="cal-legend-dot" style="background:#C8962A; outline: 2px solid #0A1628; outline-offset:1px;"></div>
+            DLC
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── Event list ── -->
+      <div>
+        <!-- Filter buttons -->
+        <div class="cal-filters" id="calFilters">
+          <button class="cal-filter-btn active" data-filter="all">
+            All Events
+          </button>
+          <button class="cal-filter-btn" data-filter="board">
+            <span class="cal-filter-dot" style="background:#1A3A6B;"></span>
+            Board Meetings
+          </button>
+          <button class="cal-filter-btn" data-filter="conference">
+            <span class="cal-filter-dot" style="background:#C8962A;"></span>
+            Conferences
+          </button>
+          <button class="cal-filter-btn" data-filter="international">
+            <span class="cal-filter-dot" style="background:#228B22;"></span>
+            International
+          </button>
+          <button class="cal-filter-btn" data-filter="dlc">
+            <span class="cal-filter-dot" style="background:#C8962A;"></span>
+            DLC
+          </button>
+        </div>
+
+        <div id="calEventList"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -328,6 +633,236 @@
 </footer>
 
 <script>
+
+  /* ================================================================
+     BUILT-IN EVENT CALENDAR
+     ================================================================ */
+  const EVENTS = [
+    {
+      id: 1, type: 'board',
+      title: 'April District Board Meeting',
+      dates: 'Apr 17–19', startDate: new Date(2026,3,17), endDate: new Date(2026,3,19),
+      month: 'APR', dayRange: '17–19',
+      location: 'Missouri-Arkansas District', note: ''
+    },
+    {
+      id: 2, type: 'conference',
+      title: 'Governor/Administrator Training Conference',
+      dates: 'Apr 23–26', startDate: new Date(2026,3,23), endDate: new Date(2026,3,26),
+      month: 'APR', dayRange: '23–26',
+      location: 'Missouri-Arkansas District', note: ''
+    },
+    {
+      id: 3, type: 'board',
+      title: 'June District Board Meeting',
+      dates: 'Jun 12–14', startDate: new Date(2026,5,12), endDate: new Date(2026,5,14),
+      month: 'JUN', dayRange: '12–14',
+      location: 'Missouri-Arkansas District', note: ''
+    },
+    {
+      id: 4, type: 'international',
+      title: 'ICON — Key Club International Convention 2026',
+      dates: 'Jul 1–5', startDate: new Date(2026,6,1), endDate: new Date(2026,6,5),
+      month: 'JUL', dayRange: '1–5',
+      location: 'TBD', note: ''
+    },
+    {
+      id: 5, type: 'conference',
+      title: '2026 MO-ARK Kiwanis Convention',
+      dates: 'Jul 30–Aug 2', startDate: new Date(2026,6,30), endDate: new Date(2026,7,2),
+      month: 'JUL', dayRange: '30–2',
+      location: 'Missouri-Arkansas District', note: 'Ends Aug 2'
+    },
+    {
+      id: 6, type: 'board',
+      title: 'September District Board Meeting',
+      dates: 'Sep 18–20', startDate: new Date(2026,8,18), endDate: new Date(2026,8,20),
+      month: 'SEP', dayRange: '18–20',
+      location: 'Missouri-Arkansas District', note: ''
+    },
+    {
+      id: 7, type: 'board',
+      title: 'January District Board Meeting',
+      dates: 'Jan 8–10', startDate: new Date(2027,0,8), endDate: new Date(2027,0,10),
+      month: 'JAN', dayRange: '8–10',
+      location: 'Missouri-Arkansas District', note: '2027'
+    },
+    {
+      id: 8, type: 'dlc',
+      title: 'DLC — District Board Setup Day',
+      dates: 'Mar 3', startDate: new Date(2027,2,3), endDate: new Date(2027,2,3),
+      month: 'MAR', dayRange: '3',
+      location: 'Springfield, Missouri', note: 'District Board only'
+    },
+    {
+      id: 9, type: 'dlc',
+      title: 'District Leadership Conference (DLC 2027)',
+      dates: 'Mar 4–6', startDate: new Date(2027,2,4), endDate: new Date(2027,2,6),
+      month: 'MAR', dayRange: '4–6',
+      location: 'Springfield, Missouri', note: 'University Plaza Hotel'
+    }
+  ];
+
+  const TYPE_LABELS = {
+    board: 'Board Meeting',
+    conference: 'Conference',
+    international: 'International',
+    dlc: 'DLC',
+  };
+  const TYPE_COLORS = {
+    board: '#1A3A6B',
+    conference: '#C8962A',
+    international: '#228B22',
+    dlc: '#C8962A',
+  };
+
+  /* Group events by "Month YYYY" display heading */
+  function groupEvents(events) {
+    const groups = {};
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    events.forEach(ev => {
+      const key = monthNames[ev.startDate.getMonth()] + ' ' + ev.startDate.getFullYear();
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(ev);
+    });
+    return groups;
+  }
+
+  function renderEvents(filter) {
+    const container = document.getElementById('calEventList');
+    const filtered = filter === 'all' ? EVENTS : EVENTS.filter(e => e.type === filter);
+    if (!filtered.length) {
+      container.innerHTML = `<div class="cal-empty"><div class="cal-empty-icon">📅</div><p>No events match this filter.</p></div>`;
+      return;
+    }
+    const groups = groupEvents(filtered);
+    let html = '';
+    for (const [monthLabel, evs] of Object.entries(groups)) {
+      html += `<div class="cal-month-group">
+        <div class="cal-month-label">
+          <span class="cal-month-label-text">${monthLabel}</span>
+          <div class="cal-month-label-line"></div>
+        </div>`;
+      evs.forEach(ev => {
+        const color = TYPE_COLORS[ev.type];
+        const tagClass = ev.type;
+        const tagLabel = TYPE_LABELS[ev.type];
+        html += `<div class="cal-event-card" data-id="${ev.id}">
+          <div class="cal-event-date-block">
+            <div class="cal-event-date-range" style="color:${color};">${ev.dayRange}</div>
+            <div class="cal-event-date-month">${ev.month}</div>
+          </div>
+          <div class="cal-event-divider"></div>
+          <div class="cal-event-body">
+            <span class="cal-event-tag ${tagClass}">${tagLabel}</span>
+            <div class="cal-event-title">${ev.title}</div>
+            <div class="cal-event-meta">
+              <span>${ev.dates}</span>
+              ${ev.location ? `<span class="cal-event-meta-sep">·</span><span>${ev.location}</span>` : ''}
+              ${ev.note ? `<span class="cal-event-meta-sep">·</span><span style="font-style:italic;">${ev.note}</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+      });
+      html += '</div>';
+    }
+    container.innerHTML = html;
+  }
+
+  /* Filter buttons */
+  document.querySelectorAll('.cal-filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.cal-filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      renderEvents(this.dataset.filter);
+    });
+  });
+
+  /* Mini calendar */
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOW = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let miniYear = 2026, miniMonth = 3; // April 2026 = index 3
+
+  function getEventDays(year, month) {
+    const days = new Set();
+    EVENTS.forEach(ev => {
+      let d = new Date(ev.startDate);
+      while (d <= ev.endDate) {
+        if (d.getFullYear() === year && d.getMonth() === month) days.add(d.getDate());
+        d.setDate(d.getDate() + 1);
+      }
+    });
+    return days;
+  }
+
+  function renderMini() {
+    const label = document.getElementById('miniMonthLabel');
+    const grid  = document.getElementById('miniGrid');
+    label.textContent = MONTH_NAMES[miniMonth] + ' ' + miniYear;
+
+    const today = new Date();
+    const eventDays = getEventDays(miniYear, miniMonth);
+    const firstDay = new Date(miniYear, miniMonth, 1).getDay();
+    const daysInMonth = new Date(miniYear, miniMonth+1, 0).getDate();
+    const daysInPrev  = new Date(miniYear, miniMonth, 0).getDate();
+
+    let html = DOW.map(d => `<div class="cal-mini-dow">${d}</div>`).join('');
+
+    // Blanks from prev month
+    for (let i = 0; i < firstDay; i++) {
+      html += `<div class="cal-mini-day other-month">${daysInPrev - firstDay + 1 + i}</div>`;
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      let cls = 'cal-mini-day';
+      if (today.getDate() === d && today.getMonth() === miniMonth && today.getFullYear() === miniYear) cls += ' today';
+      if (eventDays.has(d)) cls += ' has-event';
+      html += `<div class="${cls}" data-day="${d}">${d}</div>`;
+    }
+    grid.innerHTML = html;
+
+    // Click day to scroll to event
+    grid.querySelectorAll('.cal-mini-day[data-day]').forEach(el => {
+      el.addEventListener('click', function() {
+        const day = parseInt(this.dataset.day);
+        const clickedDate = new Date(miniYear, miniMonth, day);
+        // Find matching event
+        const match = EVENTS.find(ev => clickedDate >= ev.startDate && clickedDate <= ev.endDate);
+        if (match) {
+          // Reset filter to all, re-render, then scroll to event card
+          document.querySelectorAll('.cal-filter-btn').forEach(b => b.classList.remove('active'));
+          document.querySelector('[data-filter="all"]').classList.add('active');
+          renderEvents('all');
+          setTimeout(() => {
+            const card = document.querySelector(`.cal-event-card[data-id="${match.id}"]`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              card.style.borderColor = 'var(--gold)';
+              card.style.boxShadow = '0 0 0 3px rgba(200,150,42,0.2)';
+              setTimeout(() => { card.style.borderColor = ''; card.style.boxShadow = ''; }, 2000);
+            }
+          }, 80);
+        }
+      });
+    });
+  }
+
+  document.getElementById('miniPrev').addEventListener('click', () => {
+    miniMonth--;
+    if (miniMonth < 0) { miniMonth = 11; miniYear--; }
+    renderMini();
+  });
+  document.getElementById('miniNext').addEventListener('click', () => {
+    miniMonth++;
+    if (miniMonth > 11) { miniMonth = 0; miniYear++; }
+    renderMini();
+  });
+
+  renderEvents('all');
+  renderMini();
+
+  /* ================================================================
+     END BUILT-IN CALENDAR
+     ================================================================ */
 
   // Stars
   const starsC = document.getElementById('dlcStars');
