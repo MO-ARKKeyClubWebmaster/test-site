@@ -171,6 +171,18 @@ ul { list-style: none; }
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(200,150,42,0.4);
 }
+/* Keep the gold CTA gold (with a soft glow) on its own page — never let .nav-link.active dim it */
+.nav-link.nav-cta.active,
+.nav-cta.active {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  box-shadow: 0 0 0 3px rgba(200,150,42,0.22), 0 4px 18px rgba(200,150,42,0.55);
+}
+.nav-link.nav-cta.active:hover,
+.nav-cta.active:hover {
+  background: var(--gold-lt) !important;
+  box-shadow: 0 0 0 3px rgba(240,193,75,0.28), 0 6px 22px rgba(200,150,42,0.6);
+}
 
 /* Mobile hamburger */
 .nav-toggle {

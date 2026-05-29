@@ -514,6 +514,19 @@
     <h2 class="section-title fade-in">Event <em>Calendar</em></h2>
     <p style="font-size:1rem;color:var(--muted);max-width:55ch;margin-bottom:2.5rem;" class="fade-in">Stay up to date with all district events, deadlines, and meetings throughout the 2025–2027 service year.</p>
 
+    <!-- EXTENDED CALENDAR BANNER -->
+    <a href="extended-calendar.html" data-smooth-nav class="packet-card fade-in" style="margin-bottom:3rem;text-decoration:none;cursor:pointer;transition:transform var(--transition),box-shadow var(--transition);" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 36px rgba(10,22,40,0.25)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+      <div class="packet-icon">🗓️</div>
+      <div class="packet-text">
+        <h3>Extended Calendar — Year-Long Initiatives</h3>
+        <p>Explore the full 2026–2027 district timeline of initiatives, promotions, training, and campaigns laid out month by month. Click any item to see what it's all about.</p>
+        <span class="packet-btn">
+          View Extended Calendar
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </span>
+      </div>
+    </a>
+
     <div class="cal-wrapper fade-in">
 
       <!-- ── Mini month navigator + legend ── -->
@@ -881,6 +894,21 @@
     });
   }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  /* ── Smooth page transition: scroll-to-top + fade-out before navigating ── */
+  document.querySelectorAll('a[data-smooth-nav]').forEach(link => {
+    link.addEventListener('click', function(e){
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // honor open-in-new-tab
+      const href = this.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('http')) return;
+      e.preventDefault();
+      document.body.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
+      document.body.style.opacity = '0';
+      document.body.style.transform = 'translateY(-8px)';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      setTimeout(() => { window.location.href = href; }, 320);
+    });
+  });
 </script>
 <script src="transitions.js"></script>
 </body>
