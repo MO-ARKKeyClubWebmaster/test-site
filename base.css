@@ -325,6 +325,56 @@ footer {
 }
 .footer-social svg { width: 16px; height: 16px; }
 
+/* ── Partners & Charities row (sits between footer-top and footer-bottom) ── */
+.footer-partners {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 2rem;
+}
+.footer-partners-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gold-lt);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.footer-partners-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: space-between;
+}
+/* Each pill has a uniform HEIGHT; flex-grow lets the row span the full footer
+   width, and each pill keeps its logo at the same visual height. */
+.footer-partner {
+  flex: 1 1 0;
+  min-width: 150px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  padding: 0 1.5rem;
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 12px;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+.footer-partner:hover {
+  background: #ffffff;
+  border-color: rgba(200,150,42,0.65);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(200,150,42,0.28);
+}
+.footer-partner img {
+  display: block;
+  height: 60px;          /* uniform logo height — width auto-scales by aspect */
+  width: auto;
+  max-width: 100%;       /* never overflow the pill */
+  object-fit: contain;
+}
+
 /* ============================================================
    SHARED ANIMATIONS
    ============================================================ */
@@ -346,13 +396,18 @@ footer {
    ============================================================ */
 @media (max-width: 1024px) {
   .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-partner { height: 84px; min-width: 130px; }
+  .footer-partner img { height: 50px; }
 }
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-toggle { display: flex; }
   .section { padding: 4rem 1.25rem; }
   .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-partner { height: 76px; min-width: 120px; padding: 0 1rem; }
+  .footer-partner img { height: 44px; }
 }
 @media (max-width: 480px) {
   .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .footer-partner { flex: 1 1 calc(50% - 0.5rem); }
 }
