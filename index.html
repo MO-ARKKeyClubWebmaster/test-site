@@ -959,28 +959,11 @@
   }
 
   /* ============================================================
-     MASONRY GALLERY GRID
+     MASONRY GALLERY GRID — single source of truth; overrides below clear
+     any aspect-ratio rules from .gallery-item so each photo keeps its
+     natural shape and tiles cleanly with no gaps.
      ============================================================ */
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 200px;
-    gap: 1.25rem;
-  }
-  .gallery-item { aspect-ratio: unset; height: auto; }
-  .gallery-item:nth-child(1),
-  .gallery-item:nth-child(5),
-  .gallery-item:nth-child(9)  { grid-row: span 2; }
-
-  @media (max-width: 768px) {
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 155px; }
-  }
-  @media (max-width: 480px) {
-    .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
-    .gallery-item:nth-child(1),
-    .gallery-item:nth-child(5),
-    .gallery-item:nth-child(9) { grid-row: span 1; }
-  }
+  /* (The detailed rules live further down in the “GALLERY” block.) */
 
   /* ============================================================
      LIGHTBOX — image counter
@@ -1274,19 +1257,28 @@
     color: rgba(255,255,255,0.45);
   }
 
+  /* True masonry via CSS columns — each photo renders at its natural aspect
+     ratio, columns pack content top-down with no awkward gaps. */
   .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem;
+    column-count: 3;
+    column-gap: 1.25rem;
+    display: block;
   }
   .gallery-item {
     position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 0 1.25rem;
     border-radius: var(--radius);
     overflow: hidden;
-    aspect-ratio: 4/3;
+    aspect-ratio: auto;
+    height: auto;
     border: 1px solid rgba(200,150,42,0.2);
     cursor: pointer;
     background: rgba(255,255,255,0.03);
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
     transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
   }
   .gallery-item:hover {
@@ -1295,9 +1287,10 @@
     box-shadow: 0 12px 40px rgba(200,150,42,0.18), 0 0 0 1px rgba(200,150,42,0.12);
   }
   .gallery-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
+    width: 100%;
+    height: auto;
     display: block;
+    object-fit: contain;
     transition: transform 0.5s ease;
   }
   .gallery-item:hover img { transform: scale(1.05); }
@@ -1310,6 +1303,7 @@
     display: flex;
     align-items: flex-end;
     padding: 1rem;
+    pointer-events: none;
   }
   .gallery-item:hover .gallery-item-overlay { opacity: 1; }
   .gallery-item-overlay span {
@@ -1319,10 +1313,11 @@
     letter-spacing: 0.05em;
   }
 
-  /* featured first item is larger */
-  /* (removed span-2 so all images show equally in the grid) */
-  @media (max-width: 640px) {
-    .gallery-item:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+  @media (max-width: 900px) {
+    .gallery-grid { column-count: 2; }
+  }
+  @media (max-width: 560px) {
+    .gallery-grid { column-count: 1; }
     .countdown-sep { display: none; }
     .countdown-tiles { gap: 0.75rem; }
     .countdown-tile { min-width: 72px; }
