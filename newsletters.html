@@ -80,6 +80,7 @@
   .fade-in.visible{opacity:1;transform:translateY(0);}
 
   @media(max-width:1024px){.universal-card{flex-direction:column;gap:1.5rem;}.footer-top{grid-template-columns:1fr 1fr;}}
+  @media(max-width:900px){.marty-news{display:none;}}
   @media(max-width:768px){.nav-links{display:none;}.nav-toggle{display:flex;}.newsletter-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -156,10 +157,109 @@
 <div class="page-header">
   <div class="page-header-bg"></div>
   <div class="page-header-grid"></div>
-  <div class="page-header-inner">
+  <div class="page-header-inner" style="position:relative;">
     <div class="page-eyebrow">Stay Informed</div>
     <h1 class="page-title">District <em>Newsletters</em></h1>
     <p class="page-desc">Division newsletters, the Key Way, Kiwanigram, and more — published throughout the year by our board members.</p>
+
+    <!-- Marty reading the news — sits on the right side of the hero -->
+    <div class="marty-news" aria-hidden="true" style="position:absolute;right:1.5rem;bottom:0.5rem;width:150px;height:auto;pointer-events:none;">
+      <svg viewBox="0 0 180 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.35));display:block;">
+        <!-- Tail -->
+        <path d="M72 245 Q55 260 60 274 Q70 284 85 276 Q90 264 90 252" fill="#C8A06A" stroke="#A07840" stroke-width="1.2"/>
+        <!-- Legs (drawn before body so body covers their top) -->
+        <rect x="68" y="248" width="16" height="22" rx="7" fill="#C89050"/>
+        <rect x="96" y="248" width="16" height="22" rx="7" fill="#C89050"/>
+        <!-- Foot pads -->
+        <ellipse cx="76" cy="272" rx="14" ry="7.5" fill="#7A4A1A"/>
+        <ellipse cx="104" cy="272" rx="14" ry="7.5" fill="#7A4A1A"/>
+        <!-- Toes -->
+        <ellipse cx="67" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+        <ellipse cx="76" cy="269" rx="4" ry="3.5" fill="#6A3A10"/>
+        <ellipse cx="85" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+        <ellipse cx="95" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+        <ellipse cx="104" cy="269" rx="4" ry="3.5" fill="#6A3A10"/>
+        <ellipse cx="113" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+        <!-- Toe highlights -->
+        <ellipse cx="67" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+        <ellipse cx="76" cy="267.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+        <ellipse cx="85" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+        <ellipse cx="95" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+        <ellipse cx="104" cy="267.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+        <ellipse cx="113" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+        <!-- Body & belly -->
+        <ellipse cx="90" cy="210" rx="42" ry="50" fill="#D4A574"/>
+        <ellipse cx="90" cy="215" rx="23" ry="34" fill="#F0D8B0"/>
+        <!-- Shirt -->
+        <path d="M52 178 Q52 158 90 156 Q128 158 128 178 L130 232 Q130 242 90 244 Q50 242 50 232 Z" fill="#1A6BAA"/>
+        <path d="M76 156 Q90 151 104 156 L104 170 Q90 164 76 170 Z" fill="#1558A0"/>
+        <!-- Chest fluff -->
+        <ellipse cx="90" cy="160" rx="20" ry="10" fill="#D4A574"/>
+        <!-- Head -->
+        <ellipse cx="90" cy="118" rx="44" ry="42" fill="#D4A574"/>
+        <ellipse cx="52" cy="93" rx="11" ry="14" fill="#C89050"/>
+        <ellipse cx="128" cy="93" rx="11" ry="14" fill="#C89050"/>
+        <ellipse cx="74" cy="115" rx="17" ry="14" fill="#6B3A1A" opacity=".75"/>
+        <ellipse cx="106" cy="115" rx="17" ry="14" fill="#6B3A1A" opacity=".75"/>
+        <!-- Snout -->
+        <ellipse cx="90" cy="130" rx="22" ry="18" fill="#F0D8B0"/>
+        <ellipse cx="90" cy="126" rx="6" ry="4" fill="#3A2010"/>
+        <path d="M84 134 Q90 137 96 134" stroke="#7A4A1A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Eyes looking DOWN at the paper -->
+        <ellipse cx="74" cy="113" rx="9" ry="9.5" fill="#FFFEF8"/>
+        <ellipse cx="106" cy="113" rx="9" ry="9.5" fill="#FFFEF8"/>
+        <circle cx="74" cy="118" r="6" fill="#3A2010"/>
+        <circle cx="106" cy="118" r="6" fill="#3A2010"/>
+        <circle cx="74" cy="119" r="3.2" fill="#0A0604"/>
+        <circle cx="106" cy="119" r="3.2" fill="#0A0604"/>
+        <circle cx="76" cy="117" r="1.5" fill="white" opacity=".9"/>
+        <circle cx="108" cy="117" r="1.5" fill="white" opacity=".9"/>
+        <!-- Eyebrows -->
+        <path d="M64 100 Q74 96 84 100" stroke="#5A3010" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M96 100 Q106 96 116 100" stroke="#5A3010" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- Cowboy hat -->
+        <ellipse cx="90" cy="80" rx="52" ry="10" fill="#1A1008"/>
+        <path d="M48 80 Q46 45 90 42 Q134 45 132 80 Z" fill="#1A1008"/>
+        <path d="M52 78 Q90 74 128 78" stroke="#8B6020" stroke-width="4" fill="none"/>
+        <!-- Arms holding newspaper up -->
+        <path d="M52 178 Q50 175 50 172" stroke="#C89050" stroke-width="13" fill="none" stroke-linecap="round"/>
+        <path d="M128 178 Q130 175 130 172" stroke="#C89050" stroke-width="13" fill="none" stroke-linecap="round"/>
+        <!-- Newspaper -->
+        <rect x="44" y="172" width="92" height="68" fill="#FFFEF8" stroke="#3A2010" stroke-width="0.9" rx="1"/>
+        <!-- Slight fold shadow -->
+        <line x1="90" y1="172" x2="90" y2="240" stroke="#E6DDC9" stroke-width="0.8"/>
+        <!-- Masthead -->
+        <rect x="46" y="174" width="88" height="13" fill="#0A1628"/>
+        <text x="90" y="184" text-anchor="middle" font-family="Georgia,serif" font-size="7.5" font-weight="bold" fill="#F0C14B" letter-spacing="0.5">MO-ARK KEY WAY</text>
+        <!-- Headline -->
+        <rect x="48" y="191" width="84" height="3.5" fill="#1A1008"/>
+        <!-- Left column lines -->
+        <line x1="48" y1="200" x2="86" y2="200" stroke="#5A5A6A" stroke-width="0.8"/>
+        <line x1="48" y1="203" x2="84" y2="203" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="206" x2="86" y2="206" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="209" x2="80" y2="209" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="212" x2="86" y2="212" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="215" x2="82" y2="215" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="218" x2="86" y2="218" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="221" x2="76" y2="221" stroke="#8A95A8" stroke-width="0.7"/>
+        <!-- Right column lines -->
+        <line x1="94" y1="200" x2="132" y2="200" stroke="#5A5A6A" stroke-width="0.8"/>
+        <line x1="94" y1="203" x2="130" y2="203" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="94" y1="206" x2="132" y2="206" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="94" y1="209" x2="126" y2="209" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="94" y1="212" x2="132" y2="212" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="94" y1="215" x2="128" y2="215" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="94" y1="218" x2="132" y2="218" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="94" y1="221" x2="122" y2="221" stroke="#8A95A8" stroke-width="0.7"/>
+        <!-- Lower sub-headline + lines -->
+        <rect x="48" y="226" width="50" height="2.5" fill="#1A1008"/>
+        <line x1="48" y1="232" x2="132" y2="232" stroke="#8A95A8" stroke-width="0.7"/>
+        <line x1="48" y1="235" x2="128" y2="235" stroke="#8A95A8" stroke-width="0.7"/>
+        <!-- Paws gripping top corners -->
+        <ellipse cx="50" cy="172" rx="7" ry="5" fill="#7A4A1A"/>
+        <ellipse cx="130" cy="172" rx="7" ry="5" fill="#7A4A1A"/>
+      </svg>
+    </div>
   </div>
 </div>
 

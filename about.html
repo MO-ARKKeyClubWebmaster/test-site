@@ -71,6 +71,23 @@
   .mission-title-light{font-family:var(--ff-display);font-size:clamp(1.75rem,3vw,2.5rem);color:var(--white);line-height:1.1;margin-bottom:1rem;}
   .mission-title-light em{color:var(--gold-lt);font-style:italic;}
 
+  /* K-FAMILY ROW */
+  .kfam-section{background:var(--cream);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .kfam-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1.25rem;margin-top:2.5rem;}
+  .kfam-card{position:relative;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1rem 1.25rem;display:flex;flex-direction:column;align-items:center;text-align:center;transition:border-color var(--transition),transform var(--transition),box-shadow var(--transition);}
+  .kfam-card:hover{border-color:rgba(200,150,42,0.55);transform:translateY(-4px);box-shadow:0 12px 32px rgba(10,22,40,0.12),0 0 0 1px rgba(200,150,42,0.15);}
+  .kfam-card.kfam-self{border-color:var(--gold);background:linear-gradient(180deg,rgba(200,150,42,0.07) 0%,#fff 70%);box-shadow:0 0 0 1px rgba(200,150,42,0.25);}
+  .kfam-card.kfam-self::before{content:'YOU ARE HERE';position:absolute;top:0.5rem;right:0.5rem;font-size:0.55rem;font-weight:700;letter-spacing:0.1em;color:var(--gold);background:rgba(200,150,42,0.12);border:1px solid rgba(200,150,42,0.4);padding:0.18rem 0.5rem;border-radius:100px;}
+  .kfam-seal{width:96px;height:96px;display:flex;align-items:center;justify-content:center;margin-bottom:0.85rem;}
+  .kfam-seal img{width:100%;height:100%;object-fit:contain;display:block;}
+  .kfam-name{font-family:var(--ff-display);font-size:1rem;color:var(--navy);line-height:1.2;margin-bottom:0.3rem;}
+  .kfam-tier{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--gold);background:rgba(200,150,42,0.1);padding:0.18rem 0.55rem;border-radius:100px;margin-bottom:0.6rem;}
+  .kfam-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;flex:1;margin-bottom:0.85rem;}
+  .kfam-link{font-size:0.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.08em;display:inline-flex;align-items:center;gap:0.25rem;transition:color var(--transition),gap var(--transition);}
+  .kfam-link:hover{color:var(--navy);gap:0.45rem;}
+  @media(max-width:1024px){.kfam-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:600px){.kfam-grid{grid-template-columns:repeat(2,1fr);}.kfam-seal{width:78px;height:78px;}}
+
   /* HISTORY */
   .history-timeline{display:flex;flex-direction:column;gap:0;position:relative;margin-top:2rem;}
   .history-timeline::before{content:'';position:absolute;left:5.5rem;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),rgba(200,150,42,0.1));}
@@ -111,7 +128,7 @@
 
   /* RESPONSIVE */
   @media(max-width:1024px){.about-intro{grid-template-columns:1fr;gap:3rem;}.mission-grid{grid-template-columns:1fr;gap:2rem;}.footer-top{grid-template-columns:1fr 1fr;gap:2rem;}}
-  @media(max-width:768px){.nav-links{display:none;}.nav-toggle{display:flex;}.about-stats{grid-template-columns:1fr 1fr;}.history-timeline::before{left:4.5rem;}.footer-top{grid-template-columns:1fr;gap:2rem;}}
+  @media(max-width:768px){.nav-links{display:none;}.nav-toggle{display:flex;}.about-stats{grid-template-columns:1fr 1fr;}.history-timeline::before{left:4.5rem;}.footer-top{grid-template-columns:1fr;gap:2rem;}.marty-reading{display:none;}}
 </style>
 </head>
 <body>
@@ -302,8 +319,91 @@
 </div>
 
 <!-- HISTORY -->
-<div class="section" id="history">
-  <div class="section-header fade-in">
+<div class="section" id="history" style="position:relative;">
+  <!-- Marty reading a book — sits in the top-right of the history section, signals "story time" -->
+  <div class="marty-reading fade-in" aria-hidden="true" style="position:absolute;top:1.5rem;right:1rem;width:120px;height:auto;pointer-events:none;">
+    <svg viewBox="0 0 180 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));display:block;">
+      <!-- Tail -->
+      <path d="M72 245 Q55 260 60 274 Q70 284 85 276 Q90 264 90 252" fill="#C8A06A" stroke="#A07840" stroke-width="1.2"/>
+      <!-- Legs (drawn before body so body covers their top) -->
+      <rect x="68" y="248" width="16" height="22" rx="7" fill="#C89050"/>
+      <rect x="96" y="248" width="16" height="22" rx="7" fill="#C89050"/>
+      <!-- Foot pads -->
+      <ellipse cx="76" cy="272" rx="14" ry="7.5" fill="#7A4A1A"/>
+      <ellipse cx="104" cy="272" rx="14" ry="7.5" fill="#7A4A1A"/>
+      <!-- Toes (3 per foot) -->
+      <ellipse cx="67" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+      <ellipse cx="76" cy="269" rx="4" ry="3.5" fill="#6A3A10"/>
+      <ellipse cx="85" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+      <ellipse cx="95" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+      <ellipse cx="104" cy="269" rx="4" ry="3.5" fill="#6A3A10"/>
+      <ellipse cx="113" cy="270" rx="4" ry="3.5" fill="#6A3A10"/>
+      <!-- Toe highlights -->
+      <ellipse cx="67" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+      <ellipse cx="76" cy="267.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+      <ellipse cx="85" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+      <ellipse cx="95" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+      <ellipse cx="104" cy="267.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+      <ellipse cx="113" cy="268.5" rx="2" ry="1.4" fill="#8A5020" opacity="0.55"/>
+      <!-- Body & belly -->
+      <ellipse cx="90" cy="210" rx="42" ry="50" fill="#D4A574"/>
+      <ellipse cx="90" cy="215" rx="23" ry="34" fill="#F0D8B0"/>
+      <!-- Shirt -->
+      <path d="M52 178 Q52 158 90 156 Q128 158 128 178 L130 232 Q130 242 90 244 Q50 242 50 232 Z" fill="#1A6BAA"/>
+      <path d="M76 156 Q90 151 104 156 L104 170 Q90 164 76 170 Z" fill="#1558A0"/>
+      <!-- Chest fluff -->
+      <ellipse cx="90" cy="160" rx="20" ry="10" fill="#D4A574"/>
+      <!-- Head -->
+      <ellipse cx="90" cy="118" rx="44" ry="42" fill="#D4A574"/>
+      <ellipse cx="52" cy="93" rx="11" ry="14" fill="#C89050"/>
+      <ellipse cx="128" cy="93" rx="11" ry="14" fill="#C89050"/>
+      <ellipse cx="74" cy="115" rx="17" ry="14" fill="#6B3A1A" opacity=".75"/>
+      <ellipse cx="106" cy="115" rx="17" ry="14" fill="#6B3A1A" opacity=".75"/>
+      <!-- Snout -->
+      <ellipse cx="90" cy="130" rx="22" ry="18" fill="#F0D8B0"/>
+      <ellipse cx="90" cy="126" rx="6" ry="4" fill="#3A2010"/>
+      <path d="M84 134 Q90 138 96 134" stroke="#7A4A1A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Eyes looking DOWN at the book -->
+      <ellipse cx="74" cy="113" rx="9" ry="9.5" fill="#FFFEF8"/>
+      <ellipse cx="106" cy="113" rx="9" ry="9.5" fill="#FFFEF8"/>
+      <circle cx="74" cy="118" r="6" fill="#3A2010"/>
+      <circle cx="106" cy="118" r="6" fill="#3A2010"/>
+      <circle cx="74" cy="119" r="3.2" fill="#0A0604"/>
+      <circle cx="106" cy="119" r="3.2" fill="#0A0604"/>
+      <circle cx="76" cy="117" r="1.5" fill="white" opacity=".9"/>
+      <circle cx="108" cy="117" r="1.5" fill="white" opacity=".9"/>
+      <!-- Eyebrows (concentrated) -->
+      <path d="M64 101 Q74 97 84 101" stroke="#5A3010" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M96 101 Q106 97 116 101" stroke="#5A3010" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Cowboy hat -->
+      <ellipse cx="90" cy="80" rx="52" ry="10" fill="#1A1008"/>
+      <path d="M48 80 Q46 45 90 42 Q134 45 132 80 Z" fill="#1A1008"/>
+      <path d="M52 78 Q90 74 128 78" stroke="#8B6020" stroke-width="4" fill="none"/>
+      <!-- Arms reaching forward to grip the book -->
+      <path d="M52 178 Q55 195 68 200" stroke="#C89050" stroke-width="13" fill="none" stroke-linecap="round"/>
+      <path d="M128 178 Q125 195 112 200" stroke="#C89050" stroke-width="13" fill="none" stroke-linecap="round"/>
+      <!-- Open book -->
+      <path d="M56 188 L90 184 L124 188 L124 220 L90 217 L56 220 Z" fill="#5A3010" stroke="#3A2010" stroke-width="0.8"/>
+      <path d="M62 192 L88 188 L88 216 L62 217 Z" fill="#FFFEF8"/>
+      <path d="M92 188 L118 192 L118 217 L92 216 Z" fill="#FFFEF8"/>
+      <!-- Page text lines -->
+      <line x1="66" y1="196" x2="84" y2="194" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="66" y1="200" x2="84" y2="198" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="66" y1="204" x2="82" y2="202" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="66" y1="208" x2="84" y2="206" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="66" y1="212" x2="80" y2="210" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="96" y1="194" x2="114" y2="196" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="96" y1="198" x2="114" y2="200" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="96" y1="202" x2="112" y2="204" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="96" y1="206" x2="114" y2="208" stroke="#8A95A8" stroke-width="0.7"/>
+      <line x1="96" y1="210" x2="110" y2="212" stroke="#8A95A8" stroke-width="0.7"/>
+      <!-- Paws gripping book -->
+      <ellipse cx="66" cy="202" rx="7" ry="6" fill="#7A4A1A"/>
+      <ellipse cx="114" cy="202" rx="7" ry="6" fill="#7A4A1A"/>
+    </svg>
+  </div>
+
+  <div class="section-header fade-in" style="position:relative;z-index:1;max-width:calc(100% - 150px);">
     <div class="section-label">Our Past</div>
     <h2 class="section-title">Our <em>History</em></h2>
     <p class="section-desc">From a founding conference in Hollister, Missouri to 126 schools across two states — here's how we got here.</p>
@@ -356,6 +456,68 @@
         <h4>126 Schools & Growing</h4>
         <p>Today, MO-ARK spans approximately 126 schools in 10 divisions, with elected leaders, active clubs, and thousands of students making a difference in their communities every day.</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- K-FAMILY -->
+<div class="kfam-section">
+  <div class="section">
+    <div class="section-header fade-in">
+      <div class="section-label">The K-Family</div>
+      <h2 class="section-title">Part of a <em>Bigger Family</em></h2>
+      <p class="section-desc">Key Club is one of six service leadership programs sponsored by Kiwanis International — a global family of clubs from elementary school through adulthood, all dedicated to serving the children of the world.</p>
+    </div>
+    <div class="kfam-grid">
+
+      <a href="https://www.kiwanis.org" target="_blank" rel="noopener" class="kfam-card fade-in">
+        <div class="kfam-seal"><img src="Images/Kiwanis-seal.png" alt="Kiwanis International seal"></div>
+        <div class="kfam-name">Kiwanis International</div>
+        <div class="kfam-tier">Adults · Parent Org</div>
+        <p class="kfam-desc">The global parent organization that founded and sponsors every program in the K-Family.</p>
+        <span class="kfam-link">Visit kiwanis.org →</span>
+      </a>
+
+      <a href="https://www.circlek.org" target="_blank" rel="noopener" class="kfam-card fade-in">
+        <div class="kfam-seal"><img src="Images/CircleK-seal.png" alt="Circle K International seal"></div>
+        <div class="kfam-name">Circle K International</div>
+        <div class="kfam-tier">College</div>
+        <p class="kfam-desc">CKI is the college- and university-level service leadership organization — where many Key Clubbers go next.</p>
+        <span class="kfam-link">Visit circlek.org →</span>
+      </a>
+
+      <a href="https://www.keyclub.org" target="_blank" rel="noopener" class="kfam-card kfam-self fade-in">
+        <div class="kfam-seal"><img src="Images/KeyClub-seal.jpg" alt="Key Club International seal"></div>
+        <div class="kfam-name">Key Club International</div>
+        <div class="kfam-tier">High School</div>
+        <p class="kfam-desc">High school students serving home, school, and community — and where MO-ARK lives.</p>
+        <span class="kfam-link">Visit keyclub.org →</span>
+      </a>
+
+      <a href="https://www.buildersclub.org" target="_blank" rel="noopener" class="kfam-card fade-in">
+        <div class="kfam-seal"><img src="Images/BuildersClub-seal.jpg" alt="Builders Club seal"></div>
+        <div class="kfam-name">Builders Club</div>
+        <div class="kfam-tier">Middle School</div>
+        <p class="kfam-desc">Middle-school service club that builds character and leadership through community projects.</p>
+        <span class="kfam-link">Visit buildersclub.org →</span>
+      </a>
+
+      <a href="https://www.kkids.org" target="_blank" rel="noopener" class="kfam-card fade-in">
+        <div class="kfam-seal"><img src="Images/KKids-Seal.jpg" alt="K-Kids seal"></div>
+        <div class="kfam-name">K-Kids</div>
+        <div class="kfam-tier">Elementary</div>
+        <p class="kfam-desc">Elementary school students learning leadership and service through age-appropriate projects.</p>
+        <span class="kfam-link">Visit kkids.org →</span>
+      </a>
+
+      <a href="https://www.aktionclub.org" target="_blank" rel="noopener" class="kfam-card fade-in">
+        <div class="kfam-seal"><img src="Images/AktionClub-seal.jpg" alt="Aktion Club seal"></div>
+        <div class="kfam-name">Aktion Club</div>
+        <div class="kfam-tier">Adults with Disabilities</div>
+        <p class="kfam-desc">The only service club for adults living with disabilities — making a difference in their communities.</p>
+        <span class="kfam-link">Visit aktionclub.org →</span>
+      </a>
+
     </div>
   </div>
 </div>
