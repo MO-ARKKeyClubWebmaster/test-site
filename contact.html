@@ -259,9 +259,20 @@
       </div>
     </div>
 
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="email">Email <span class="req">*</span></label>
+        <input type="email" id="email" class="form-input" placeholder="your@email.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="role">I am a:</label>
+        <input type="text" id="role" class="form-input" placeholder="Student, Teacher, Advisor…">
+      </div>
+    </div>
+
     <div class="form-group">
-      <label class="form-label" for="email">Email <span class="req">*</span></label>
-      <input type="email" id="email" class="form-input" placeholder="your@email.com" required autocomplete="email">
+      <label class="form-label" for="school">School / Agency</label>
+      <input type="text" id="school" class="form-input" placeholder="Your school or organization">
     </div>
 
     <div class="form-group">
@@ -390,7 +401,7 @@
     setTimeout(() => {
       document.getElementById('formSuccess').style.display = 'block';
       btn.style.display = 'none';
-      ['firstName','lastName','email','subject','message'].forEach(id => document.getElementById(id).value = '');
+      ['firstName','lastName','email','role','school','subject','message'].forEach(id => document.getElementById(id).value = '');
     }, 800);
   }
 
